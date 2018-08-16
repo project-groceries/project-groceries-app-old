@@ -18,7 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "prod": "node server.js"
+    "prod": "yarn build && node server.js"
   },
   "devDependencies": {
     "eslint": "^5.3.0",
