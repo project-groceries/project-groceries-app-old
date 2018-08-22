@@ -1,0 +1,35 @@
+body {
+  background-color: #edeef0;
+}
+
+#incorrect,
+#correct,
+#correct-recovery,
+#spinner {
+  display: none;
+}
+
+#incorrect {
+  max-width: 250px;
+}
+
+.bubble {
+  /* position */
+  position: fixed;
+  top: 50px;
+  right: 10px;
+  transform: translateX(300px);
+
+  /* display */
+  width: 200px;
+  border-radius: 5px;
+  padding: 5px;
+  text-align: center;
+
+  transition: all 0.6s ease;
+  z-index: 1;
+}
+
+.bubble.visible {
+  transform: translateX(0);
+}
