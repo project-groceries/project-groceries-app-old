@@ -9,15 +9,18 @@ import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { BrowserRouter } from "react-router-dom";
 import { setContext } from "apollo-link-context";
-import { AUTH_TOKEN } from "./constants";
+// import { AUTH_TOKEN } from "./constants";
 import { CookiesProvider } from "react-cookie";
+import Cookies from "universal-cookie";
 
 const httpLink = createHttpLink({
   uri: "https://project-groceries-graphql-dev.herokuapp.com/"
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem(AUTH_TOKEN);
+  const cookies = new Cookies();
+  const token = cookies.get("token");
+  // const token = localStorage.getItem(AUTH_TOKEN);
   return {
     headers: {
       ...headers,

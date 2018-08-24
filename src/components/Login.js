@@ -1,44 +1,9 @@
 import React, { Component } from "react";
 // import { AUTH_TOKEN } from "../constants";
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
-
-const SIGNUP_MUTATION = gql`
-  mutation SignupMutation($email: String!, $password: String!, $name: String!) {
-    signup(email: $email, password: $password, name: $name, type: "STUDENT") {
-      token
-    }
-  }
-`;
-
-const LOGIN_MUTATION = gql`
-  mutation LoginMutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-    }
-  }
-`;
-
-// const fullPageBackgroundStyles = {
-//   minHeight: "100vh",
-//   backgroundPosition: "center",
-//   backgroundSize: "cover"
-// };
-
-// const flexCenterStyles = {
-//   display: "flex",
-//   justifyContent: "center",
-//   alignItems: "center"
-// };
-
-// const wrapperStyles = {
-//   ...fullPageBackgroundStyles,
-//   ...flexCenterStyles,
-//   flexDirection: "column",
-//   backgroundImage: `url('https://s3-ap-southeast-2.amazonaws.com/project-groceries-test0/${login}.jpg')`
-// };
+import { LOGIN_MUTATION, SIGNUP_MUTATION } from "../queries";
 
 class Login extends Component {
   static propTypes = {
@@ -131,7 +96,7 @@ class Login extends Component {
             )}
 
             {success ? (
-              <div id="correct" class="card column">
+              <div id="correct" className="card column">
                 <h1>
                   <span role="img" aria-label="Thumbs Up">
                     👍
@@ -265,15 +230,11 @@ class Login extends Component {
     this.setState({ success: true, loading: false });
     const { token } = this.state.login ? data.login : data.signup;
     this._saveUserData(token);
-    // this.forceUpdate();
-    window.setTimeout(() => window.location.reload(), 1000);
-    // this.props.history.push("/");
   };
 
   _saveUserData = token => {
     const { cookies } = this.props;
 
-    // localStorage.setItem(AUTH_TOKEN, token);
     cookies.set("token", token, { path: "/" });
   };
 }
