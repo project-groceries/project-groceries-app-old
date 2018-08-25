@@ -4,7 +4,7 @@ import logo from "../logo.svg";
 // import LinkList from "./LinkList";
 // import CreateLink from "./CreateLink";
 // import Header from "./Header";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, NavLink } from "react-router-dom";
 import Login from "./Login";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
@@ -13,6 +13,7 @@ import NoSchool from "./NoSchool";
 import Logo from "./Logo";
 import SamsungTVLoader from "./SamsungTVLoader";
 import { USER_QUERY } from "../queries";
+import DeclareAccountType from "./DeclareAccountType";
 
 class App extends Component {
   static propTypes = {
@@ -70,7 +71,10 @@ class App extends Component {
               );
             if (error) return <div>Error</div>;
 
-            const { name, school } = data.user;
+            const { name, school, hasDeclaredAccountType } = data.user;
+            const hasCompletedDetails = Boolean(
+              school && hasDeclaredAccountType
+            );
 
             return (
               <Fragment>
@@ -78,14 +82,28 @@ class App extends Component {
                   style={{
                     backgroundColor: "rgba(128, 128, 128, 0.1)",
                     transition: "all 0.6s ease",
-                    filter: school ? "none" : "blur(8px)",
-                    pointerEvents: school ? "auto" : "none"
+                    filter: hasCompletedDetails ? "none" : "blur(8px)",
+                    pointerEvents: hasCompletedDetails ? "auto" : "none"
                   }}
                 >
-                  <div className="bar">
+                  <div
+                    className="bar"
+                    style={{ backgroundColor: "rgba(0,0,0,0.1)" }}
+                  >
                     <Logo />
                     <h1>{name}</h1>
                   </div>
+
+                  <div>
+                    <h1>Classes</h1>
+                    <NavLink
+                      to="/faq"
+                      activeStyle={{ backgroundColor: "blue" }}
+                    >
+                      yolo
+                    </NavLink>
+                  </div>
+
                   <input
                     type="button"
                     value="Sign Out"
@@ -98,7 +116,15 @@ class App extends Component {
                   />
                 </section>
                 <main>
-                  {school ? <div>There is a School!!</div> : <NoSchool />}
+                  {school ? (
+                    hasDeclaredAccountType ? (
+                      <div>There is a School and a Type!!</div>
+                    ) : (
+                      <DeclareAccountType />
+                    )
+                  ) : (
+                    <NoSchool />
+                  )}
                 </main>
               </Fragment>
             );

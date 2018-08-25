@@ -9,9 +9,9 @@ import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { BrowserRouter } from "react-router-dom";
 import { setContext } from "apollo-link-context";
-// import { AUTH_TOKEN } from "./constants";
 import { CookiesProvider } from "react-cookie";
 import Cookies from "universal-cookie";
+import { ToastProvider } from "react-toast-notifications";
 
 const httpLink = createHttpLink({
   uri: "https://project-groceries-graphql-dev.herokuapp.com/"
@@ -38,7 +38,9 @@ ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={client}>
       <CookiesProvider>
-        <App />
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </CookiesProvider>
     </ApolloProvider>
   </BrowserRouter>,

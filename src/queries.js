@@ -21,6 +21,8 @@ export const USER_QUERY = gql`
     user {
       id
       name
+      type
+      hasDeclaredAccountType
       school {
         id
         name
@@ -42,6 +44,11 @@ export const JOIN_SCHOOL_MUTATION = gql`
   mutation JoinSchoolMutation($id: String!) {
     joinSchool(id: $id) {
       id
+      name
+      school {
+        id
+        name
+      }
     }
   }
 `;
@@ -51,6 +58,16 @@ export const CREATE_SCHOOL_MUTATION = gql`
     createSchool(name: $name, teacherCode: $teacherCode) {
       id
       name
+    }
+  }
+`;
+
+export const DECLARE_ACCOUNT_TYPE_MUTATION = gql`
+  mutation DeclareAccountType($type: String!) {
+    declareAccountType(type: $type) {
+      id
+      hasDeclaredAccountType
+      type
     }
   }
 `;
