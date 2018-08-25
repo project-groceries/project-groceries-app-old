@@ -38,6 +38,8 @@ class App extends Component {
   }
 
   render() {
+    const { cookies } = this.props;
+
     return this.state.hasToken ? (
       <div
         style={{
@@ -84,6 +86,16 @@ class App extends Component {
                     <Logo />
                     <h1>{name}</h1>
                   </div>
+                  <input
+                    type="button"
+                    value="Sign Out"
+                    onClick={() => cookies.remove("token")}
+                    style={{
+                      position: "absolute",
+                      bottom: "10px",
+                      left: "10px"
+                    }}
+                  />
                 </section>
                 <main>
                   {school ? <div>There is a School!!</div> : <NoSchool />}
