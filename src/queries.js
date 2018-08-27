@@ -27,6 +27,10 @@ export const USER_QUERY = gql`
         id
         name
       }
+      classes {
+        id
+        name
+      }
     }
   }
 `;
@@ -68,6 +72,36 @@ export const DECLARE_ACCOUNT_TYPE_MUTATION = gql`
       id
       hasDeclaredAccountType
       type
+    }
+  }
+`;
+
+export const OVERVIEW_QUERY = gql`
+  query overviewQuery {
+    user {
+      id
+      name
+      type
+      school {
+        id
+        ingredients {
+          id
+          name
+        }
+      }
+      classes {
+        id
+        name
+      }
+      orders {
+        id
+        amount
+        ingredient {
+          id
+          name
+          unit
+        }
+      }
     }
   }
 `;

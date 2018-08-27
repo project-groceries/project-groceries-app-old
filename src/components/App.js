@@ -4,16 +4,45 @@ import logo from "../logo.svg";
 // import LinkList from "./LinkList";
 // import CreateLink from "./CreateLink";
 // import Header from "./Header";
-import { Switch, Route, Redirect, NavLink } from "react-router-dom";
+import { Switch, Route, Redirect, Link, NavLink } from "react-router-dom";
 import Login from "./Login";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
 import { Query } from "react-apollo";
 import NoSchool from "./NoSchool";
-import Logo from "./Logo";
+import Logo from "./svg/Logo";
 import SamsungTVLoader from "./SamsungTVLoader";
 import { USER_QUERY } from "../queries";
 import DeclareAccountType from "./DeclareAccountType";
+import { css } from "emotion";
+import Group from "./svg/Group";
+import List from "./svg/List";
+import Cart from "./svg/Cart";
+import Overview from "./Overview";
+import Classes from "./Classes";
+import Orders from "./Orders";
+import Ingredients from "./Ingredients";
+
+const menuSection = css`
+  padding: 10px;
+  text-align: center;
+
+  .menuSectionTitle {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h1 {
+    margin-left: 10px;
+  }
+
+  svg {
+    height: 30px;
+  }
+`;
 
 class App extends Component {
   static propTypes = {
@@ -65,13 +94,20 @@ class App extends Component {
                     height: "100vh"
                   }}
                 >
-                  <img src={logo} alt="Project Groceries" height="80px" />
+                  <img
+                    src={logo}
+                    alt="Project Groceries"
+                    height="80px"
+                    className={css`
+                      transform: translateY(30px);
+                    `}
+                  />
                   <SamsungTVLoader />
                 </div>
               );
             if (error) return <div>Error</div>;
 
-            const { name, school, hasDeclaredAccountType } = data.user;
+            const { name, hasDeclaredAccountType, school, classes } = data.user;
             const hasCompletedDetails = Boolean(
               school && hasDeclaredAccountType
             );
@@ -90,18 +126,50 @@ class App extends Component {
                     className="bar"
                     style={{ backgroundColor: "rgba(0,0,0,0.1)" }}
                   >
-                    <Logo />
+                    <Link to="/">
+                      <Logo />
+                    </Link>
                     <h1>{name}</h1>
                   </div>
 
-                  <div>
-                    <h1>Classes</h1>
-                    <NavLink
-                      to="/faq"
-                      activeStyle={{ backgroundColor: "blue" }}
-                    >
-                      yolo
-                    </NavLink>
+                  <div className={menuSection}>
+                    <Link to="/classes">
+                      <div className="menuSectionTitle">
+                        <Group />
+                        <h1>Classes</h1>
+                      </div>
+                    </Link>
+                    {classes.length ? (
+                      classes.map(c => (
+                        <NavLink
+                          key={c.id}
+                          to={`/classes/${c.id}`}
+                          activeStyle={{ backgroundColor: "blue" }}
+                        >
+                          {c.name}
+                        </NavLink>
+                      ))
+                    ) : (
+                      <small>There are no classes... yet</small>
+                    )}
+                  </div>
+
+                  <div className={menuSection}>
+                    <Link to="/orders">
+                      <div className="menuSectionTitle">
+                        <List />
+                        <h1>Orders</h1>
+                      </div>
+                    </Link>
+                  </div>
+
+                  <div className={menuSection}>
+                    <Link to="/ingredients">
+                      <div className="menuSectionTitle">
+                        <Cart />
+                        <h1>Ingredients</h1>
+                      </div>
+                    </Link>
                   </div>
 
                   <input
@@ -118,7 +186,17 @@ class App extends Component {
                 <main>
                   {school ? (
                     hasDeclaredAccountType ? (
-                      <div>There is a School and a Type!!</div>
+                      <Switch>
+                        <Route exact path="/" component={Overview} />
+                        <Route exact path="/classes" component={Classes} />
+                        <Route exact path="/orders" component={Orders} />
+                        <Route
+                          exact
+                          path="/ingredients"
+                          component={Ingredients}
+                        />
+                        <Route render={() => <Redirect to="/" />} />
+                      </Switch>
                     ) : (
                       <DeclareAccountType />
                     )

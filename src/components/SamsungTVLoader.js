@@ -1,9 +1,14 @@
 import React, { Component } from "react";
+import { css } from "emotion";
+
+const loader = css`
+  position: relative;
+`;
 
 class SamsungTVLoader extends Component {
   render() {
     return (
-      <div className="flex-center column full-page">
+      <div className={loader}>
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
           <defs>
             <filter id="gooey">
