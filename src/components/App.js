@@ -33,9 +33,10 @@ const menuSection = css`
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 5px;
   }
 
-  h1 {
+  h3 {
     margin-left: 10px;
   }
 
@@ -107,10 +108,18 @@ class App extends Component {
               );
             if (error) return <div>Error</div>;
 
-            const { name, hasDeclaredAccountType, school, classes } = data.user;
+            const {
+              name,
+              type,
+              hasDeclaredAccountType,
+              school,
+              classes,
+              enrolledIn
+            } = data.user;
             const hasCompletedDetails = Boolean(
               school && hasDeclaredAccountType
             );
+            const userClasses = type === "TEACHER" ? classes : enrolledIn;
 
             return (
               <Fragment>
@@ -136,11 +145,11 @@ class App extends Component {
                     <Link to="/classes">
                       <div className="menuSectionTitle">
                         <Group />
-                        <h1>Classes</h1>
+                        <h3>Classes</h3>
                       </div>
                     </Link>
-                    {classes.length ? (
-                      classes.map(c => (
+                    {userClasses.length ? (
+                      userClasses.map(c => (
                         <NavLink
                           key={c.id}
                           to={`/classes/${c.id}`}
@@ -158,7 +167,7 @@ class App extends Component {
                     <Link to="/orders">
                       <div className="menuSectionTitle">
                         <List />
-                        <h1>Orders</h1>
+                        <h3>Orders</h3>
                       </div>
                     </Link>
                   </div>
@@ -167,7 +176,7 @@ class App extends Component {
                     <Link to="/ingredients">
                       <div className="menuSectionTitle">
                         <Cart />
-                        <h1>Ingredients</h1>
+                        <h3>Ingredients</h3>
                       </div>
                     </Link>
                   </div>

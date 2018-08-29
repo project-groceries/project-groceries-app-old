@@ -3,6 +3,17 @@ import { css } from "emotion";
 import { Query } from "react-apollo";
 import { OVERVIEW_QUERY } from "../queries";
 import SamsungTVLoader from "./SamsungTVLoader";
+import Enrol from "./Enrol";
+import CreateClass from "./CreateClass";
+
+const fullPage = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 const overviewSection = css`
   padding: 10px;
@@ -32,14 +43,28 @@ class Overview extends Component {
 
           if (error) return <div>Error</div>;
 
-          const { classes, orders, school } = data.user;
+          const { classes, enrolledIn, orders, school, type } = data.user;
           const { ingredients } = school;
+          const userClasses = type === "TEACHER" ? classes : enrolledIn;
+          const hasNothing =
+            !userClasses.length && !orders.length && !ingredients.length;
 
-          return (
+          return hasNothing ? (
+            type === "STUDENT" ? (
+              <div className={fullPage}>
+                <h2>You aren't enrolled in any classes yet!</h2>
+                <Enrol />
+              </div>
+            ) : (
+              <div className={fullPage}>
+                <CreateClass />
+              </div>
+            )
+          ) : (
             <Fragment>
               <div className={overviewSection}>
                 <h1>Classes</h1>
-                {classes.length ? (
+                {userClasses.length ? (
                   <p>There are classes</p>
                 ) : (
                   <p>There are no classes... yet</p>

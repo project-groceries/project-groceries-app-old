@@ -31,6 +31,10 @@ export const USER_QUERY = gql`
         id
         name
       }
+      enrolledIn {
+        id
+        name
+      }
     }
   }
 `;
@@ -80,7 +84,6 @@ export const OVERVIEW_QUERY = gql`
   query overviewQuery {
     user {
       id
-      name
       type
       school {
         id
@@ -93,6 +96,10 @@ export const OVERVIEW_QUERY = gql`
         id
         name
       }
+      enrolledIn {
+        id
+        name
+      }
       orders {
         id
         amount
@@ -100,6 +107,79 @@ export const OVERVIEW_QUERY = gql`
           id
           name
           unit
+        }
+      }
+    }
+  }
+`;
+
+export const ENROL_QUERY = gql`
+  query enrolQuery {
+    user {
+      id
+      school {
+        id
+        users(where: { type: TEACHER }) {
+          id
+          classes {
+            id
+            name
+          }
+        }
+      }
+      enrolledIn {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const CREATE_CLASS_QUERY = gql`
+  query createClassQuery {
+    user {
+      id
+      classes {
+        id
+      }
+    }
+  }
+`;
+
+export const CREATE_CLASS_MUTATION = gql`
+  mutation CreateClassMutation($name: String!) {
+    createClass(name: $name) {
+      id
+      name
+      teacher {
+        id
+        school {
+          id
+          users(where: { type: TEACHER }) {
+            id
+            classes {
+              id
+              name
+            }
+          }
+        }
+        classes {
+          id
+        }
+      }
+    }
+  }
+`;
+export const ENROL_INTO_CLASS_MUTATION = gql`
+  mutation enrolIntoClassMutation($id: String!) {
+    enrolIntoClass(id: $id) {
+      id
+      enrolledIn {
+        id
+        name
+        students {
+          id
+          name
         }
       }
     }
