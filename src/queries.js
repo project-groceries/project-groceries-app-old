@@ -185,3 +185,34 @@ export const ENROL_INTO_CLASS_MUTATION = gql`
     }
   }
 `;
+
+export const CLASSES_GRID_QUERY = gql`
+  query classesGridQuery {
+    user {
+      id
+      type
+      classes {
+        id
+        name
+        teacher {
+          id
+          name
+        }
+        students {
+          id
+        }
+      }
+      enrolledIn {
+        id
+        name
+        teacher {
+          id
+          name
+        }
+        students {
+          id
+        }
+      }
+    }
+  }
+`;

@@ -5,6 +5,7 @@ import { OVERVIEW_QUERY } from "../queries";
 import SamsungTVLoader from "./SamsungTVLoader";
 import Enrol from "./Enrol";
 import CreateClass from "./CreateClass";
+import ClassesGrid from "./ClassesGrid";
 
 const fullPage = css`
   width: 100%;
@@ -18,7 +19,6 @@ const fullPage = css`
 const overviewSection = css`
   padding: 10px;
   margin: 10px;
-  background-color: goldenrod;
 `;
 
 const loaderContainer = css`
@@ -65,7 +65,7 @@ class Overview extends Component {
               <div className={overviewSection}>
                 <h1>Classes</h1>
                 {userClasses.length ? (
-                  <p>There are classes</p>
+                  <ClassesGrid />
                 ) : (
                   <p>There are no classes... yet</p>
                 )}

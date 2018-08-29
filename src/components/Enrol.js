@@ -45,7 +45,6 @@ class Enrol extends Component {
             value: c.id,
             label: c.name
           }));
-          console.log("unenrolledClasses", unenrolledClasses);
 
           return allClasses.length ? (
             unenrolledClasses.length ? (
