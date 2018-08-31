@@ -177,10 +177,15 @@ export const ENROL_INTO_CLASS_MUTATION = gql`
   mutation enrolIntoClassMutation($id: String!) {
     enrolIntoClass(id: $id) {
       id
+      name
       enrolledIn {
         id
         name
         students {
+          id
+          name
+        }
+        teacher {
           id
           name
         }

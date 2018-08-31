@@ -60,7 +60,7 @@ class Enrol extends Component {
                 )}
                 <Mutation
                   mutation={ENROL_INTO_CLASS_MUTATION}
-                  onCompleted={this._success}
+                  update={this._success}
                   onError={this._announceError}
                 >
                   {mutation => (
@@ -121,7 +121,10 @@ class Enrol extends Component {
   };
 
   _success = () => {
+    const { onCompleted } = this.props;
+
     this.setState({ mutationLoading: false });
+    if (onCompleted) onCompleted();
   };
 }
 

@@ -104,7 +104,7 @@ class ClassesGrid extends Component {
                     onCompleted={() => this.setState({ isOpen: false })}
                   />
                 ) : (
-                  <Enrol />
+                  <Enrol onCompleted={() => this.setState({ isOpen: false })} />
                 )}
               </Dialog>
             </div>
