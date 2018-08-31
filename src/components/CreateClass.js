@@ -46,6 +46,7 @@ class CreateClass extends Component {
               mutation={CREATE_CLASS_MUTATION}
               onCompleted={this._success}
               onError={this._announceError}
+              update={this._success}
             >
               {mutation => {
                 return (
@@ -98,13 +99,15 @@ class CreateClass extends Component {
   };
 
   _success = async () => {
-    const { toastManager } = this.props;
+    const { toastManager, onCompleted } = this.props;
 
     this.setState({ mutationLoading: false });
     toastManager.add("Class created successfully", {
       appearance: "success",
       autoDismiss: true
     });
+
+    if (onCompleted) onCompleted();
   };
 }
 

@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import logo from "../logo.svg";
+import "@reach/dialog/styles.css";
 // import "../styles/App.css"
 // import LinkList from "./LinkList";
 // import CreateLink from "./CreateLink";
@@ -23,17 +24,31 @@ import Classes from "./Classes";
 import Orders from "./Orders";
 import Ingredients from "./Ingredients";
 
+const bodyWrapper = css`
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-auto-rows: 1fr;
+
+  & > * {
+    overflow: auto;
+  }
+`;
+
 const menuSection = css`
   padding: 10px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
 
   .menuSectionTitle {
     background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    // border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 5px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 2px 0;
   }
 
   h3 {
@@ -42,6 +57,10 @@ const menuSection = css`
 
   svg {
     height: 30px;
+  }
+
+  & > a:not(:first-child) {
+    margin: 5px 0;
   }
 `;
 
@@ -72,15 +91,7 @@ class App extends Component {
     const { cookies } = this.props;
 
     return this.state.hasToken ? (
-      <div
-        style={{
-          height: "100vh",
-          display: "grid",
-          gridTemplateColumns: "250px 1fr",
-          // gridTemplateRows: "auto",
-          gridAutoRows: "1fr"
-        }}
-      >
+      <div className={bodyWrapper}>
         <Query query={USER_QUERY}>
           {({ loading, error, data }) => {
             if (loading)

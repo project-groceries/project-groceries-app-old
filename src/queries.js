@@ -167,6 +167,9 @@ export const CREATE_CLASS_MUTATION = gql`
           id
         }
       }
+      students {
+        id
+      }
     }
   }
 `;

@@ -63,6 +63,29 @@
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@emotion/utils/-/utils-0.8.1.tgz#f3a81587ad8d0ef33cdad6f3b4310774fcc1053e"
 
+"@reach/component-component@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@reach/component-component/-/component-component-0.1.0.tgz#ea8fe4ad2a219e71feb0fb065b82a5683286d7a4"
+
+"@reach/dialog@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@reach/dialog/-/dialog-0.1.0.tgz#37429b84864f9b939cb5dbc0d2de282d0ee607b1"
+  dependencies:
+    "@reach/component-component" "^0.1.0"
+    "@reach/portal" "^0.1.0"
+    "@reach/utils" "^0.1.0"
+    focus-trap "^3.0.0"
+
+"@reach/portal@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.1.0.tgz#f73751da463934784b0e58291651fd08d8a3fe1e"
+  dependencies:
+    "@reach/component-component" "^0.1.0"
+
+"@reach/utils@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.1.0.tgz#263cf1010c9c27663715427144dffc7261f98c8f"
+
 "@types/async@2.0.49":
   version "2.0.49"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.49.tgz#92e33d13f74c895cb9a7f38ba97db8431ed14bc0"
@@ -3179,6 +3202,13 @@ flat-cache@^1.2.1:
 flatten@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
+
+focus-trap@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-3.0.0.tgz#4d2ee044ae66bf7eb6ebc6c93bd7a1039481d7dc"
+  dependencies:
+    tabbable "^3.1.0"
+    xtend "^4.0.1"
 
 follow-redirects@^1.0.0:
   version "1.5.2"
@@ -7104,6 +7134,10 @@ symbol-tree@^3.2.1:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
 
+tabbable@^3.1.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-3.1.1.tgz#db7512f28a9a1ed16e4275bd190131be9d5ad8e9"
+
 table@^4.0.1, table@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/table/-/table-4.0.3.tgz#00b5e2b602f1794b9acaf9ca908a76386a7813bc"
@@ -7759,7 +7793,7 @@ xml-name-validator@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-2.0.1.tgz#4d8b8f1eccd3419aa362061becef515e1e559635"
 
-xtend@^4.0.0:
+xtend@^4.0.0, xtend@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.1.tgz#a5c6d532be656e23db820efb943a1f04998d63af"
 

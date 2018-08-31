@@ -1,16 +1,20 @@
 import React, { Component } from "react";
 import { Query } from "react-apollo";
 import { Link } from "react-router-dom";
+import { Dialog } from "@reach/dialog";
 import { CLASSES_GRID_QUERY } from "../queries";
 import Spinner from "./Spinner";
 import { css } from "emotion";
 import Add from "./svg/Add";
+import CreateClass from "./CreateClass";
+import Enrol from "./Enrol";
 
 const classesGrid = css`
   padding: 5px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
 
   & > * {
     margin: 10px;
@@ -42,6 +46,7 @@ const classesGrid = css`
 
   & svg {
     height: 60px;
+    fill: #d9d9d9;
     transition: all 0.1s ease;
   }
 
@@ -51,7 +56,17 @@ const classesGrid = css`
 `;
 
 class ClassesGrid extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isOpen: false
+    };
+  }
+
   render() {
+    const { isOpen } = this.state;
+
     return (
       <Query query={CLASSES_GRID_QUERY}>
         {({ loading, error, data }) => {
@@ -74,15 +89,38 @@ class ClassesGrid extends Component {
                   </div>
                 </Link>
               ))}
-              <Link to="/unknown">
+              <span onClick={this._toggleModal}>
                 <Add />
-              </Link>
+              </span>
+              <Dialog isOpen={isOpen}>
+                <button
+                  className="close-button"
+                  onClick={() => this.setState({ isOpen: false })}
+                >
+                  <span aria-hidden>×</span>
+                </button>
+                {type === "TEACHER" ? (
+                  <CreateClass
+                    onCompleted={() => this.setState({ isOpen: false })}
+                  />
+                ) : (
+                  <Enrol />
+                )}
+              </Dialog>
             </div>
           );
         }}
       </Query>
     );
   }
+
+  _toggleModal = () => {
+    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
+  };
+
+  // _createClassOnComplete = () => {
+  //   this.setState()
+  // }
 }
 
 export default ClassesGrid;
