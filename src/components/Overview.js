@@ -6,28 +6,7 @@ import SamsungTVLoader from "./SamsungTVLoader";
 import Enrol from "./Enrol";
 import CreateClass from "./CreateClass";
 import ClassesGrid from "./ClassesGrid";
-
-const fullPage = css`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const overviewSection = css`
-  padding: 10px;
-  margin: 10px;
-`;
-
-const loaderContainer = css`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
+import { fullPage, overviewSection, loaderContainer } from "../styles";
 
 class Overview extends Component {
   render() {

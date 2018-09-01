@@ -113,6 +113,23 @@ export const OVERVIEW_QUERY = gql`
   }
 `;
 
+export const CLASSES_QUERY = gql`
+  query overviewQuery {
+    user {
+      id
+      type
+      classes {
+        id
+        name
+      }
+      enrolledIn {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const ENROL_QUERY = gql`
   query enrolQuery {
     user {
