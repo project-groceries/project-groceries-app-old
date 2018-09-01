@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Query, Mutation } from "react-apollo";
 import { withToastManager } from "react-toast-notifications";
 import { CREATE_CLASS_QUERY, CREATE_CLASS_MUTATION } from "../queries";
+import { css } from "emotion";
 
 class CreateClass extends Component {
   constructor(props) {
@@ -51,7 +52,13 @@ class CreateClass extends Component {
               {mutation => {
                 return (
                   <form
-                    className="pad-children"
+                    className={css`
+                      text-align: center;
+
+                      & > * {
+                        padding: 7px;
+                      }
+                    `}
                     onSubmit={e => {
                       e.preventDefault();
                       this.setState({

@@ -40,11 +40,7 @@ class Classes extends Component {
             <Fragment>
               <div className={overviewSection}>
                 <h1>Classes</h1>
-                {userClasses.length ? (
-                  <ClassesGrid />
-                ) : (
-                  <p>There are no classes... yet</p>
-                )}
+                <ClassesGrid />
               </div>
             </Fragment>
           );
