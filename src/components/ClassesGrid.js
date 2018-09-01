@@ -44,6 +44,10 @@ const classesGrid = css`
     justify-content: space-between;
   }
 
+  & span:hover {
+    cursor: pointer;
+  }
+
   & svg {
     height: 60px;
     fill: #d9d9d9;
