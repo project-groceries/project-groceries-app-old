@@ -75,7 +75,9 @@ class ClassView extends Component {
                   >
                     <span aria-hidden>×</span>
                   </button>
-                  <CreateIngredients />
+                  <CreateIngredients
+                    onCompleted={() => this.setState({ isOpen: false })}
+                  />
                 </Dialog>
               </div>
             );

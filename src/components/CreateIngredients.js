@@ -1,8 +1,12 @@
 import React from "react";
 import CreateIngredientsSubForm from "./CreateIngredientsSubForm";
-import { Query } from "react-apollo";
-import { CREATE_INGREDIENTS_QUERY } from "../queries";
+import { Query, Mutation } from "react-apollo";
+import {
+  CREATE_INGREDIENTS_QUERY,
+  CREATE_INGREDIENTS_MUTATION
+} from "../queries";
 import Spinner from "./Spinner";
+import { withToastManager } from "react-toast-notifications/dist/ToastProvider";
 
 class CreateIngredients extends React.Component {
   constructor(props) {
@@ -14,120 +18,154 @@ class CreateIngredients extends React.Component {
           unit: "",
           tags: []
         }
-      ]
+      ],
+      mutationLoading: false
     };
   }
 
   render() {
+    const { onCompleted, toastManager } = this.props;
+
     return (
       <Query query={CREATE_INGREDIENTS_QUERY}>
         {({ loading, error, data }) => {
           if (loading) return <Spinner />;
           if (error) return <p>Error</p>;
 
-          const { ingredients, tags } = data.user.school;
+          const { id: schoolId, ingredients, tags } = data.user.school;
 
           return (
-            <form
-              onSubmit={e => {
-                e.preventDefault();
-                // this.props.createIngredients(this.state.ingredients)
-                const properIngredients = [];
-                let numberOfDuplicateIngredients = 0;
-
-                this.state.ingredients.forEach(ingredient => {
-                  const { name, unit, tags } = ingredient;
-                  const isDuplicate = ingredients.some(
-                    i => i.name.toLowerCase() === name.toLowerCase()
-                  );
-
-                  if (isDuplicate) {
-                    numberOfDuplicateIngredients++;
-                  } else {
-                    properIngredients.push({
-                      name,
-                      unit,
-                      schoolName: "user.schoolName",
-                      tags: tags.filter(t => t.id).map(t => t.id)
-                    });
-                  }
+            <Mutation
+              mutation={CREATE_INGREDIENTS_MUTATION}
+              onError={() => {
+                this.setState({ mutationLoading: false });
+                toastManager.add("There was an error", {
+                  appearance: "error",
+                  autoDismiss: true
+                });
+              }}
+              update={() => {
+                this.setState({ mutationLoading: false });
+                toastManager.add("Ingredients created successfully", {
+                  appearance: "success",
+                  autoDismiss: true
                 });
 
-                if (numberOfDuplicateIngredients > 0) {
-                  alert("duplicate ingredients were not added");
-                  // new Toast({
-                  //   message: "Some duplicate ingredients were not added",
-                  //   type: "warning"
-                  // });
-                }
-
-                console.log("properIngredients", properIngredients);
+                if (onCompleted) onCompleted();
               }}
-              className="column center strict"
             >
-              <datalist id="unitList">
-                <option value="Litres" />
-                <option value="Millilitres" />
-                <option value="Gallons" />
-                <option value="Grams" />
-                <option value="Kilograms" />
-                <option value="Whole" />
-                <option value="Slices" />
-                <option value="Bags" />
-              </datalist>
-              <div className="space-around wrap">
-                {this.state.ingredients.map((i, index) => (
-                  <CreateIngredientsSubForm
-                    key={index}
-                    index={index}
-                    ingredient={i}
-                    remainingTags={tags.filter(
-                      t => !i.tags.some(tt => tt.id === t.id)
-                    )}
-                    multipleIngredients={this.state.ingredients.length > 1}
-                    isDuplicate={ingredients.some(
-                      ii => ii.name.toLowerCase() === i.name.toLowerCase()
-                    )}
-                    updateValue={this.updateValue}
-                    addTag={this.addTag}
-                    selectTag={e => {
-                      const {
-                        value,
-                        dataset: { index, tagindex }
-                      } = e.target;
-                      const selectedTag = tags.find(t => t.id === value);
-                      this.state.ingredients[index].tags[tagindex] = {
-                        id: +value,
-                        name: selectedTag.name
-                      };
-                      this.forceUpdate();
-                    }}
-                    removeTag={this.removeTag}
-                    removeIngredientSubForm={this.removeIngredientSubForm}
-                  />
-                ))}
-              </div>
-              <div
-                className="space-around"
-                style={{
-                  marginTop: "10px",
-                  marginBottom: "10px",
-                  width: "100%"
-                }}
-              >
-                <span />
-                <input type="submit" value="Add Ingredients" className="info" />
-                <button
-                  type="button"
-                  id="CreateIngredientsAddButton"
-                  name=""
-                  style={{ padding: "5px 12px" }}
-                  onClick={this.addIngredientSubForm}
+              {mutation => (
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                    // this.props.createIngredients(this.state.ingredients)
+                    const properIngredients = [];
+                    let numberOfDuplicateIngredients = 0;
+
+                    this.state.ingredients.forEach(ingredient => {
+                      const { name, unit, tags } = ingredient;
+                      const isDuplicate = ingredients.some(
+                        i => i.name.toLowerCase() === name.toLowerCase()
+                      );
+
+                      if (isDuplicate) {
+                        numberOfDuplicateIngredients++;
+                      } else {
+                        properIngredients.push({
+                          name,
+                          unit,
+                          tags: tags.filter(t => t.id).map(t => t.id)
+                        });
+                      }
+                    });
+
+                    if (numberOfDuplicateIngredients > 0) {
+                      alert("duplicate ingredients were not added");
+                      // new Toast({
+                      //   message: "Some duplicate ingredients were not added",
+                      //   type: "warning"
+                      // });
+                    }
+
+                    console.log("properIngredients", properIngredients);
+                    mutation({
+                      variables: {
+                        schoolId,
+                        ingredients: properIngredients
+                      }
+                    });
+                  }}
+                  className="column center strict"
                 >
-                  +
-                </button>
-              </div>
-            </form>
+                  <datalist id="unitList">
+                    <option value="Litres" />
+                    <option value="Millilitres" />
+                    <option value="Gallons" />
+                    <option value="Grams" />
+                    <option value="Kilograms" />
+                    <option value="Whole" />
+                    <option value="Slices" />
+                    <option value="Bags" />
+                  </datalist>
+                  <div className="space-around wrap">
+                    {this.state.ingredients.map((i, index) => (
+                      <CreateIngredientsSubForm
+                        key={index}
+                        index={index}
+                        ingredient={i}
+                        remainingTags={tags.filter(
+                          t => !i.tags.some(tt => tt.id === t.id)
+                        )}
+                        multipleIngredients={this.state.ingredients.length > 1}
+                        isDuplicate={ingredients.some(
+                          ii => ii.name.toLowerCase() === i.name.toLowerCase()
+                        )}
+                        updateValue={this.updateValue}
+                        addTag={this.addTag}
+                        selectTag={e => {
+                          const {
+                            value,
+                            dataset: { index, tagindex }
+                          } = e.target;
+                          const selectedTag = tags.find(t => t.id === value);
+                          this.state.ingredients[index].tags[tagindex] = {
+                            id: +value,
+                            name: selectedTag.name
+                          };
+                          this.forceUpdate();
+                        }}
+                        removeTag={this.removeTag}
+                        removeIngredientSubForm={this.removeIngredientSubForm}
+                      />
+                    ))}
+                  </div>
+                  <div
+                    className="space-around"
+                    style={{
+                      marginTop: "10px",
+                      marginBottom: "10px",
+                      width: "100%"
+                    }}
+                  >
+                    <span />
+                    <input
+                      type="submit"
+                      value="Add Ingredients"
+                      className="info"
+                    />
+                    <button
+                      type="button"
+                      id="CreateIngredientsAddButton"
+                      name=""
+                      style={{ padding: "5px 12px" }}
+                      onClick={this.addIngredientSubForm}
+                    >
+                      +
+                    </button>
+                  </div>
+                </form>
+              )}
+            </Mutation>
           );
         }}
       </Query>
@@ -226,4 +264,4 @@ class CreateIngredients extends React.Component {
   // };
 }
 
-export default CreateIngredients;
+export default withToastManager(CreateIngredients);

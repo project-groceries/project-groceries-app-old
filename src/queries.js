@@ -272,6 +272,7 @@ export const CREATE_INGREDIENTS_QUERY = gql`
       id
       school {
         id
+        name
         ingredients {
           id
           name
@@ -281,6 +282,27 @@ export const CREATE_INGREDIENTS_QUERY = gql`
             name
           }
         }
+        tags {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_INGREDIENTS_MUTATION = gql`
+  mutation createIngredientsMutation(
+    $schoolId: String!
+    $ingredients: [IngredientCreateWithoutSchoolInput!]!
+  ) {
+    createIngredients(schoolId: $schoolId, ingredients: $ingredients) {
+      id
+      name
+      ingredients {
+        id
+        name
+        unit
         tags {
           id
           name
