@@ -11,7 +11,7 @@ export const fullPage = css`
 
 export const overviewSection = css`
   padding: 10px;
-  margin: 10px;
+  // margin: 10px;
 `;
 
 export const loaderContainer = css`
@@ -20,4 +20,11 @@ export const loaderContainer = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+export const bar = css`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 40px;
 `;

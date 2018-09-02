@@ -44,8 +44,19 @@ const classesGrid = css`
     justify-content: space-between;
   }
 
+  & span {
+    width: 250px;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 5px 0px grey;
+    transition: all 0.1s ease;
+  }
+
   & span:hover {
     cursor: pointer;
+    box-shadow: 0px 0px 10px 0px grey;
   }
 
   & svg {
@@ -54,7 +65,7 @@ const classesGrid = css`
     transition: all 0.1s ease;
   }
 
-  & svg:hover {
+  & span:hover svg {
     transform: scale(1.4);
   }
 `;
@@ -121,10 +132,6 @@ class ClassesGrid extends Component {
   _toggleModal = () => {
     this.setState(prevState => ({ isOpen: !prevState.isOpen }));
   };
-
-  // _createClassOnComplete = () => {
-  //   this.setState()
-  // }
 }
 
 export default ClassesGrid;

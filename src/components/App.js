@@ -227,7 +227,7 @@ class App extends Component {
                         hasDeclaredAccountType ? (
                           <Switch>
                             <Route exact path="/" component={Overview} />
-                            <Route exact path="/classes" component={Classes} />
+                            <Route path="/classes" component={Classes} />
                             <Route exact path="/orders" component={Orders} />
                             <Route
                               exact

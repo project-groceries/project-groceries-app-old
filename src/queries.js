@@ -241,3 +241,51 @@ export const CLASSES_GRID_QUERY = gql`
     }
   }
 `;
+
+export const CLASS_VIEW_QUERY = gql`
+  query classViewQuery($id: ID!) {
+    user {
+      id
+      type
+      enrolledIn(where: { id: $id }) {
+        id
+        name
+      }
+      classes(where: { id: $id }) {
+        id
+        name
+      }
+      school {
+        id
+        ingredients {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_INGREDIENTS_QUERY = gql`
+  query createIngredientsQuery {
+    user {
+      id
+      school {
+        id
+        ingredients {
+          id
+          name
+          unit
+          tags {
+            id
+            name
+          }
+        }
+        tags {
+          id
+          name
+        }
+      }
+    }
+  }
+`;

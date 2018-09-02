@@ -6,6 +6,9 @@ import SamsungTVLoader from "./SamsungTVLoader";
 import Enrol from "./Enrol";
 import CreateClass from "./CreateClass";
 import ClassesGrid from "./ClassesGrid";
+import { Switch, Route } from "react-router-dom";
+import ClassView from "./ClassView";
+import { css } from "emotion";
 
 class Classes extends Component {
   render() {
@@ -38,9 +41,27 @@ class Classes extends Component {
             )
           ) : (
             <Fragment>
-              <div className={overviewSection}>
-                <h1>Classes</h1>
-                <ClassesGrid />
+              <div
+                className={css`
+                  display: flex;
+                  & > div:first-child {
+                    flex: 1;
+                    background-color: rgba(0, 0, 0, 0.1);
+                  }
+
+                  & > div:last-child {
+                    width: calc(100% - 300px);
+                    background-color: rgba(0, 0, 0, 0.2);
+                  }
+                `}
+              >
+                <div className={overviewSection}>
+                  <h1>Classes</h1>
+                  <ClassesGrid />
+                </div>
+                <Switch>
+                  <Route path="/classes/:id" component={ClassView} />
+                </Switch>
               </div>
             </Fragment>
           );
