@@ -5,7 +5,9 @@
   "dependencies": {
     "@reach/dialog": "^0.1.0",
     "apollo-boost": "^0.1.12",
+    "apollo-link": "^1.2.2",
     "apollo-link-context": "^1.0.8",
+    "apollo-link-error": "^1.1.0",
     "emotion": "^9.2.6",
     "graphql": "^0.13.2",
     "prop-types": "^15.6.2",
