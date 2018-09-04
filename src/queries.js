@@ -311,3 +311,18 @@ export const CREATE_INGREDIENTS_MUTATION = gql`
     }
   }
 `;
+
+export const INGREDIENTS_PAGE_QUERY = gql`
+  query ingredientsPageQuery {
+    user {
+      id
+      school {
+        id
+        ingredients {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
