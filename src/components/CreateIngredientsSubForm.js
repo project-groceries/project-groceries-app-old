@@ -129,11 +129,9 @@ class CreateIngredientsSubForm extends Component {
                   </small>
                 ) : (
                   <select
-                    name={`tagId${index}`}
                     defaultValue=""
                     style={{ width: "150px" }}
                     key={`null${index}${ti}`}
-                    name={`tag${index}${ti}`}
                     data-index={index}
                     data-tagindex={ti}
                     onChange={selectTag}
