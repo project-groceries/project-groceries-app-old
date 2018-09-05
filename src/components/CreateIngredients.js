@@ -87,7 +87,6 @@ class CreateIngredients extends React.Component {
                       // });
                     }
 
-                    console.log("properIngredients", properIngredients);
                     mutation({
                       variables: {
                         schoolId,
