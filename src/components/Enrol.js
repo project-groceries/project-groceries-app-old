@@ -1,3 +1,5 @@
+/* global mixpanel */
+
 import React, { Component, Fragment } from "react";
 import { Query, Mutation } from "react-apollo";
 import Select from "react-select";
@@ -121,6 +123,8 @@ class Enrol extends Component {
   };
 
   _success = () => {
+    mixpanel.track("Enrolled into class");
+
     const { onCompleted } = this.props;
 
     this.setState({ mutationLoading: false });

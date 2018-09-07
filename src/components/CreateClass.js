@@ -1,3 +1,4 @@
+/* global mixpanel */
 import React, { Component } from "react";
 import { Query, Mutation } from "react-apollo";
 import { withToastManager } from "react-toast-notifications";
@@ -107,6 +108,8 @@ class CreateClass extends Component {
 
   _success = async () => {
     const { toastManager, onCompleted } = this.props;
+
+    mixpanel.track("Created class");
 
     this.setState({ mutationLoading: false });
     toastManager.add("Class created successfully", {

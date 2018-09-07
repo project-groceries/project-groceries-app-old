@@ -1,3 +1,5 @@
+/* global mixpanel */
+
 import React, { Component } from "react";
 // import { AUTH_TOKEN } from "../constants";
 import { Mutation } from "react-apollo";
@@ -109,6 +111,7 @@ class Login extends Component {
                 mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION}
                 variables={{ email, password, name }}
                 onCompleted={data => this._confirm(data)}
+                update={data => this._confirm(data)}
                 onError={error => this._announceError(error)}
               >
                 {mutation => (
@@ -227,6 +230,8 @@ class Login extends Component {
   };
 
   _confirm = async data => {
+    mixpanel.track(this.state.login ? "Logged in" : "Signed up");
+
     this.setState({ success: true, loading: false });
     const { token } = this.state.login ? data.login : data.signup;
     this._saveUserData(token);
