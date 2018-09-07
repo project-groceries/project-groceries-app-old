@@ -230,7 +230,6 @@ class App extends Component {
                             <Route path="/classes" component={Classes} />
                             <Route exact path="/orders" component={Orders} />
                             <Route
-                              exact
                               path="/ingredients"
                               component={Ingredients}
                             />

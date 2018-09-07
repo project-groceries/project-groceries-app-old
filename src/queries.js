@@ -307,6 +307,9 @@ export const CREATE_INGREDIENTS_MUTATION = gql`
           id
           name
         }
+        orders {
+          id
+        }
       }
     }
   }
@@ -321,6 +324,30 @@ export const INGREDIENTS_PAGE_QUERY = gql`
         ingredients {
           id
           name
+        }
+      }
+    }
+  }
+`;
+
+export const INGREDIENTS_GRID_QUERY = gql`
+  query ingredientsGridQuery {
+    user {
+      id
+      school {
+        id
+        ingredients {
+          id
+          name
+          unit
+          tags {
+            id
+            name
+          }
+          orders {
+            id
+            amount
+          }
         }
       }
     }

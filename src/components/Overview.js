@@ -6,6 +6,7 @@ import Enrol from "./Enrol";
 import CreateClass from "./CreateClass";
 import ClassesGrid from "./ClassesGrid";
 import { fullPage, overviewSection, loaderContainer } from "../styles";
+import IngredientsGrid from "./IngredientsGrid";
 
 class Overview extends Component {
   render() {
@@ -58,11 +59,7 @@ class Overview extends Component {
               </div>
               <div className={overviewSection}>
                 <h1>Ingredients</h1>
-                {ingredients.length ? (
-                  <p>There are ingredients</p>
-                ) : (
-                  <p>There are no ingredients... yet</p>
-                )}
+                <IngredientsGrid />
               </div>
             </Fragment>
           );

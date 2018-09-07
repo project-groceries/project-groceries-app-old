@@ -25,6 +25,7 @@ class CreateIngredients extends React.Component {
 
   render() {
     const { onCompleted, toastManager } = this.props;
+    const { mutationLoading } = this.state;
 
     return (
       <Query query={CREATE_INGREDIENTS_QUERY}>
@@ -34,7 +35,9 @@ class CreateIngredients extends React.Component {
 
           const { id: schoolId, ingredients, tags } = data.user.school;
 
-          return (
+          return mutationLoading ? (
+            <Spinner />
+          ) : (
             <Mutation
               mutation={CREATE_INGREDIENTS_MUTATION}
               onError={() => {
@@ -87,6 +90,9 @@ class CreateIngredients extends React.Component {
                       // });
                     }
 
+                    this.setState({
+                      mutationLoading: true
+                    });
                     mutation({
                       variables: {
                         schoolId,

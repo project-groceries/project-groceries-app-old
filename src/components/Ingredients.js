@@ -3,8 +3,12 @@ import { Query } from "react-apollo";
 import { INGREDIENTS_PAGE_QUERY } from "../queries";
 import Spinner from "./Spinner";
 import { Dialog } from "@reach/dialog";
+import { css } from "emotion";
 import CreateIngredients from "./CreateIngredients";
-import { fullPage } from "../styles";
+import { fullPage, overviewSection } from "../styles";
+import IngredientsGrid from "./IngredientsGrid";
+import IngredientView from "./IngredientView";
+import { Route, Switch } from "react-router-dom";
 
 class Ingredients extends Component {
   constructor(props) {
@@ -27,9 +31,38 @@ class Ingredients extends Component {
           const { ingredients } = data.user.school;
 
           return ingredients.length ? (
-            <div>
-              <h1>Ingredients Page</h1>
-              <p>Boo yah</p>
+            <div
+              className={css`
+                display: grid;
+                grid-template-columns: 250px 1fr;
+                grid-template-rows: 100vh;
+                & > div:first-child {
+                  // flex: 1;
+                  background-color: rgba(0, 0, 0, 0.1);
+                  overflow: auto;
+                }
+
+                & > div:last-child {
+                  // width: calc(100% - 200px);
+                  background-color: rgba(0, 0, 0, 0.2);
+                  overflow: auto;
+                }
+              `}
+            >
+              <div className={overviewSection}>
+                <h1>Ingredients</h1>
+                <IngredientsGrid />
+              </div>
+              <Switch>
+                <Route path="/ingredients/:id" component={IngredientView} />
+                <Route
+                  render={() => (
+                    <div className={fullPage}>
+                      <p>No Ingredient Selected</p>
+                    </div>
+                  )}
+                />
+              </Switch>
             </div>
           ) : (
             <div className={fullPage}>
@@ -49,7 +82,11 @@ class Ingredients extends Component {
                   <span aria-hidden>×</span>
                 </button>
                 <CreateIngredients
-                  onCompleted={() => this.setState({ isOpen: false })}
+                  onCompleted={() =>
+                    this.setState({
+                      isOpen: false
+                    })
+                  }
                 />
               </Dialog>
             </div>
