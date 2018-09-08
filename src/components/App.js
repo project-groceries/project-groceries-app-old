@@ -163,10 +163,10 @@ class App extends Component {
                     >
                       <div
                         className="bar"
-                        style={{ backgroundColor: "rgba(0,0,0,0.1)" }}
+                        style={{ backgroundColor: "#83c674" }}
                       >
                         <Link to="/">
-                          <Logo />
+                          <Logo fill="white" />
                         </Link>
                         <h1>{name}</h1>
                       </div>
