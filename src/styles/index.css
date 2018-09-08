@@ -256,14 +256,9 @@ img {
 }
 
 .favicon {
-  fill: #83c673;
   height: 40px;
   background-color: transparent;
   height: 30px;
-}
-
-.favicon.clear {
-  fill: white;
 }
 
 main {
