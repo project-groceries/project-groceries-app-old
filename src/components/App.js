@@ -183,7 +183,9 @@ class App extends Component {
                             <NavLink
                               key={c.id}
                               to={`/classes/${c.id}`}
-                              activeStyle={{ backgroundColor: "blue" }}
+                              activeStyle={{
+                                boxShadow: "0px 0px 1px rgba(0,0,0,0.5)"
+                              }}
                             >
                               {c.name}
                             </NavLink>
