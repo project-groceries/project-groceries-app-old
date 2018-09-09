@@ -2,12 +2,14 @@ import React, { Component } from "react";
 
 class Logo extends Component {
   render() {
+    const { fill } = this.props;
+
     return (
       <svg
         className="favicon"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 550 550"
-        fill="#83c673"
+        fill={fill || "#83c673"}
       >
         <path
           className="handle"

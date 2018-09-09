@@ -111,7 +111,7 @@ class Login extends Component {
                 mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION}
                 variables={{ email, password, name }}
                 onCompleted={data => this._confirm(data)}
-                update={data => this._confirm(data)}
+                // update={data => this._confirm(data)}
                 onError={error => this._announceError(error)}
               >
                 {mutation => (

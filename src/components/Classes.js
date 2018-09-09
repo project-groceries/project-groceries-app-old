@@ -46,12 +46,14 @@ class Classes extends Component {
                   display: flex;
                   & > div:first-child {
                     flex: 1;
-                    background-color: rgba(0, 0, 0, 0.1);
+                    // background-color: rgba(0, 0, 0, 0.1);
                   }
 
                   & > div:last-child {
                     width: calc(100% - 300px);
-                    background-color: rgba(0, 0, 0, 0.2);
+                    // background-color: rgba(0, 0, 0, 0.2);
+                    padding: 10px;
+                    border-left: 1px solid #c9c9c9;
                   }
                 `}
               >

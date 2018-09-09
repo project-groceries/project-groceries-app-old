@@ -260,6 +260,11 @@ export const CLASS_VIEW_QUERY = gql`
         ingredients {
           id
           name
+          unit
+          orders {
+            id
+            amount
+          }
         }
       }
     }
@@ -347,6 +352,58 @@ export const INGREDIENTS_GRID_QUERY = gql`
           orders {
             id
             amount
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_ORDER_QUERY = gql`
+  query createOrderQuery {
+    user {
+      id
+      school {
+        id
+        ingredients {
+          id
+          name
+          unit
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_ORDERS_MUTATION = gql`
+  mutation createOrdersMutation(
+    $orders: [OrderCreateWithoutOrderSessionInput!]!
+  ) {
+    createOrders(orders: $orders) {
+      id
+      createdAt
+      updatedAt
+      orders {
+        id
+        amount
+        createdAt
+        updatedAt
+        ingredient {
+          id
+          orders {
+            id
+          }
+        }
+        madeBy {
+          id
+          orders {
+            id
+          }
+        }
+        class {
+          id
+          orders {
+            id
           }
         }
       }
