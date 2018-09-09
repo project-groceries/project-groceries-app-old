@@ -37,6 +37,26 @@
       }
     })(document, window.mixpanel || []);
     mixpanel.init("cfce9dc378027829531f95eb51061941");</script><!-- end Mixpanel -->
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122950307-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-122950307-1');
+  </script>
+
+  <!-- LogRocket -->
+  <!-- <script src="https://cdn.logrocket.io/LogRocket.min.js" crossorigin="anonymous"></script> -->
+  <!-- <script>window.LogRocket && window.LogRocket.init('5ox9mo/project-groceries');</script> -->
+
+  <!-- Raven.js - Sentry -->
+  <script src="https://cdn.ravenjs.com/3.26.4/raven.min.js" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    Raven.config('https://3aaaa961ca6547d3a48ee38e17f37b04@sentry.io/1251067').install()
+  </script>
 </head>
 
 <body>

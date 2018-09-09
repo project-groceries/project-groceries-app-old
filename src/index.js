@@ -1,3 +1,5 @@
+/* global Raven */
+
 import React from "react";
 import ReactDOM from "react-dom";
 import "./styles/index.css";
@@ -14,6 +16,16 @@ import { setContext } from "apollo-link-context";
 import { CookiesProvider } from "react-cookie";
 import Cookies from "universal-cookie";
 import { ToastProvider } from "react-toast-notifications";
+
+import LogRocket from "logrocket";
+LogRocket.init("5ox9mo/project-groceries");
+
+LogRocket.getSessionURL(function(sessionURL) {
+  Raven.setDataCallback(function(data) {
+    data.extra.sessionURL = sessionURL;
+    return data;
+  });
+});
 
 const httpLink = createHttpLink({
   uri: "https://project-groceries-graphql-dev.herokuapp.com/"

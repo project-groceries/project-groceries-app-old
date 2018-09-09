@@ -20,6 +20,7 @@ export const USER_QUERY = gql`
   query userQuery {
     user {
       id
+      email
       name
       type
       hasDeclaredAccountType

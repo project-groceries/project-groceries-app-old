@@ -6,6 +6,7 @@ import "@reach/dialog/styles.css";
 // import CreateLink from "./CreateLink";
 // import Header from "./Header";
 import { Switch, Route, Redirect, Link, NavLink } from "react-router-dom";
+import LogRocket from "logrocket";
 import Login from "./Login";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
@@ -139,6 +140,7 @@ class App extends Component {
                 if (error) return <div>Error</div>;
 
                 const {
+                  email,
                   name,
                   type,
                   hasDeclaredAccountType,
@@ -150,6 +152,12 @@ class App extends Component {
                   school && hasDeclaredAccountType
                 );
                 const userClasses = type === "TEACHER" ? classes : enrolledIn;
+
+                LogRocket.identify(email, {
+                  name,
+                  email,
+                  type
+                });
 
                 return (
                   <Fragment>
