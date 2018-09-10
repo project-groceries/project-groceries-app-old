@@ -23,6 +23,7 @@ export const USER_QUERY = gql`
       email
       name
       type
+      createdAt
       hasDeclaredAccountType
       school {
         id

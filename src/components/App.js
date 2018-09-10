@@ -1,3 +1,5 @@
+/* global mixpanel */
+
 import React, { Component, Fragment } from "react";
 import logo from "../logo.svg";
 import "@reach/dialog/styles.css";
@@ -144,6 +146,7 @@ class App extends Component {
                   name,
                   type,
                   hasDeclaredAccountType,
+                  createdAt,
                   school,
                   classes,
                   enrolledIn
@@ -157,6 +160,16 @@ class App extends Component {
                   name,
                   email,
                   type
+                });
+
+                // Mixpanel user identification
+                mixpanel.identify(email);
+                mixpanel.people.set({
+                  // only special properties need the $
+                  $email: email,
+                  $name: name,
+                  $created: createdAt,
+                  type: type
                 });
 
                 return (
