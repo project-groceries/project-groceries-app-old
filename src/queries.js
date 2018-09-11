@@ -412,3 +412,34 @@ export const CREATE_ORDERS_MUTATION = gql`
     }
   }
 `;
+
+export const NEW_CLASS_SUBSCRIPTION = gql`
+  subscription {
+    newClass {
+      node {
+        id
+        name
+        createdAt
+        updatedAt
+        teacher {
+          id
+          classes {
+            id
+          }
+        }
+        students {
+          id
+          enrolledIn {
+            id
+          }
+        }
+        orders {
+          id
+          class {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
