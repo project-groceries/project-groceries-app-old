@@ -6,7 +6,6 @@ import Enrol from "./Enrol";
 import CreateClass from "./CreateClass";
 import ClassesGrid from "./ClassesGrid";
 import { fullPage, overviewSection, loaderContainer } from "../styles";
-import IngredientsGrid from "./IngredientsGrid";
 
 class Overview extends Component {
   render() {
@@ -52,10 +51,6 @@ class Overview extends Component {
                 ) : (
                   <p>There are no orders... yet</p>
                 )}
-              </div>
-              <div className={overviewSection}>
-                <h1>Ingredients</h1>
-                <IngredientsGrid />
               </div>
             </Fragment>
           );

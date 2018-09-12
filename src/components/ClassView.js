@@ -7,6 +7,8 @@ import CreateIngredients from "./CreateIngredients";
 import { Dialog } from "@reach/dialog";
 import { css } from "emotion";
 import CreateOrder from "./CreateOrder";
+import Menu from "./svg/Menu";
+import Unenrol from "./Unenrol";
 
 const classViewGrid = css`
   display: grid;
@@ -36,6 +38,44 @@ const classViewGrid = css`
   }
 `;
 
+const burger = css`
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: rgb(220, 220, 220);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(180, 180, 180);
+  }
+`;
+
+const burgerOpen = css`
+  transform: translateX(-250px);
+`;
+
+const menu = css`
+  width: 250px;
+  background-color: gainsboro;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  transition: all 0.3s ease;
+  transform: translateX(250px);
+`;
+
+const menuOpen = css`
+  transform: none;
+`;
+
 class ClassView extends Component {
   constructor(props) {
     super(props);
@@ -43,7 +83,9 @@ class ClassView extends Component {
     this.state = {
       isCreateIngredientsModalOpen: false,
       isAddOrderModalOpen: false,
-      activeIngredient: null
+      isUnenrolModalOpen: false,
+      activeIngredient: null,
+      menuIsOpen: false
     };
   }
 
@@ -53,7 +95,7 @@ class ClassView extends Component {
 
     return (
       <div>
-        <Query query={CLASS_VIEW_QUERY} variables={{ id }}>
+        <Query query={CLASS_VIEW_QUERY}>
           {({ loading, error, data }) => {
             if (loading) return <Spinner />;
 
@@ -62,7 +104,9 @@ class ClassView extends Component {
             const {
               isCreateIngredientsModalOpen,
               isAddOrderModalOpen,
-              activeIngredient
+              isUnenrolModalOpen,
+              activeIngredient,
+              menuIsOpen
             } = this.state;
             const {
               type,
@@ -73,7 +117,7 @@ class ClassView extends Component {
             const appropriateClasses =
               type === "STUDENT" ? enrolledIn : classes;
             const appropriateClass = appropriateClasses.length
-              ? appropriateClasses[0]
+              ? appropriateClasses.find(c => c.id === id)
               : null;
 
             return ingredients.length ? (
@@ -107,6 +151,19 @@ class ClassView extends Component {
                     </Dialog>
                     <small>Search (Coming Soon)</small>
                     <p>All/Summary</p>
+                    <div
+                      className={css`
+                        ${burger};
+                        ${menuIsOpen ? burgerOpen : ""};
+                      `}
+                      onClick={() =>
+                        this.setState(prevState => ({
+                          menuIsOpen: !prevState.menuIsOpen
+                        }))
+                      }
+                    >
+                      <Menu />
+                    </div>
                   </div>
                   <div className={classViewGrid}>
                     {ingredients.map(ingredient => {
@@ -142,6 +199,43 @@ class ClassView extends Component {
                         </div>
                       );
                     })}
+                  </div>
+                  <div
+                    className={css`
+                      ${menu};
+                      ${menuIsOpen ? menuOpen : ""};
+                    `}
+                  >
+                    <h2>Hello</h2>
+                    <input
+                      type="button"
+                      value={`${
+                        type === "TEACHER" ? "Delete" : "Unenroll from"
+                      } this class`}
+                      className={type === "TEACHER" ? "error" : "warning"}
+                      onClick={this._toggleUnenrolModal}
+                      style={{
+                        position: "absolute",
+                        bottom: "10px",
+                        right: "10px"
+                      }}
+                    />
+                    <Dialog isOpen={isUnenrolModalOpen}>
+                      <button
+                        className="close-button"
+                        onClick={() =>
+                          this.setState({ isUnenrolModalOpen: false })
+                        }
+                      >
+                        <span aria-hidden>×</span>
+                      </button>
+                      <Unenrol
+                        id={id}
+                        onCompleted={() =>
+                          this.setState({ isUnenrolModalOpen: false })
+                        }
+                      />
+                    </Dialog>
                   </div>
                 </Fragment>
               ) : (
@@ -191,6 +285,12 @@ class ClassView extends Component {
   _toggleAddOrderModal = () => {
     this.setState(prevState => ({
       isAddOrderModalOpen: !prevState.isAddOrderModalOpen
+    }));
+  };
+
+  _toggleUnenrolModal = () => {
+    this.setState(prevState => ({
+      isUnenrolModalOpen: !prevState.isUnenrolModalOpen
     }));
   };
 }

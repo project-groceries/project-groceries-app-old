@@ -230,18 +230,20 @@ class Login extends Component {
   };
 
   _confirm = async data => {
+    const { cookies } = this.props;
+    const { login } = this.state;
+
     mixpanel.track(this.state.login ? "Logged in" : "Signed up");
 
-    this.setState({ success: true, loading: false });
-    const { token } = this.state.login ? data.login : data.signup;
-    this._saveUserData(token);
-  };
-
-  _saveUserData = token => {
-    const { cookies } = this.props;
-
+    const { token } = login ? data.login : data.signup;
     cookies.set("token", token, { path: "/" });
+
+    this.setState({ success: true, loading: false });
+    // this._saveUserData(token);
   };
+
+  // _saveUserData = token => {
+  // };
 }
 
 export default withCookies(Login);

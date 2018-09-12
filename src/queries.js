@@ -245,15 +245,15 @@ export const CLASSES_GRID_QUERY = gql`
 `;
 
 export const CLASS_VIEW_QUERY = gql`
-  query classViewQuery($id: ID!) {
+  query classViewQuery {
     user {
       id
       type
-      enrolledIn(where: { id: $id }) {
+      enrolledIn {
         id
         name
       }
-      classes(where: { id: $id }) {
+      classes {
         id
         name
       }
@@ -439,6 +439,17 @@ export const NEW_CLASS_SUBSCRIPTION = gql`
             id
           }
         }
+      }
+    }
+  }
+`;
+
+export const UNENROL_MUTATION = gql`
+  mutation unenrolMutation($id: String!) {
+    unenrol(id: $id) {
+      id
+      enrolledIn {
+        id
       }
     }
   }
