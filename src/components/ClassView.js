@@ -167,10 +167,9 @@ class ClassView extends Component {
                   </div>
                   <div className={classViewGrid}>
                     {ingredients.map(ingredient => {
-                      const totalOrders = ingredient.orders.reduce(
-                        (acc, cur) => acc + cur.amount,
-                        0
-                      );
+                      const totalOrders = ingredient.orders
+                        .filter(o => o.class.id === id)
+                        .reduce((acc, cur) => acc + cur.amount, 0);
 
                       return (
                         <div

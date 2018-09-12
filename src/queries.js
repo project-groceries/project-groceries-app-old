@@ -259,6 +259,9 @@ export const CLASS_VIEW_QUERY = gql`
           orders {
             id
             amount
+            class {
+              id
+            }
           }
         }
       }
