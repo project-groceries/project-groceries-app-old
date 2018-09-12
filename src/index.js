@@ -61,6 +61,7 @@ const routeLink = split(
 
 const authLink = setContext((_, { headers }) => {
   // const token = localStorage.getItem(AUTH_TOKEN);
+  const token = cookies.get("token");
   return {
     headers: {
       ...headers,
