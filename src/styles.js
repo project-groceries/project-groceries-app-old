@@ -7,6 +7,7 @@ export const fullPage = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
 `;
 
 export const overviewSection = css`
