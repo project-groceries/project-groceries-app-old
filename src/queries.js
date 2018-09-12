@@ -450,3 +450,14 @@ export const UNENROL_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_CLASS_MUTATION = gql`
+  mutation deleteClassMutation($id: String!) {
+    deleteClass(id: $id) {
+      id
+      classes {
+        id
+      }
+    }
+  }
+`;

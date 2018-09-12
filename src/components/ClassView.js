@@ -9,6 +9,7 @@ import { css } from "emotion";
 import CreateOrder from "./CreateOrder";
 import Menu from "./svg/Menu";
 import Unenrol from "./Unenrol";
+import DeleteClass from "./DeleteClass";
 
 const classViewGrid = css`
   display: grid;
@@ -228,12 +229,21 @@ class ClassView extends Component {
                       >
                         <span aria-hidden>×</span>
                       </button>
-                      <Unenrol
-                        id={id}
-                        onCompleted={() =>
-                          this.setState({ isUnenrolModalOpen: false })
-                        }
-                      />
+                      {type === "TEACHER" ? (
+                        <DeleteClass
+                          id={id}
+                          onCompleted={() =>
+                            this.setState({ isUnenrolModalOpen: false })
+                          }
+                        />
+                      ) : (
+                        <Unenrol
+                          id={id}
+                          onCompleted={() =>
+                            this.setState({ isUnenrolModalOpen: false })
+                          }
+                        />
+                      )}
                     </Dialog>
                   </div>
                 </Fragment>
