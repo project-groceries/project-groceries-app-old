@@ -21,13 +21,11 @@ class Overview extends Component {
 
           if (error) return <div>Error</div>;
 
-          const { classes, enrolledIn, orders, school, type } = data.user;
-          const { ingredients } = school;
+          const { classes, enrolledIn, orders, type } = data.user;
           const userClasses = type === "TEACHER" ? classes : enrolledIn;
-          const hasNothing =
-            !userClasses.length && !orders.length && !ingredients.length;
+          const noClasses = !userClasses.length;
 
-          return hasNothing ? (
+          return noClasses ? (
             type === "STUDENT" ? (
               <div className={fullPage}>
                 <h2>You aren't enrolled in any classes yet!</h2>

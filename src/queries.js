@@ -87,13 +87,6 @@ export const OVERVIEW_QUERY = gql`
     user {
       id
       type
-      school {
-        id
-        ingredients {
-          id
-          name
-        }
-      }
       classes {
         id
         name
