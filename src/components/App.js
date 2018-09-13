@@ -102,6 +102,10 @@ class App extends Component {
     }
   }
 
+  componentDidUpdate() {
+    window.Intercom("update");
+  }
+
   render() {
     const { cookies } = this.props;
 
@@ -160,6 +164,13 @@ class App extends Component {
                   name,
                   email,
                   type
+                });
+
+                window.Intercom("boot", {
+                  app_id: "e1sx7dly",
+                  name: name, // Full name
+                  email: email // Email address
+                  // created_at: "yolo" // Signup date
                 });
 
                 // Mixpanel user identification

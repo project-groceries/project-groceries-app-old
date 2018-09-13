@@ -98,3 +98,7 @@ ReactDOM.render(
   document.getElementById("root")
 );
 registerServiceWorker();
+
+window.Intercom("boot", {
+  app_id: "e1sx7dly"
+});
