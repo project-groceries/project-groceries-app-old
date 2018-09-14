@@ -172,8 +172,9 @@ class App extends Component {
 
                 window.Intercom("boot", {
                   app_id: "e1sx7dly",
-                  name: name, // Full name
-                  email: email // Email address
+                  name, // Full name
+                  email, // Email address
+                  type
                   // created_at: "yolo" // Signup date
                 });
 
