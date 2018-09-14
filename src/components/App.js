@@ -174,7 +174,7 @@ class App extends Component {
                   app_id: "e1sx7dly",
                   name, // Full name
                   email, // Email address
-                  type
+                  "Account Type": type
                   // created_at: "yolo" // Signup date
                 });
 
