@@ -1,6 +1,6 @@
 /* global mixpanel */
 
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { css } from "emotion";
 import { Query, Mutation } from "react-apollo";
 import { withToastManager } from "react-toast-notifications";
@@ -8,7 +8,7 @@ import { CREATE_ORDER_QUERY, CREATE_ORDERS_MUTATION } from "../queries";
 import Spinner from "./Spinner";
 import Select from "react-select";
 import Add from "./svg/Add";
-import Cross from "./svg/Cross";
+import Close from "./svg/Close";
 
 const orderItem = css`
   background-color: #f1f1f1;
@@ -39,6 +39,7 @@ const orderItem = css`
     // background-color: white;
     // width: 40px;
     height: 40px;
+    width: 40px;
     transition: all 0.1s ease;
   }
 
@@ -77,7 +78,9 @@ class CreateOrder extends Component {
     this.state = {
       orderedIngredients: new Map(),
       addingIngredients: false,
-      mutationLoading: false
+      mutationLoading: false,
+      isRecipe: false,
+      recipeTitle: "Untitled Recipe"
     };
   }
 
@@ -92,7 +95,9 @@ class CreateOrder extends Component {
           const {
             orderedIngredients,
             addingIngredients,
-            mutationLoading
+            mutationLoading,
+            isRecipe,
+            recipeTitle
           } = this.state;
           const {
             id: userId,
@@ -115,7 +120,20 @@ class CreateOrder extends Component {
                 margin: 10px auto;
               `}
             >
-              <h2>{time.toLocaleString()}</h2>
+              {isRecipe ? (
+                <input
+                  type="text"
+                  value={recipeTitle}
+                  onChange={e => {
+                    e.preventDefault();
+
+                    this.setState({ recipeTitle: e.target.value });
+                  }}
+                  placeholder="Untitled recipe"
+                />
+              ) : (
+                <h2>{time.toLocaleString()}</h2>
+              )}
               {[...orderedIngredients].map(([id, ingredient]) => (
                 <div key={id} className={orderItem}>
                   <h3>{ingredient.name}</h3>
@@ -147,7 +165,7 @@ class CreateOrder extends Component {
                     />
                     <small> {ingredient.unit}</small>
                   </div>
-                  <Cross
+                  <Close
                     onClick={() =>
                       this.setState(prevState => {
                         prevState.orderedIngredients.delete(id);
@@ -199,37 +217,61 @@ class CreateOrder extends Component {
                 </span>
               )}
               {orderedIngredients.size ? (
-                <Mutation
-                  mutation={CREATE_ORDERS_MUTATION}
-                  onCompleted={this._success}
-                  onError={this._announceError}
-                  update={this._success}
-                >
-                  {mutation => {
-                    return (
-                      <input
-                        type="button"
-                        value="Add the order"
-                        className="success"
-                        onClick={() => {
-                          const orders = [...orderedIngredients].map(
-                            ([id, ingredient]) => ({
-                              amount: ingredient.amount,
-                              ingredient: { connect: { id } },
-                              madeBy: { connect: { id: userId } },
-                              class: { connect: { id: classId } }
-                            })
-                          );
+                isRecipe ? (
+                  <Fragment>
+                    <input
+                      type="button"
+                      value="Save this recipe"
+                      className="info"
+                    />
+                    <input
+                      type="button"
+                      value="Back to individual order"
+                      className="default"
+                      onClick={() => this.setState({ isRecipe: false })}
+                    />
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <Mutation
+                      mutation={CREATE_ORDERS_MUTATION}
+                      onCompleted={this._success}
+                      onError={this._announceError}
+                      update={this._success}
+                    >
+                      {mutation => {
+                        return (
+                          <input
+                            type="button"
+                            value="Add the order"
+                            className="success"
+                            onClick={() => {
+                              const orders = [...orderedIngredients].map(
+                                ([id, ingredient]) => ({
+                                  amount: ingredient.amount,
+                                  ingredient: { connect: { id } },
+                                  madeBy: { connect: { id: userId } },
+                                  class: { connect: { id: classId } }
+                                })
+                              );
 
-                          console.log("orders", orders);
-                          this.setState({ mutationLoading: true });
+                              console.log("orders", orders);
+                              this.setState({ mutationLoading: true });
 
-                          mutation({ variables: { orders } });
-                        }}
-                      />
-                    );
-                  }}
-                </Mutation>
+                              mutation({ variables: { orders } });
+                            }}
+                          />
+                        );
+                      }}
+                    </Mutation>
+                    <input
+                      type="button"
+                      value="Save order as a recipe"
+                      className="default"
+                      onClick={() => this.setState({ isRecipe: true })}
+                    />
+                  </Fragment>
+                )
               ) : (
                 ""
               )}
