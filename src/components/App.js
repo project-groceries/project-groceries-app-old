@@ -28,7 +28,7 @@ import Orders from "./Orders";
 import Ingredients from "./Ingredients";
 import { Offline } from "react-detect-offline";
 import Menu from "./svg/Menu";
-import { burger } from "../styles";
+import { circleIcon } from "../styles";
 
 const bodyWrapper = css`
   height: 100vh;
@@ -272,7 +272,7 @@ class App extends Component {
                     >
                       <div
                         className={css`
-                          ${burger};
+                          ${circleIcon};
                           left: 10px;
                           ${menuIsOpen ? "transform: translateX(250px);" : ""};
                         `}

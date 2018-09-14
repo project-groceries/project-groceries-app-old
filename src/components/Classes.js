@@ -24,6 +24,9 @@ class Classes extends Component {
 
           if (error) return <div>Error</div>;
 
+          const { match } = this.props;
+          const { isExact } = match;
+
           const { classes, enrolledIn, type } = data.user;
           const userClasses = type === "TEACHER" ? classes : enrolledIn;
           const noClasses = !userClasses.length;
@@ -43,21 +46,23 @@ class Classes extends Component {
             <Fragment>
               <div
                 className={css`
-                  display: flex;
-                  & > div:first-child {
-                    flex: 1;
-                    // background-color: rgba(0, 0, 0, 0.1);
-                  }
+                  display: grid;
+                  grid-template-columns: ${isExact ? "1fr" : "300px 1fr;"};
 
-                  & > div:last-child {
-                    width: calc(100% - 300px);
-                    // background-color: rgba(0, 0, 0, 0.2);
-                    padding: 10px;
-                    border-left: 1px solid #c9c9c9;
+                  @media (max-width: 1000px) {
+                    grid-template-columns: 1fr;
+
+                    & > div:first-child {
+                      ${isExact ? "" : "display: none;"};
+                    }
                   }
                 `}
               >
-                <div className={overviewSection}>
+                <div
+                  className={css`
+                    ${overviewSection};
+                  `}
+                >
                   <h1>Classes</h1>
                   <ClassesGrid />
                 </div>

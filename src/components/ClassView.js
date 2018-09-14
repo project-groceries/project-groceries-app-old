@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Query } from "react-apollo";
 import { CLASS_VIEW_QUERY } from "../queries";
 import Spinner from "./Spinner";
-import { fullPage, bar, burger } from "../styles";
+import { fullPage, bar, circleIcon } from "../styles";
 import CreateIngredients from "./CreateIngredients";
 import { Dialog } from "@reach/dialog";
 import { css } from "emotion";
@@ -10,6 +10,7 @@ import CreateOrder from "./CreateOrder";
 import Menu from "./svg/Menu";
 import Unenrol from "./Unenrol";
 import DeleteClass from "./DeleteClass";
+import Close from "./svg/Close";
 
 const classViewGrid = css`
   display: grid;
@@ -68,11 +69,15 @@ class ClassView extends Component {
   }
 
   render() {
-    const { match } = this.props;
+    const { match, history } = this.props;
     const { id } = match.params;
 
     return (
-      <div>
+      <div
+        className={css`
+          position: relative;
+        `}
+      >
         <Query query={CLASS_VIEW_QUERY}>
           {({ loading, error, data }) => {
             if (loading) return <Spinner />;
@@ -105,6 +110,22 @@ class ClassView extends Component {
                     <h2>{appropriateClass.name}</h2>
                   </div>
                   <div className={bar}>
+                    <div
+                      className={css`
+                        ${circleIcon};
+                        left: 10px;
+                        ${menuIsOpen ? "transform: translateX(-250px);" : ""};
+
+                        display: none;
+
+                        @media (max-width: 1000px) {
+                          display: inherit;
+                        }
+                      `}
+                      onClick={() => history.push(`/classes`)}
+                    >
+                      <Close />
+                    </div>
                     <input
                       type="button"
                       value="Add an order"
@@ -131,7 +152,7 @@ class ClassView extends Component {
                     <p>All/Summary</p>
                     <div
                       className={css`
-                        ${burger};
+                        ${circleIcon};
                         right: 10px;
                         ${menuIsOpen ? "transform: translateX(-250px);" : ""};
                       `}

@@ -30,7 +30,7 @@ export const bar = css`
   height: 40px;
 `;
 
-export const burger = css`
+export const circleIcon = css`
   height: 40px;
   width: 40px;
   border-radius: 50%;
@@ -39,7 +39,7 @@ export const burger = css`
   justify-content: center;
   align-items: center;
   transition: all 0.3s ease;
-  position: fixed;
+  position: absolute;
   top: 10px;
   // right: 10px;
 
@@ -47,4 +47,8 @@ export const burger = css`
     cursor: pointer;
     background-color: rgb(180, 180, 180);
   }
+
+  // & svg {
+  //   height: 40px;
+  // }
 `;
