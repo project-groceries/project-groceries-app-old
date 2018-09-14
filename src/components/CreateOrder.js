@@ -166,14 +166,15 @@ class CreateOrder extends Component {
                     <small> {ingredient.unit}</small>
                   </div>
                   <Close
-                    onClick={() =>
+                    onClick={() => {
+                      alert("just got clicked");
                       this.setState(prevState => {
                         prevState.orderedIngredients.delete(id);
                         return {
                           orderedIngredients: prevState.orderedIngredients
                         };
-                      })
-                    }
+                      });
+                    }}
                   />
                 </div>
               ))}
