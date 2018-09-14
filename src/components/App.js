@@ -27,11 +27,13 @@ import Classes from "./Classes";
 import Orders from "./Orders";
 import Ingredients from "./Ingredients";
 import { Offline } from "react-detect-offline";
+import Menu from "./svg/Menu";
+import { burger } from "../styles";
 
 const bodyWrapper = css`
   height: 100vh;
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: 60px 1fr;
   grid-auto-rows: 1fr;
 
   & > * {
@@ -89,7 +91,8 @@ class App extends Component {
 
     const { cookies } = this.props;
     this.state = {
-      hasToken: cookies.get("token") || undefined
+      hasToken: cookies.get("token") || undefined,
+      menuIsOpen: false
     };
   }
 
@@ -108,6 +111,7 @@ class App extends Component {
 
   render() {
     const { cookies } = this.props;
+    const { hasToken, menuIsOpen } = this.state;
 
     return (
       <Fragment>
@@ -116,7 +120,7 @@ class App extends Component {
             Offline: Changes made now may not be saved
           </div>
         </Offline>
-        {this.state.hasToken ? (
+        {hasToken ? (
           <div className={bodyWrapper}>
             <Query query={USER_QUERY}>
               {({ loading, error, data }) => {
@@ -187,10 +191,15 @@ class App extends Component {
                   <Fragment>
                     <section
                       style={{
-                        backgroundColor: "rgba(128, 128, 128, 0.1)",
-                        transition: "all 0.6s ease",
+                        backgroundColor: "rgb(236, 236, 236)",
+                        transition: "all 0.3s ease",
                         filter: hasCompletedDetails ? "none" : "blur(8px)",
-                        pointerEvents: hasCompletedDetails ? "auto" : "none"
+                        pointerEvents: hasCompletedDetails ? "auto" : "none",
+                        position: "fixed",
+                        height: "100vh",
+                        width: "250px",
+                        zIndex: 2,
+                        transform: menuIsOpen ? "" : "translateX(-100%)"
                       }}
                     >
                       <div
@@ -256,6 +265,26 @@ class App extends Component {
                         }}
                       />
                     </section>
+                    <div
+                      className={css`
+                        background-color: rgb(245, 245, 245);
+                      `}
+                    >
+                      <div
+                        className={css`
+                          ${burger};
+                          left: 10px;
+                          ${menuIsOpen ? "transform: translateX(250px);" : ""};
+                        `}
+                        onClick={() =>
+                          this.setState(prevState => ({
+                            menuIsOpen: !prevState.menuIsOpen
+                          }))
+                        }
+                      >
+                        <Menu />
+                      </div>
+                    </div>
                     <main>
                       {school ? (
                         hasDeclaredAccountType ? (

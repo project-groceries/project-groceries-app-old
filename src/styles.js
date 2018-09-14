@@ -29,3 +29,22 @@ export const bar = css`
   align-items: center;
   height: 40px;
 `;
+
+export const burger = css`
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: rgb(220, 220, 220);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  position: fixed;
+  top: 10px;
+  // right: 10px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(180, 180, 180);
+  }
+`;

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Query } from "react-apollo";
 import { CLASS_VIEW_QUERY } from "../queries";
 import Spinner from "./Spinner";
-import { fullPage, bar } from "../styles";
+import { fullPage, bar, burger } from "../styles";
 import CreateIngredients from "./CreateIngredients";
 import { Dialog } from "@reach/dialog";
 import { css } from "emotion";
@@ -37,29 +37,6 @@ const classViewGrid = css`
   & > div[data-active="true"] {
     grid-row-end: span 3;
   }
-`;
-
-const burger = css`
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  background-color: rgb(220, 220, 220);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.3s ease;
-  position: fixed;
-  top: 10px;
-  right: 10px;
-
-  &:hover {
-    cursor: pointer;
-    background-color: rgb(180, 180, 180);
-  }
-`;
-
-const burgerOpen = css`
-  transform: translateX(-250px);
 `;
 
 const menu = css`
@@ -155,7 +132,8 @@ class ClassView extends Component {
                     <div
                       className={css`
                         ${burger};
-                        ${menuIsOpen ? burgerOpen : ""};
+                        right: 10px;
+                        ${menuIsOpen ? "transform: translateX(-250px);" : ""};
                       `}
                       onClick={() =>
                         this.setState(prevState => ({
