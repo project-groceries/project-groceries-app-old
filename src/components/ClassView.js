@@ -122,7 +122,7 @@ class ClassView extends Component {
                           display: inherit;
                         }
                       `}
-                      onClick={() => history.push(`/classes`)}
+                      onClick={() => history.push("/classes")}
                     >
                       <Close />
                     </div>
