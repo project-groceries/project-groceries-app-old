@@ -175,7 +175,10 @@ class App extends Component {
                   name, // Full name
                   email, // Email address
                   "Account Type": type,
-                  "Company Name": school ? school.name : ""
+                  company: {
+                    id: school ? school.id : "",
+                    name: school ? school.name : ""
+                  }
                   // created_at: "yolo" // Signup date
                 });
 
