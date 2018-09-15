@@ -461,3 +461,42 @@ export const DELETE_CLASS_MUTATION = gql`
     }
   }
 `;
+
+export const NEW_ORDERS_SUBSCRIPTION = gql`
+  subscription {
+    newOrders {
+      node {
+        id
+        createdAt
+        updatedAt
+        orders {
+          id
+          amount
+          createdAt
+          updatedAt
+          ingredient {
+            id
+            orders {
+              id
+            }
+          }
+          orderSession {
+            id
+          }
+          madeBy {
+            id
+            orders {
+              id
+            }
+          }
+          class {
+            id
+            orders {
+              id
+            }
+          }
+        }
+      }
+    }
+  }
+`;

@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { Query } from "react-apollo";
 import { Link } from "react-router-dom";
 import { Dialog } from "@reach/dialog";
-import { CLASSES_GRID_QUERY, NEW_CLASS_SUBSCRIPTION } from "../queries";
+import {
+  CLASSES_GRID_QUERY,
+  NEW_CLASS_SUBSCRIPTION,
+  NEW_ORDERS_SUBSCRIPTION
+} from "../queries";
 import Spinner from "./Spinner";
 import { css } from "emotion";
 import Add from "./svg/Add";
@@ -89,6 +93,7 @@ class ClassesGrid extends Component {
           if (error) return <p>Error</p>;
 
           this._subscribeToNewClasses(subscribeToMore);
+          this._subscribeToNewOrders(subscribeToMore);
 
           const { type, classes, enrolledIn } = data.user;
           const userClasses = type === "TEACHER" ? classes : enrolledIn;
@@ -138,6 +143,15 @@ class ClassesGrid extends Component {
   _subscribeToNewClasses = subscribeToMore => {
     subscribeToMore({
       document: NEW_CLASS_SUBSCRIPTION
+      // updateQuery: (prev, { subscriptionData }) => {
+      //   if (!subscriptionData.data) return prev;
+      // }
+    });
+  };
+
+  _subscribeToNewOrders = subscribeToMore => {
+    subscribeToMore({
+      document: NEW_ORDERS_SUBSCRIPTION
       // updateQuery: (prev, { subscriptionData }) => {
       //   if (!subscriptionData.data) return prev;
       // }
