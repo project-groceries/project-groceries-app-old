@@ -4,7 +4,11 @@ import React, { Component, Fragment } from "react";
 import { css } from "emotion";
 import { Query, Mutation } from "react-apollo";
 import { withToastManager } from "react-toast-notifications";
-import { CREATE_ORDER_QUERY, CREATE_ORDERS_MUTATION } from "../queries";
+import {
+  CREATE_ORDER_QUERY,
+  CREATE_ORDERS_MUTATION,
+  CREATE_RECIPE_MUTATION
+} from "../queries";
 import Spinner from "./Spinner";
 import Select from "react-select";
 import Add from "./svg/Add";
@@ -80,7 +84,7 @@ class CreateOrder extends Component {
       addingIngredients: false,
       mutationLoading: false,
       isRecipe: false,
-      recipeTitle: "Untitled Recipe"
+      recipeName: "Mystery Recipe"
     };
   }
 
@@ -97,11 +101,11 @@ class CreateOrder extends Component {
             addingIngredients,
             mutationLoading,
             isRecipe,
-            recipeTitle
+            recipeName
           } = this.state;
           const {
             id: userId,
-            school: { ingredients }
+            school: { id: schoolId, ingredients }
           } = data.user;
           const unorderedIngredients = ingredients.filter(
             i => !orderedIngredients.has(i.id)
@@ -123,13 +127,13 @@ class CreateOrder extends Component {
               {isRecipe ? (
                 <input
                   type="text"
-                  value={recipeTitle}
+                  value={recipeName}
                   onChange={e => {
                     e.preventDefault();
 
-                    this.setState({ recipeTitle: e.target.value });
+                    this.setState({ recipeName: e.target.value });
                   }}
-                  placeholder="Untitled recipe"
+                  placeholder="Mystery recipe"
                 />
               ) : (
                 <h2>{time.toLocaleString()}</h2>
@@ -166,15 +170,14 @@ class CreateOrder extends Component {
                     <small> {ingredient.unit}</small>
                   </div>
                   <Close
-                    onClick={() => {
-                      alert("just got clicked");
+                    onClick={() =>
                       this.setState(prevState => {
                         prevState.orderedIngredients.delete(id);
                         return {
                           orderedIngredients: prevState.orderedIngredients
                         };
-                      });
-                    }}
+                      })
+                    }
                   />
                 </div>
               ))}
@@ -220,11 +223,46 @@ class CreateOrder extends Component {
               {orderedIngredients.size ? (
                 isRecipe ? (
                   <Fragment>
-                    <input
-                      type="button"
-                      value="Save this recipe"
-                      className="info"
-                    />
+                    <Mutation
+                      mutation={CREATE_RECIPE_MUTATION}
+                      onCompleted={this._success}
+                      onError={this._announceError}
+                      update={this._success}
+                    >
+                      {mutation => {
+                        return (
+                          <input
+                            type="button"
+                            value="Save this recipe"
+                            className="info"
+                            onClick={() => {
+                              const ingredients = [...orderedIngredients].map(
+                                ([id, ingredient]) => ({
+                                  amount: ingredient.amount,
+                                  ingredient: {
+                                    connect: { id }
+                                  }
+                                })
+                              );
+
+                              console.log("ingredients", ingredients);
+
+                              this.setState({
+                                mutationLoading: true
+                              });
+
+                              mutation({
+                                variables: {
+                                  name: recipeName,
+                                  schoolId,
+                                  ingredients
+                                }
+                              });
+                            }}
+                          />
+                        );
+                      }}
+                    </Mutation>
                     <input
                       type="button"
                       value="Back to individual order"
@@ -256,7 +294,6 @@ class CreateOrder extends Component {
                                 })
                               );
 
-                              console.log("orders", orders);
                               this.setState({ mutationLoading: true });
 
                               mutation({ variables: { orders } });
@@ -295,11 +332,13 @@ class CreateOrder extends Component {
 
   _success = async () => {
     const { toastManager, onCompleted } = this.props;
+    const { isRecipe } = this.state;
 
-    mixpanel.track("Made orders");
+    mixpanel.track(isRecipe ? "Created Recipe" : "Made orders");
 
     this.setState({ mutationLoading: false });
-    toastManager.add("Your order was added successfully", {
+    const action = isRecipe ? "recipe was created" : "order was added";
+    toastManager.add(`Your ${action} successfully`, {
       appearance: "success",
       autoDismiss: true
     });

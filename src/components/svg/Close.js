@@ -4,6 +4,7 @@ class Close extends Component {
   render() {
     return (
       <svg
+        onClick={this.props.onClick}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         width="24"

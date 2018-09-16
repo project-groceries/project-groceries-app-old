@@ -500,3 +500,36 @@ export const NEW_ORDERS_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const CREATE_RECIPE_MUTATION = gql`
+  mutation createRecipeMutation(
+    $name: String!
+    $schoolId: String!
+    $ingredients: [RecipeIngredientCreateWithoutRecipeInput!]!
+  ) {
+    createRecipe(name: $name, schoolId: $schoolId, ingredients: $ingredients) {
+      id
+      name
+      createdAt
+      updatedAt
+      school {
+        id
+        recipes {
+          id
+        }
+      }
+      ingredients {
+        id
+        amount
+        createdAt
+        updatedAt
+        recipe {
+          id
+        }
+        ingredient {
+          id
+        }
+      }
+    }
+  }
+`;
