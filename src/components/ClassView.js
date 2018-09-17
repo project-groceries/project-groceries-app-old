@@ -21,6 +21,10 @@ const classViewGrid = css`
   width: fit-content;
   margin: 10px auto;
 
+  @media (max-width: 768px) {
+    grid-template-columns: 300px;
+  }
+
   & > div {
     background-color: #f1f1f1;
     box-shadow: rgba(0, 0, 0, 0.14) 0 2px 2px 0;
@@ -229,13 +233,19 @@ class ClassView extends Component {
                       background-color: white;
                       position: sticky;
                       top: 40px;
+
+                      @media (max-width: 768px) {
+                        #search {
+                          width: 150px;
+                        }
+                      }
                     `}
                   >
                     <div
                       className={css`
                         ${circleIcon};
+                        top: -30px;
                         left: 10px;
-                        ${menuIsOpen ? "transform: translateX(-250px);" : ""};
 
                         display: none;
 
@@ -270,6 +280,7 @@ class ClassView extends Component {
                       />
                     </Dialog>
                     <input
+                      id="search"
                       type="text"
                       placeholder="Search..."
                       value={searchValue}
@@ -322,6 +333,7 @@ class ClassView extends Component {
                     <div
                       className={css`
                         ${circleIcon};
+                        position: fixed;
                         right: 10px;
                         ${menuIsOpen ? "transform: translateX(-250px);" : ""};
                       `}
