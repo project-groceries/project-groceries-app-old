@@ -266,8 +266,8 @@ class App extends Component {
                         onClick={() => {
                           this.setState({ menuIsOpen: false });
 
+                          client.resetStore();
                           cookies.remove("token", { path: "/" });
-                          client.clearStore();
                         }}
                         style={{
                           position: "absolute",
