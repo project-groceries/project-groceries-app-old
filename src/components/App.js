@@ -263,7 +263,9 @@ class App extends Component {
                       <input
                         type="button"
                         value="Sign Out"
-                        onClick={() => cookies.remove("token")}
+                        onClick={() => {
+                          cookies.remove("token", { path: "/" });
+                        }}
                         style={{
                           position: "absolute",
                           bottom: "10px",
