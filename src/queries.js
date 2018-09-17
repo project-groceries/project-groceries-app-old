@@ -263,6 +263,10 @@ export const CLASS_VIEW_QUERY = gql`
               id
             }
           }
+          tags {
+            id
+            name
+          }
         }
       }
     }

@@ -15,7 +15,7 @@ import Close from "./svg/Close";
 const classViewGrid = css`
   display: grid;
   grid-template-columns: 300px 300px;
-  grid-auto-rows: 60px;
+  grid-auto-rows: 80px;
   grid-gap: 20px;
   max-width: 1000px;
   width: fit-content;
@@ -25,10 +25,30 @@ const classViewGrid = css`
     background-color: #f1f1f1;
     box-shadow: rgba(0, 0, 0, 0.14) 0 2px 2px 0;
 
-    display: flex;
-    // flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 30px 1fr;
+
+    & > div:first-child {
+      display: flex;
+      // flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    & > div:nth-child(2) {
+      display: flex;
+      // justify-content:
+      align-items: center;
+
+      & > small {
+        padding: 2px 5px;
+        margin: 5px;
+        background-color: white;
+        box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
+        border-radius: 5px;
+      }
+    }
   }
 
   & > div:hover {
@@ -297,10 +317,17 @@ class ClassView extends Component {
                             }
                           }}
                         >
-                          <h3>{ingredient.name}</h3>
-                          <small>
-                            {ingredient.totalOrders} {ingredient.unit}
-                          </small>
+                          <div>
+                            <h3>{ingredient.name}</h3>
+                            <small>
+                              {ingredient.totalOrders} {ingredient.unit}
+                            </small>
+                          </div>
+                          <div>
+                            {ingredient.tags.map(tag => (
+                              <small key={tag.id}>{tag.name}</small>
+                            ))}
+                          </div>
                         </div>
                       );
                     })}
