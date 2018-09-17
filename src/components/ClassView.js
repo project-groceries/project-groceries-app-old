@@ -212,10 +212,25 @@ class ClassView extends Component {
             return ingredients.length ? (
               appropriateClass ? (
                 <Fragment>
-                  <div className={bar}>
+                  <div
+                    className={css`
+                      ${bar};
+                      background-color: white;
+                      position: sticky;
+                      top: 0;
+                    `}
+                  >
                     <h2>{appropriateClass.name}</h2>
                   </div>
-                  <div className={bar}>
+                  <div
+                    className={css`
+                      ${bar};
+                      height: 60px;
+                      background-color: white;
+                      position: sticky;
+                      top: 40px;
+                    `}
+                  >
                     <div
                       className={css`
                         ${circleIcon};
@@ -272,8 +287,6 @@ class ClassView extends Component {
                         border: "none"
                       }}
                     />
-                    {/* <small>Search (Coming Soon)</small> */}
-                    {/* <p>All/Summary</p> */}
                     <div className={toggle}>
                       <h4>
                         <span

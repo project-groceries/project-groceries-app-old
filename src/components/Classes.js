@@ -48,6 +48,12 @@ class Classes extends Component {
                 className={css`
                   display: grid;
                   grid-template-columns: ${isExact ? "1fr" : "300px 1fr;"};
+                  height: 100vh;
+
+                  & > div {
+                    // height: 100vh;
+                    overflow: auto;
+                  }
 
                   @media (max-width: 1000px) {
                     grid-template-columns: 1fr;
