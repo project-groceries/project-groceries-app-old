@@ -211,14 +211,14 @@ class App extends Component {
                         className="bar"
                         style={{ backgroundColor: "#83c674" }}
                       >
-                        <Link to="/">
+                        <Link to="/" onClick={this._closeMenu}>
                           <Logo fill="white" />
                         </Link>
                         <h1>{name}</h1>
                       </div>
 
                       <div className={menuSection}>
-                        <Link to="/classes">
+                        <Link to="/classes" onClick={this._closeMenu}>
                           <div className="menuSectionTitle">
                             <Group />
                             <h3>Classes</h3>
@@ -232,6 +232,7 @@ class App extends Component {
                               activeStyle={{
                                 boxShadow: "0px 0px 1px rgba(0,0,0,0.5)"
                               }}
+                              onClick={this._closeMenu}
                             >
                               {c.name}
                             </NavLink>
@@ -242,7 +243,7 @@ class App extends Component {
                       </div>
 
                       <div className={menuSection}>
-                        <Link to="/orders">
+                        <Link to="/orders" onClick={this._closeMenu}>
                           <div className="menuSectionTitle">
                             <List />
                             <h3>Orders</h3>
@@ -251,7 +252,7 @@ class App extends Component {
                       </div>
 
                       <div className={menuSection}>
-                        <Link to="/ingredients">
+                        <Link to="/ingredients" onClick={this._closeMenu}>
                           <div className="menuSectionTitle">
                             <Cart />
                             <h3>Ingredients</h3>
@@ -324,6 +325,10 @@ class App extends Component {
       </Fragment>
     );
   }
+
+  _closeMenu = () => {
+    this.setState({ menuIsOpen: false });
+  };
 }
 
 export default withCookies(App);
