@@ -34,6 +34,12 @@ const classViewGrid = css`
       // flex-direction: column;
       justify-content: space-around;
       align-items: center;
+
+      h3 {
+        max-width: 70%;
+        overflow: hidden;
+        text-align: center;
+      }
     }
 
     & > div:nth-child(2) {
@@ -161,7 +167,8 @@ class ClassView extends Component {
       isUnenrolModalOpen: false,
       activeIngredient: null,
       menuIsOpen: false,
-      isSummary: false
+      isSummary: false,
+      searchValue: ""
     };
   }
 
@@ -187,7 +194,8 @@ class ClassView extends Component {
               isUnenrolModalOpen,
               activeIngredient,
               menuIsOpen,
-              isSummary
+              isSummary,
+              searchValue
             } = this.state;
             const {
               type,
@@ -246,7 +254,25 @@ class ClassView extends Component {
                         }
                       />
                     </Dialog>
-                    <small>Search (Coming Soon)</small>
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      value={searchValue}
+                      onChange={event => {
+                        const target = event.target;
+                        const value = target.value;
+
+                        this.setState({ searchValue: value });
+                      }}
+                      style={{
+                        padding: "6px 15px",
+                        height: "40px",
+                        borderRadius: "20px",
+                        boxShadow: "0px 0px 2px",
+                        border: "none"
+                      }}
+                    />
+                    {/* <small>Search (Coming Soon)</small> */}
                     {/* <p>All/Summary</p> */}
                     <div className={toggle}>
                       <h4>
@@ -421,7 +447,7 @@ class ClassView extends Component {
     const { match } = this.props;
     const { id } = match.params;
 
-    const { isSummary } = this.state;
+    const { isSummary, searchValue } = this.state;
 
     return ingredients
       .map(ingredient => ({
@@ -430,6 +456,14 @@ class ClassView extends Component {
           .filter(o => o.class.id === id) // filter by class (only this class)
           .reduce((acc, cur) => acc + cur.amount, 0) // reduce to total
       }))
+      .filter(
+        ingredient =>
+          ingredient.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          ingredient.unit.toLowerCase().includes(searchValue.toLowerCase()) ||
+          ingredient.tags.some(tag =>
+            tag.name.toLowerCase().includes(searchValue.toLowerCase())
+          )
+      )
       .filter(ingredient => (isSummary ? ingredient.totalOrders : true));
   };
 
