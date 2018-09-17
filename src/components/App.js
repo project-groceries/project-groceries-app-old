@@ -123,7 +123,7 @@ class App extends Component {
         {hasToken ? (
           <div className={bodyWrapper}>
             <Query query={USER_QUERY}>
-              {({ loading, error, data }) => {
+              {({ loading, error, data, client }) => {
                 if (loading)
                   return (
                     <div
@@ -264,7 +264,10 @@ class App extends Component {
                         type="button"
                         value="Sign Out"
                         onClick={() => {
+                          this.setState({ menuIsOpen: false });
+
                           cookies.remove("token", { path: "/" });
+                          client.clearStore();
                         }}
                         style={{
                           position: "absolute",
