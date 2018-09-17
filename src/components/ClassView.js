@@ -55,6 +55,82 @@ const menuOpen = css`
   transform: none;
 `;
 
+const toggle = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h4 {
+    text-align: center;
+  }
+
+  .tgl {
+    display: none;
+
+    // add default box-sizing for this scope
+    &,
+    &:after,
+    &:before,
+    & *,
+    & *:after,
+    & *:before,
+    & + .tgl-btn {
+      box-sizing: border-box;
+      &::selection {
+        background: none;
+      }
+    }
+
+    + .tgl-btn {
+      outline: 0;
+      display: block;
+      width: 4em;
+      height: 2em;
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      &:after,
+      &:before {
+        position: relative;
+        display: block;
+        content: "";
+        width: 50%;
+        height: 100%;
+      }
+
+      &:after {
+        left: 0;
+      }
+
+      &:before {
+        display: none;
+      }
+    }
+
+    &:checked + .tgl-btn:after {
+      left: 50%;
+    }
+  }
+
+  .tgl-light {
+    + .tgl-btn {
+      background: #f0f0f0;
+      border-radius: 2em;
+      padding: 2px;
+      transition: all 0.4s ease;
+      &:after {
+        border-radius: 50%;
+        background: #fff;
+        transition: all 0.2s ease;
+      }
+    }
+
+    &:checked + .tgl-btn {
+      background: #9fd6ae;
+    }
+  }
+`;
+
 class ClassView extends Component {
   constructor(props) {
     super(props);
@@ -64,7 +140,8 @@ class ClassView extends Component {
       isAddOrderModalOpen: false,
       isUnenrolModalOpen: false,
       activeIngredient: null,
-      menuIsOpen: false
+      menuIsOpen: false,
+      isSummary: false
     };
   }
 
@@ -89,7 +166,8 @@ class ClassView extends Component {
               isAddOrderModalOpen,
               isUnenrolModalOpen,
               activeIngredient,
-              menuIsOpen
+              menuIsOpen,
+              isSummary
             } = this.state;
             const {
               type,
@@ -149,7 +227,39 @@ class ClassView extends Component {
                       />
                     </Dialog>
                     <small>Search (Coming Soon)</small>
-                    <p>All/Summary</p>
+                    {/* <p>All/Summary</p> */}
+                    <div className={toggle}>
+                      <h4>
+                        <span
+                          style={{
+                            color: isSummary ? "rgba(0,0,0,0.2)" : "black"
+                          }}
+                        >
+                          All
+                        </span>{" "}
+                        /{" "}
+                        <span
+                          style={{
+                            color: isSummary ? "black" : "rgba(0,0,0,0.2)"
+                          }}
+                        >
+                          Summary
+                        </span>
+                      </h4>
+                      <input
+                        className="tgl tgl-light"
+                        id="cb1"
+                        type="checkbox"
+                        checked={isSummary}
+                        onChange={event => {
+                          const target = event.target;
+                          const value = target.checked;
+
+                          this.setState({ isSummary: value });
+                        }}
+                      />
+                      <label className="tgl-btn" htmlFor="cb1" />
+                    </div>
                     <div
                       className={css`
                         ${circleIcon};
@@ -166,11 +276,7 @@ class ClassView extends Component {
                     </div>
                   </div>
                   <div className={classViewGrid}>
-                    {ingredients.map(ingredient => {
-                      const totalOrders = ingredient.orders
-                        .filter(o => o.class.id === id)
-                        .reduce((acc, cur) => acc + cur.amount, 0);
-
+                    {this._filterIngredients(ingredients).map(ingredient => {
                       return (
                         <div
                           key={ingredient.id}
@@ -193,7 +299,7 @@ class ClassView extends Component {
                         >
                           <h3>{ingredient.name}</h3>
                           <small>
-                            {totalOrders} {ingredient.unit}
+                            {ingredient.totalOrders} {ingredient.unit}
                           </small>
                         </div>
                       );
@@ -283,6 +389,22 @@ class ClassView extends Component {
       </div>
     );
   }
+
+  _filterIngredients = ingredients => {
+    const { match } = this.props;
+    const { id } = match.params;
+
+    const { isSummary } = this.state;
+
+    return ingredients
+      .map(ingredient => ({
+        ...ingredient,
+        totalOrders: ingredient.orders
+          .filter(o => o.class.id === id) // filter by class (only this class)
+          .reduce((acc, cur) => acc + cur.amount, 0) // reduce to total
+      }))
+      .filter(ingredient => (isSummary ? ingredient.totalOrders : true));
+  };
 
   _toggleCreateIngredientsModal = () => {
     this.setState(prevState => ({
