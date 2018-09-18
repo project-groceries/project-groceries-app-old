@@ -25,6 +25,10 @@ const classViewGrid = css`
     grid-template-columns: 300px;
   }
 
+  @media (min-width: 1400px) {
+    grid-template-columns: 300px 300px 300px;
+  }
+
   & > div {
     background-color: #f1f1f1;
     box-shadow: rgba(0, 0, 0, 0.14) 0 2px 2px 0;
