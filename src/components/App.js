@@ -267,7 +267,9 @@ class App extends Component {
                           this.setState({ menuIsOpen: false });
 
                           client.resetStore();
-                          cookies.remove("token", { path: "/" });
+                          cookies.remove("token", {
+                            path: "/"
+                          });
                         }}
                         style={{
                           position: "absolute",
@@ -295,6 +297,36 @@ class App extends Component {
                       >
                         <Menu />
                       </div>
+                      <Link
+                        to="/classes"
+                        onClick={this._closeMenu}
+                        className={css`
+                          ${circleIcon} left: 10px;
+                          top: 70px;
+                        `}
+                      >
+                        <Group />
+                      </Link>
+                      <Link
+                        to="/orders"
+                        onClick={this._closeMenu}
+                        className={css`
+                          ${circleIcon} left: 10px;
+                          top: 120px;
+                        `}
+                      >
+                        <List />
+                      </Link>
+                      <Link
+                        to="/ingredients"
+                        onClick={this._closeMenu}
+                        className={css`
+                          ${circleIcon} left: 10px;
+                          top: 170px;
+                        `}
+                      >
+                        <Cart />
+                      </Link>
                     </div>
                     <main>
                       {school ? (
