@@ -263,7 +263,7 @@ class ClassView extends Component {
                     </div>
                     <input
                       type="button"
-                      value="Add an order"
+                      value="Order Ingredients"
                       className="success"
                       onClick={this._toggleAddOrderModal}
                     />
