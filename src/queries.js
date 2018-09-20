@@ -567,3 +567,14 @@ export const ORDERS_QUERY = gql`
     }
   }
 `;
+
+export const UPDATE_ORDER_MUTATION = gql`
+  mutation updateOrderMutation($id: String!, $amount: Int!) {
+    updateOrder(id: $id, amount: $amount) {
+      id
+      amount
+      createdAt
+      updatedAt
+    }
+  }
+`;

@@ -1,11 +1,24 @@
-import React, { Component } from "react";
-import { Query } from "react-apollo";
-import { ORDERS_QUERY } from "../queries";
+import React, { Component, Fragment } from "react";
+import { Query, Mutation } from "react-apollo";
+import { ORDERS_QUERY, UPDATE_ORDER_MUTATION } from "../queries";
 import Spinner from "./Spinner";
+import Edit from "./svg/Edit";
 import { orderItem } from "../styles";
 import { css } from "emotion";
+import Close from "./svg/Close";
+import Done from "./svg/Done";
+import { withToastManager } from "react-toast-notifications";
 
 class OrdersGrid extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      editMap: new Map(),
+      amountMap: new Map()
+    };
+  }
+
   render() {
     return (
       <Query query={ORDERS_QUERY}>
@@ -13,6 +26,8 @@ class OrdersGrid extends Component {
           if (loading) return <Spinner />;
 
           if (error) return <p>Error</p>;
+
+          const { editMap, amountMap } = this.state;
 
           const { orders } = data.user;
 
@@ -68,9 +83,87 @@ class OrdersGrid extends Component {
                     {orders.map(({ id, amount, ingredient }) => (
                       <div key={id} className={orderItem}>
                         <h3>{ingredient.name}</h3>
-                        <small>
-                          {amount} {ingredient.unit}
-                        </small>
+                        {editMap.get(id) ? (
+                          <Fragment>
+                            <input
+                              id="name"
+                              placeholder={amount}
+                              value={amountMap.get(id)}
+                              onChange={e => {
+                                const newAmount = e.target.value;
+
+                                this.setState(prevState => {
+                                  prevState.amountMap.set(id, newAmount);
+
+                                  return {
+                                    amountMap: prevState.amountMap
+                                  };
+                                });
+                              }}
+                              type="number"
+                              required={true}
+                            />
+                            <small> {ingredient.unit}</small>
+                            <Mutation
+                              mutation={UPDATE_ORDER_MUTATION}
+                              onCompleted={this._editOrderSuccess}
+                              onError={this._announceEditOrderError}
+                              update={this._editOrderSuccess}
+                            >
+                              {mutation => {
+                                return (
+                                  <Done
+                                    fill="green"
+                                    onClick={() => {
+                                      this.setState(prevState => {
+                                        prevState.editMap.set(id, false);
+                                        prevState.amountMap.delete(id);
+                                        return {
+                                          editMap: prevState.editMap
+                                        };
+                                      });
+
+                                      mutation({
+                                        variables: {
+                                          id,
+                                          amount: amountMap.get(id)
+                                        }
+                                      });
+                                    }}
+                                  />
+                                );
+                              }}
+                            </Mutation>
+                            <Close
+                              fill="red"
+                              onClick={() =>
+                                this.setState(prevState => {
+                                  prevState.editMap.set(id, false);
+                                  prevState.amountMap.delete(id);
+                                  return {
+                                    editMap: prevState.editMap
+                                  };
+                                })
+                              }
+                            />
+                          </Fragment>
+                        ) : (
+                          <Fragment>
+                            <small>
+                              {amount} {ingredient.unit}
+                            </small>
+                            <Edit
+                              onClick={() =>
+                                this.setState(prevState => {
+                                  prevState.editMap.set(id, true);
+                                  return {
+                                    editMap: prevState.editMap
+                                  };
+                                })
+                              }
+                            />
+                          </Fragment>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -85,7 +178,14 @@ class OrdersGrid extends Component {
 
   _groupByOrderSession = orders => {
     const { limit } = this.props;
+    // const { editMap } = this.state;
     const orderSessions = [];
+
+    // if (!editMap.size) {
+    //   this.setState({
+    //     editMap: new Map(orders.map(order => [order.id, false]))
+    //   });
+    // }
 
     orders.forEach(order => {
       const {
@@ -113,6 +213,30 @@ class OrdersGrid extends Component {
 
     return orderSessions.reverse().slice(0, limit);
   };
+
+  _announceEditOrderError = async () => {
+    const { toastManager } = this.props;
+
+    this.setState({ mutationLoading: false });
+    toastManager.add("An error occurred", {
+      appearance: "error",
+      autoDismiss: true
+    });
+  };
+
+  _editOrderSuccess = async () => {
+    const { toastManager, onCompleted } = this.props;
+
+    window.mixpanel.track("Edited an order");
+
+    this.setState({ mutationLoading: false });
+    toastManager.add("The order was successfully edited", {
+      appearance: "success",
+      autoDismiss: true
+    });
+
+    if (onCompleted) onCompleted();
+  };
 }
 
-export default OrdersGrid;
+export default withToastManager(OrdersGrid);

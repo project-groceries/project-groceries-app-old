@@ -117,7 +117,7 @@ class CreateOrder extends Component {
                           );
                           prevState.orderedIngredients.set(id, {
                             ...currentIngredient,
-                            amount: +amount
+                            amount: amount
                           });
 
                           return {
@@ -125,7 +125,7 @@ class CreateOrder extends Component {
                           };
                         });
                       }}
-                      type="text"
+                      type="number"
                       placeholder="Amount"
                       required={true}
                     />
@@ -247,14 +247,26 @@ class CreateOrder extends Component {
                             value="Add the order"
                             className="success"
                             onClick={() => {
-                              const orders = [...orderedIngredients].map(
-                                ([id, ingredient]) => ({
+                              const orders = [...orderedIngredients]
+                                .map(([id, ingredient]) => ({
                                   amount: ingredient.amount,
-                                  ingredient: { connect: { id } },
-                                  madeBy: { connect: { id: userId } },
-                                  class: { connect: { id: classId } }
-                                })
-                              );
+                                  ingredient: {
+                                    connect: {
+                                      id
+                                    }
+                                  },
+                                  madeBy: {
+                                    connect: {
+                                      id: userId
+                                    }
+                                  },
+                                  class: {
+                                    connect: {
+                                      id: classId
+                                    }
+                                  }
+                                }))
+                                .filter(({ amount }) => amount);
 
                               this.setState({ mutationLoading: true });
 
