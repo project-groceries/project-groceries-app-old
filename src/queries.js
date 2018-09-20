@@ -252,6 +252,10 @@ export const CLASS_VIEW_QUERY = gql`
       }
       school {
         id
+        tags {
+          id
+          name
+        }
         ingredients {
           id
           name
@@ -532,6 +536,28 @@ export const CREATE_RECIPE_MUTATION = gql`
         }
         ingredient {
           id
+        }
+      }
+    }
+  }
+`;
+
+export const ORDERS_QUERY = gql`
+  query ordersQuery {
+    user {
+      id
+      orders {
+        id
+        amount
+        ingredient {
+          id
+          name
+          unit
+        }
+        orderSession {
+          id
+          createdAt
+          updatedAt
         }
       }
     }

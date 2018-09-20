@@ -13,45 +13,7 @@ import Spinner from "./Spinner";
 import Select from "react-select";
 import Add from "./svg/Add";
 import Close from "./svg/Close";
-
-const orderItem = css`
-  background-color: #f1f1f1;
-  box-shadow: rgba(0, 0, 0, 0.14) 0 2px 2px 0;
-
-  display: flex;
-  // flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  height: 60px;
-  margin: 20px 5px;
-
-  & input {
-    width: 40px;
-    margin: 5px;
-  }
-
-  & > *:not(svg) {
-    flex: 1;
-    text-align: center;
-  }
-
-  & > svg {
-    fill: #c9c9c9;
-
-    margin: 5px;
-    padding: 5px;
-    // background-color: white;
-    // width: 40px;
-    height: 40px;
-    width: 40px;
-    transition: all 0.1s ease;
-  }
-
-  & > svg:hover {
-    cursor: pointer;
-    transform: scale(1.2);
-  }
-`;
+import { orderItem } from "../styles";
 
 const addOrderItem = css`
   ${orderItem};

@@ -6,6 +6,8 @@ import Enrol from "./Enrol";
 import CreateClass from "./CreateClass";
 import ClassesGrid from "./ClassesGrid";
 import { fullPage, overviewSection, loaderContainer } from "../styles";
+import OrdersGrid from "./OrdersGrid";
+import { Link } from "react-router-dom";
 
 class Overview extends Component {
   render() {
@@ -45,9 +47,17 @@ class Overview extends Component {
               <div className={overviewSection}>
                 <h1>Orders</h1>
                 {orders.length ? (
-                  <p>There are orders</p>
+                  <Fragment>
+                    <p>
+                      Showing the latest orders{" "}
+                      <Link to="/orders" className="btn default">
+                        See all orders
+                      </Link>
+                    </p>
+                    <OrdersGrid limit={5} />
+                  </Fragment>
                 ) : (
-                  <p>There are no orders... yet</p>
+                  <p>No orders to show 😭</p>
                 )}
               </div>
             </Fragment>

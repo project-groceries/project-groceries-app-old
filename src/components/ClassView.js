@@ -176,7 +176,8 @@ class ClassView extends Component {
       activeIngredient: null,
       menuIsOpen: false,
       isSummary: false,
-      searchValue: ""
+      searchValue: "",
+      tagFilters: null
     };
   }
 
@@ -204,13 +205,15 @@ class ClassView extends Component {
               menuIsOpen,
               isSummary,
               searchValue
+              // tagFilters
             } = this.state;
             const {
               type,
               enrolledIn,
               classes,
-              school: { ingredients }
+              school: { ingredients /*, tags*/ }
             } = data.user;
+
             const appropriateClasses =
               type === "STUDENT" ? enrolledIn : classes;
             const appropriateClass = appropriateClasses.length
@@ -393,7 +396,13 @@ class ClassView extends Component {
                       ${menuIsOpen ? menuOpen : ""};
                     `}
                   >
-                    <h2>Hello</h2>
+                    <div
+                      className={css`
+                        margin: 10px;
+                      `}
+                    >
+                      <h2>Hello</h2>
+                    </div>
                     <input
                       type="button"
                       value={`${
