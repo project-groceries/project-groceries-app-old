@@ -72,12 +72,16 @@ const authLink = setContext((_, { headers }) => {
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) =>
+    graphQLErrors.map(({ message, locations, path }) => {
       console.log(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
-    );
-  if (networkError) console.log(`[Network error]: ${networkError}`);
+      );
+      throw new Error(` [GraphQL Error]: ${message}`);
+    });
+  if (networkError) {
+    console.log(`[Network error]: ${networkError}`);
+    throw new Error(`[Network error]: ${networkError}`);
+  }
 });
 
 const client = new ApolloClient({
