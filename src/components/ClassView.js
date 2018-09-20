@@ -37,11 +37,17 @@ const classViewGrid = css`
     grid-template-columns: 1fr;
     grid-template-rows: 50px 30px 1fr;
 
+    overflow: auto;
+
     & > div:first-child {
       display: flex;
       // flex-direction: column;
       justify-content: space-around;
       align-items: center;
+
+      position: sticky;
+      top: 0;
+      background-color: #f1f1f1;
 
       h3 {
         max-width: 70%;
@@ -50,10 +56,18 @@ const classViewGrid = css`
       }
     }
 
+    & > div:first-child:hover {
+      cursor: pointer;
+    }
+
     & > div:nth-child(2) {
       display: flex;
       // justify-content:
       align-items: center;
+
+      position: sticky;
+      top: 50px;
+      background-color: #f1f1f1;
 
       & > small {
         padding: 2px 5px;
@@ -63,10 +77,6 @@ const classViewGrid = css`
         border-radius: 5px;
       }
     }
-  }
-
-  & > div:hover {
-    cursor: pointer;
   }
 
   & > div[data-active="true"] {
@@ -361,21 +371,22 @@ class ClassView extends Component {
                           data-active={
                             activeIngredient === ingredient.id ? true : false
                           }
-                          onClick={e => {
-                            e.preventDefault();
-
-                            if (activeIngredient === ingredient.id) {
-                              this.setState({
-                                activeIngredient: null
-                              });
-                            } else {
-                              this.setState({
-                                activeIngredient: ingredient.id
-                              });
-                            }
-                          }}
                         >
-                          <div>
+                          <div
+                            onClick={e => {
+                              e.preventDefault();
+
+                              if (activeIngredient === ingredient.id) {
+                                this.setState({
+                                  activeIngredient: null
+                                });
+                              } else {
+                                this.setState({
+                                  activeIngredient: ingredient.id
+                                });
+                              }
+                            }}
+                          >
                             <h3>{ingredient.name}</h3>
                             <small>
                               {ingredient.totalOrders} {ingredient.unit}
@@ -385,6 +396,33 @@ class ClassView extends Component {
                             {ingredient.tags.map(tag => (
                               <small key={tag.id}>{tag.name}</small>
                             ))}
+                          </div>
+                          <div
+                            className={css`
+                              display: flex;
+                              flex-direction: column;
+
+                              & > div {
+                                display: flex;
+                                justify-content: space-around;
+                                align-items: center;
+                                background-color: white;
+                                margin: 5px;
+                                padding: 5px;
+                                box-shadow: 0px 0px 2px 0px #b9b9b9;
+                              }
+                            `}
+                          >
+                            {ingredient.orders
+                              .filter(order => order.class.id === id)
+                              .map(order => (
+                                <div key={order.id}>
+                                  <p>{order.madeBy.name}</p>
+                                  <p>
+                                    {order.amount} {ingredient.unit}
+                                  </p>
+                                </div>
+                              ))}
                           </div>
                         </div>
                       );
