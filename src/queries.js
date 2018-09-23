@@ -578,3 +578,27 @@ export const UPDATE_ORDER_MUTATION = gql`
     }
   }
 `;
+
+export const ORDER_RECIPE_QUERY = gql`
+  query orderRecipeQuery {
+    user {
+      id
+      school {
+        id
+        recipes {
+          id
+          name
+          ingredients {
+            id
+            amount
+            ingredient {
+              id
+              name
+              unit
+            }
+          }
+        }
+      }
+    }
+  }
+`;

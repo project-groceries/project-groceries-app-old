@@ -57,7 +57,12 @@ class Overview extends Component {
                     <OrdersGrid limit={5} />
                   </Fragment>
                 ) : (
-                  <p>No orders to show 😭</p>
+                  <p>
+                    No orders to show{" "}
+                    <span role="img" aria-label="crying emoji">
+                      😭
+                    </span>
+                  </p>
                 )}
               </div>
             </Fragment>

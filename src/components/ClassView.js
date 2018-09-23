@@ -11,6 +11,7 @@ import Menu from "./svg/Menu";
 import Unenrol from "./Unenrol";
 import DeleteClass from "./DeleteClass";
 import Close from "./svg/Close";
+import OrderRecipe from "./OrderRecipe";
 
 const classViewGrid = css`
   display: grid;
@@ -182,6 +183,7 @@ class ClassView extends Component {
     this.state = {
       isCreateIngredientsModalOpen: false,
       isAddOrderModalOpen: false,
+      isOrderRecipeModalOpen: false,
       isUnenrolModalOpen: false,
       activeIngredient: null,
       menuIsOpen: false,
@@ -210,6 +212,7 @@ class ClassView extends Component {
             const {
               isCreateIngredientsModalOpen,
               isAddOrderModalOpen,
+              isOrderRecipeModalOpen,
               isUnenrolModalOpen,
               activeIngredient,
               menuIsOpen,
@@ -274,28 +277,62 @@ class ClassView extends Component {
                     >
                       <Close />
                     </div>
-                    <input
-                      type="button"
-                      value="Order Ingredients"
-                      className="success"
-                      onClick={this._toggleAddOrderModal}
-                    />
-                    <Dialog isOpen={isAddOrderModalOpen}>
-                      <button
-                        className="close-button"
-                        onClick={() =>
-                          this.setState({ isAddOrderModalOpen: false })
-                        }
-                      >
-                        <span aria-hidden>×</span>
-                      </button>
-                      <CreateOrder
-                        classId={id}
-                        onCompleted={() =>
-                          this.setState({ isAddOrderModalOpen: false })
-                        }
-                      />
-                    </Dialog>
+                    <div
+                      className={css`
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                      `}
+                    >
+                      <h4>Order</h4>
+                      <div>
+                        <input
+                          type="button"
+                          value="Ingredients"
+                          className="success"
+                          onClick={this._toggleAddOrderModal}
+                        />
+                        <Dialog isOpen={isAddOrderModalOpen}>
+                          <button
+                            className="close-button"
+                            onClick={() =>
+                              this.setState({ isAddOrderModalOpen: false })
+                            }
+                          >
+                            <span aria-hidden>×</span>
+                          </button>
+                          <CreateOrder
+                            classId={id}
+                            onCompleted={() =>
+                              this.setState({ isAddOrderModalOpen: false })
+                            }
+                          />
+                        </Dialog>
+                        <input
+                          type="button"
+                          value="A Recipe"
+                          className="default"
+                          onClick={this._toggleOrderRecipeModal}
+                        />
+                        <Dialog isOpen={isOrderRecipeModalOpen}>
+                          <button
+                            className="close-button"
+                            onClick={() =>
+                              this.setState({ isOrderRecipeModalOpen: false })
+                            }
+                          >
+                            <span aria-hidden>×</span>
+                          </button>
+                          <OrderRecipe
+                            classId={id}
+                            onCompleted={() =>
+                              this.setState({ isOrderRecipeModalOpen: false })
+                            }
+                          />
+                        </Dialog>
+                      </div>
+                    </div>
                     <input
                       id="search"
                       type="text"
@@ -552,6 +589,12 @@ class ClassView extends Component {
   _toggleAddOrderModal = () => {
     this.setState(prevState => ({
       isAddOrderModalOpen: !prevState.isAddOrderModalOpen
+    }));
+  };
+
+  _toggleOrderRecipeModal = () => {
+    this.setState(prevState => ({
+      isOrderRecipeModalOpen: !prevState.isOrderRecipeModalOpen
     }));
   };
 
