@@ -12,6 +12,7 @@ import { css } from "emotion";
 import Add from "./svg/Add";
 import CreateClass from "./CreateClass";
 import Enrol from "./Enrol";
+import { noPrint } from "../styles";
 
 const classesGrid = css`
   padding: 5px;
@@ -99,7 +100,7 @@ class ClassesGrid extends Component {
           const userClasses = type === "TEACHER" ? classes : enrolledIn;
 
           return (
-            <div className={classesGrid}>
+            <div className={`${classesGrid} ${noPrint}`}>
               {userClasses.map(c => (
                 <Link to={`/classes/${c.id}`} key={c.id}>
                   <div>

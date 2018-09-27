@@ -14,7 +14,6 @@ import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
 import { Query } from "react-apollo";
 import NoSchool from "./NoSchool";
-import Logo from "./svg/Logo";
 import SamsungTVLoader from "./SamsungTVLoader";
 import { USER_QUERY } from "../queries";
 import DeclareAccountType from "./DeclareAccountType";
@@ -28,16 +27,18 @@ import Orders from "./Orders";
 import Ingredients from "./Ingredients";
 import { Offline } from "react-detect-offline";
 import Menu from "./svg/Menu";
-import { circleIcon } from "../styles";
+import { circleIcon, noPrint } from "../styles";
 
 const bodyWrapper = css`
-  height: 100vh;
-  display: grid;
-  grid-template-columns: 60px 1fr;
-  grid-auto-rows: 1fr;
+  @media screen {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    grid-auto-rows: 1fr;
 
-  & > * {
-    overflow: auto;
+    & > * {
+      overflow: auto;
+    }
   }
 `;
 
@@ -196,17 +197,23 @@ class App extends Component {
                 return (
                   <Fragment>
                     <section
-                      style={{
-                        backgroundColor: "rgb(236, 236, 236)",
-                        transition: "all 0.3s ease",
-                        filter: hasCompletedDetails ? "none" : "blur(8px)",
-                        pointerEvents: hasCompletedDetails ? "auto" : "none",
-                        position: "fixed",
-                        height: "100vh",
-                        width: "250px",
-                        zIndex: 2,
-                        transform: menuIsOpen ? "" : "translateX(-100%)"
-                      }}
+                      className={css`
+                        ${noPrint};
+
+                        background-color: rgb(236, 236, 236);
+                        transition: all 0.3s ease;
+
+                        filter: ${hasCompletedDetails ? "none" : "blur(8px)"};
+                        pointer-events: ${hasCompletedDetails
+                          ? "auto"
+                          : "none"};
+
+                        position: fixed;
+                        height: 100vh;
+                        width: 250px;
+                        z-index: 2;
+                        transform: ${menuIsOpen ? "none" : "translateX(-100%)"};
+                      `}
                     >
                       <div
                         className={css`
@@ -217,9 +224,6 @@ class App extends Component {
                           padding: 5px;
                         `}
                       >
-                        {/* <Link to="/" onClick={this._closeMenu}>
-                          <Logo fill="white" />
-                        </Link> */}
                         <div
                           className={css`
                             display: flex;
@@ -302,6 +306,7 @@ class App extends Component {
                     </section>
                     <div
                       className={css`
+                        ${noPrint};
                         background-color: rgb(245, 245, 245);
                       `}
                     >

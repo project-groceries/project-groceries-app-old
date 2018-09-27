@@ -91,3 +91,8 @@ export const orderItem = css`
     transform: scale(1.2);
   }
 `;
+export const noPrint = css`
+  @media print {
+    display: none;
+  }
+`;

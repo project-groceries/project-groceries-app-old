@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Query } from "react-apollo";
 import { CLASS_VIEW_QUERY } from "../queries";
 import Spinner from "./Spinner";
-import { fullPage, bar, circleIcon } from "../styles";
+import { fullPage, bar, circleIcon, noPrint } from "../styles";
 import CreateIngredients from "./CreateIngredients";
 import { Dialog } from "@reach/dialog";
 import { css } from "emotion";
@@ -28,6 +28,10 @@ const classViewGrid = css`
 
   @media (min-width: 1400px) {
     grid-template-columns: 300px 300px 300px;
+  }
+
+  @media print {
+    grid-template-columns: 300px 300px;
   }
 
   & > div {
@@ -248,6 +252,7 @@ class ClassView extends Component {
                   </div>
                   <div
                     className={css`
+                      ${noPrint};
                       ${bar};
                       height: 60px;
                       background-color: white;
@@ -478,6 +483,17 @@ class ClassView extends Component {
                     >
                       <h2>Hello</h2>
                     </div>
+                    <button
+                      className="default"
+                      style={{
+                        position: "absolute",
+                        bottom: "30px",
+                        left: "-150px"
+                      }}
+                      onClick={() => window.print()}
+                    >
+                      Print
+                    </button>
                     <input
                       type="button"
                       value={`${
