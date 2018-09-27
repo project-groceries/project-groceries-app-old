@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Logo extends Component {
+class Cart extends Component {
   render() {
     return (
       <svg
@@ -15,4 +15,4 @@ class Logo extends Component {
   }
 }
 
-export default Logo;
+export default Cart;
