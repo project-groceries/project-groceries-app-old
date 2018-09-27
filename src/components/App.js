@@ -162,7 +162,8 @@ class App extends Component {
                 const hasCompletedDetails = Boolean(
                   school && hasDeclaredAccountType
                 );
-                const userClasses = type === "TEACHER" ? classes : enrolledIn;
+                const isTeacher = type === "TEACHER";
+                const userClasses = isTeacher ? classes : enrolledIn;
 
                 LogRocket.identify(email, {
                   name,
@@ -208,13 +209,34 @@ class App extends Component {
                       }}
                     >
                       <div
-                        className="bar"
-                        style={{ backgroundColor: "#83c674" }}
+                        className={css`
+                          display: flex;
+                          align-items: center;
+                          justify-content: space-between;
+                          height: 60px;
+                          padding: 5px;
+                        `}
                       >
-                        <Link to="/" onClick={this._closeMenu}>
+                        {/* <Link to="/" onClick={this._closeMenu}>
                           <Logo fill="white" />
-                        </Link>
-                        <h1>{name}</h1>
+                        </Link> */}
+                        <div
+                          className={css`
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            background-color: ${isTeacher
+                              ? "#83c674"
+                              : "white"};
+                            height: 50px;
+                            width: 50px;
+                            border-radius: 50%;
+                            margin: 10px;
+                          `}
+                        >
+                          <h1>{name.toUpperCase()[0]}</h1>
+                        </div>
+                        <h1>{school ? school.name : "No School"}</h1>
                       </div>
 
                       <div className={menuSection}>
