@@ -563,6 +563,10 @@ export const ORDERS_QUERY = gql`
           createdAt
           updatedAt
         }
+        madeBy {
+          id
+          name
+        }
       }
     }
   }

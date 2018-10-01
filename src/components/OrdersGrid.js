@@ -69,7 +69,7 @@ class OrdersGrid extends Component {
               `}
             >
               {this._groupByOrderSession(orders).map(
-                ({ id, dateCreated, orders }) => (
+                ({ id, dateCreated, madeBy, orders }) => (
                   <div
                     key={id}
                     className={css`
@@ -80,6 +80,7 @@ class OrdersGrid extends Component {
                     `}
                   >
                     <h2>{dateCreated.toDateString()}</h2>
+                    <h4>{madeBy.name}</h4>
                     {orders.map(({ id, amount, ingredient }) => (
                       <div key={id} className={orderItem}>
                         <h3>{ingredient.name}</h3>
@@ -178,21 +179,15 @@ class OrdersGrid extends Component {
 
   _groupByOrderSession = orders => {
     const { limit } = this.props;
-    // const { editMap } = this.state;
     const orderSessions = [];
-
-    // if (!editMap.size) {
-    //   this.setState({
-    //     editMap: new Map(orders.map(order => [order.id, false]))
-    //   });
-    // }
 
     orders.forEach(order => {
       const {
         id,
         amount,
         ingredient,
-        orderSession: { id: orderSessionId }
+        orderSession: { id: orderSessionId },
+        madeBy
       } = order;
 
       if (
@@ -206,6 +201,7 @@ class OrdersGrid extends Component {
         orderSessions.push({
           ...order.orderSession,
           dateCreated: new Date(order.orderSession.createdAt),
+          madeBy,
           orders: [{ id, amount, ingredient }]
         });
       }
