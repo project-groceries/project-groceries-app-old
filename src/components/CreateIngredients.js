@@ -104,7 +104,7 @@ class CreateIngredients extends React.Component {
                 >
                   <datalist id="unitList">
                     <option value="Cups" />
-                    <option value="Teaspons" />
+                    <option value="Teaspoons" />
                     <option value="Tablespoons" />
                     <option value="Litres" />
                     <option value="Millilitres" />
