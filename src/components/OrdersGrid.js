@@ -29,7 +29,12 @@ class OrdersGrid extends Component {
 
           const { editMap, amountMap } = this.state;
 
-          const { orders } = data.user;
+          const { type, classes, orders: ownOrders } = data.user;
+          const classOrders = classes.reduce(
+            (acc, cur) => [...acc, ...cur.orders],
+            []
+          );
+          const orders = type === "TEACHER" ? classOrders : ownOrders;
 
           return (
             <div

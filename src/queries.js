@@ -550,6 +550,28 @@ export const ORDERS_QUERY = gql`
   query ordersQuery {
     user {
       id
+      type
+      classes {
+        id
+        orders {
+          id
+          amount
+          ingredient {
+            id
+            name
+            unit
+          }
+          orderSession {
+            id
+            createdAt
+            updatedAt
+          }
+          madeBy {
+            id
+            name
+          }
+        }
+      }
       orders {
         id
         amount
