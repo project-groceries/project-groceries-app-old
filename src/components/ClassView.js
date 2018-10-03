@@ -516,7 +516,10 @@ class ClassView extends Component {
                         margin: 10px;
                       `}
                     >
-                      <h3>Filter tags</h3>
+                      <h3>Filter ingredients by tag</h3>
+                      <small>
+                        ⓘ Only show ingredients that have the selected tags
+                      </small>
                       {tags.length ? (
                         <Fragment>
                           <div className={fullCheck}>
@@ -526,8 +529,8 @@ class ClassView extends Component {
                               name="filter-tag-undefined"
                               type="checkbox"
                               defaultChecked={true}
+                              // checked={this.state.isGoing}
                               onChange={e => {
-                                // checked={this.state.isGoing}
                                 const value = e.target.checked;
 
                                 this.setState(prevState => {
@@ -575,10 +578,8 @@ class ClassView extends Component {
                       ) : (
                         <p>No Tags</p>
                       )}
-                      <h3>Filter students</h3>
-                      <small>
-                        ⓘ Only orders from selected students will be shown
-                      </small>
+                      <h3>Filter orders by students</h3>
+                      <small>ⓘ Only show orders by selected students</small>
                       {classUsers.map(user => (
                         <div key={user.id} className={fullCheck}>
                           <input
@@ -722,8 +723,8 @@ class ClassView extends Component {
         ...ingredient,
         orders: ingredient.orders
           .filter(o => o.class.id === id) // filter by class (only this class)
-          .filter(o => !hiddenUsers.get(o.madeBy.id))
-      })) // filter by user
+          .filter(o => !hiddenUsers.get(o.madeBy.id)) // filter by user
+      }))
       .map(ingredient => ({
         ...ingredient,
         totalOrders: ingredient.orders.reduce((acc, cur) => acc + cur.amount, 0)
