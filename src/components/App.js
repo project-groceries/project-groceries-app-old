@@ -28,6 +28,7 @@ import Ingredients from "./Ingredients";
 import { Offline } from "react-detect-offline";
 import Menu from "./svg/Menu";
 import { circleIcon, noPrint } from "../styles";
+import Signup from "./Signup";
 
 const bodyWrapper = css`
   @media screen {
@@ -382,6 +383,7 @@ class App extends Component {
           </div>
         ) : (
           <Switch>
+            <Route exact path="/signup" component={Signup} />
             <Route exact path="/login" component={Login} />
             <Route render={() => <Redirect to="/login" />} />
           </Switch>

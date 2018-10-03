@@ -5,7 +5,7 @@ import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
-import { LOGIN_MUTATION } from "../queries";
+import { SIGNUP_MUTATION } from "../queries";
 
 class Login extends Component {
   static propTypes = {
@@ -16,7 +16,6 @@ class Login extends Component {
     super(props);
 
     this.state = {
-      login: true, // switch between Login and SignUp
       email: "",
       password: "",
       name: "",
@@ -28,15 +27,14 @@ class Login extends Component {
 
   render() {
     const { history } = this.props;
-    const { email, password, error, success, loading } = this.state;
-    const title = "Log In";
+    const { email, password, name, error, success, loading } = this.state;
 
     return (
       <div
         className="viewport-container background-image"
         style={{
           backgroundImage:
-            "url('https://s3-ap-southeast-2.amazonaws.com/project-groceries-test0/login.jpg')"
+            "url('https://s3-ap-southeast-2.amazonaws.com/project-groceries-test0/register.jpg')"
         }}
       >
         <nav className="bar">
@@ -53,11 +51,11 @@ class Login extends Component {
             <path className="bag" d="M39.3 493.1h471.3V160.4H39.3" />
           </svg>
           <div id="title">
-            <h1 className="display-w-lg title__text">{title}</h1>
-            <h3 className="display-w-md title__text">{title}</h3>
+            <h1 className="display-w-lg title__text">Sign Up</h1>
+            <h3 className="display-w-md title__text">Sign Up</h3>
           </div>
-          <div className="btn default" onClick={() => history.push("/signup")}>
-            Sign Up
+          <div className="btn default" onClick={() => history.push("/login")}>
+            Log In
           </div>
         </nav>
 
@@ -94,8 +92,8 @@ class Login extends Component {
               </div>
             ) : (
               <Mutation
-                mutation={LOGIN_MUTATION}
-                variables={{ email, password }}
+                mutation={SIGNUP_MUTATION}
+                variables={{ email, password, name }}
                 onCompleted={data => this._confirm(data)}
                 // update={data => this._confirm(data)}
                 onError={error => this._announceError(error)}
@@ -112,6 +110,17 @@ class Login extends Component {
                       mutation();
                     }}
                   >
+                    <div className="form__group">
+                      <label htmlFor="name">Name</label>
+                      <input
+                        id="name"
+                        value={name}
+                        onChange={e => this.setState({ name: e.target.value })}
+                        type="text"
+                        placeholder="First Last"
+                        required={true}
+                      />
+                    </div>
                     <div className="form__group">
                       <label htmlFor="email">Email</label>
                       <input
@@ -136,7 +145,11 @@ class Login extends Component {
                         required={true}
                       />
                     </div>
-                    <input className="btn info" type="submit" value="Log In" />
+                    <input
+                      className="btn info"
+                      type="submit"
+                      value={"Create Account"}
+                    />
                   </form>
                 )}
               </Mutation>
@@ -199,9 +212,9 @@ class Login extends Component {
   _confirm = async data => {
     const { cookies } = this.props;
 
-    mixpanel.track("Logged in");
+    mixpanel.track("Signed up");
 
-    const { token } = data.login;
+    const { token } = data.signup;
     cookies.set("token", token, { path: "/" });
 
     this.setState({ success: true, loading: false });
