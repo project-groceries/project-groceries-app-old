@@ -229,9 +229,7 @@ class ClassView extends Component {
               activeIngredients,
               menuIsOpen,
               isSummary,
-              searchValue,
-              hiddentTags,
-              hiddenUsers
+              searchValue
             } = this.state;
             const {
               type,
@@ -526,7 +524,6 @@ class ClassView extends Component {
                             <input
                               id="filter-tag-undefined"
                               name="filter-tag-undefined"
-                              name="filter-tag-undefined"
                               type="checkbox"
                               defaultChecked={true}
                               // checked={this.state.isGoing}
@@ -550,7 +547,6 @@ class ClassView extends Component {
                             <div key={tag.id} className={fullCheck}>
                               <input
                                 id={`filter-tag-${tag.id}`}
-                                name={`filter-tag-${tag.id}`}
                                 name={`filter-tag-${tag.id}`}
                                 type="checkbox"
                                 defaultChecked={true}
@@ -584,7 +580,6 @@ class ClassView extends Component {
                         <div key={user.id} className={fullCheck}>
                           <input
                             id={`filter-user-${user.id}`}
-                            name={`filter-user-${user.id}`}
                             name={`filter-user-${user.id}`}
                             type="checkbox"
                             defaultChecked={true}
