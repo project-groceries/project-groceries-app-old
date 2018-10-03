@@ -245,10 +245,26 @@ export const CLASS_VIEW_QUERY = gql`
       enrolledIn {
         id
         name
+        teacher {
+          id
+          name
+        }
+        students {
+          id
+          name
+        }
       }
       classes {
         id
         name
+        teacher {
+          id
+          name
+        }
+        students {
+          id
+          name
+        }
       }
       school {
         id

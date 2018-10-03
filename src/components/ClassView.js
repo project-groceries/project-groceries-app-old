@@ -104,6 +104,7 @@ const menu = css`
   height: 100%;
   transition: all 0.3s ease;
   transform: translateX(250px);
+  overflow: auto;
 `;
 
 const menuOpen = css`
@@ -199,7 +200,8 @@ class ClassView extends Component {
       menuIsOpen: false,
       isSummary: false,
       searchValue: "",
-      hiddentTags: new Map()
+      hiddentTags: new Map(),
+      hiddenUsers: new Map()
     };
   }
 
@@ -228,7 +230,8 @@ class ClassView extends Component {
               menuIsOpen,
               isSummary,
               searchValue,
-              hiddentTags
+              hiddentTags,
+              hiddenUsers
             } = this.state;
             const {
               type,
@@ -242,6 +245,12 @@ class ClassView extends Component {
             const appropriateClass = appropriateClasses.length
               ? appropriateClasses.find(c => c.id === id)
               : null;
+            let classUsers;
+            if (appropriateClass)
+              classUsers = [
+                appropriateClass.teacher,
+                ...appropriateClass.students
+              ];
 
             return ingredients.length ? (
               appropriateClass ? (
@@ -421,7 +430,9 @@ class ClassView extends Component {
                         <div
                           key={ingredient.id}
                           data-active={activeIngredients.get(ingredient.id)}
-                          className={activeIngredients.get(ingredient.id) ? "active" : ""}
+                          className={
+                            activeIngredients.get(ingredient.id) ? "active" : ""
+                          }
                         >
                           <div
                             onClick={e => {
@@ -479,7 +490,7 @@ class ClassView extends Component {
                             `}
                           >
                             {ingredient.orders
-                              .filter(order => order.class.id === id)
+                              // .filter(order => order.class.id === id)
                               .map(order => (
                                 <div key={order.id}>
                                   <p>{order.madeBy.name}</p>
@@ -505,7 +516,7 @@ class ClassView extends Component {
                         margin: 10px;
                       `}
                     >
-                      {/* <h2>Hello</h2> */}
+                      <h3>Filter tags</h3>
                       {tags.length ? (
                         <Fragment>
                           <div className={fullCheck}>
@@ -564,6 +575,38 @@ class ClassView extends Component {
                       ) : (
                         <p>No Tags</p>
                       )}
+                      <h3>Filter students</h3>
+                      <small>
+                        ⓘ Only orders from selected students will be shown
+                      </small>
+                      {classUsers.map(user => (
+                        <div key={user.id} className={fullCheck}>
+                          <input
+                            id={`filter-user-${user.id}`}
+                            name={`filter-user-${user.id}`}
+                            name={`filter-user-${user.id}`}
+                            type="checkbox"
+                            defaultChecked={true}
+                            // checked={this.state.isGoing}
+                            onChange={e => {
+                              const value = e.target.checked;
+
+                              this.setState(prevState => {
+                                prevState.hiddenUsers.set(user.id, !value);
+
+                                return {
+                                  hiddenUsers: prevState.hiddenUsers
+                                };
+                              });
+                            }}
+                          />
+                          <label htmlFor={`filter-user-${user.id}`}>
+                            <Visibility />
+                            <VisibilityOff />
+                            <span>{user.name}</span>
+                          </label>
+                        </div>
+                      ))}
                     </div>
                     <button
                       className="default"
@@ -584,7 +627,7 @@ class ClassView extends Component {
                       className={type === "TEACHER" ? "error" : "warning"}
                       onClick={this._toggleUnenrolModal}
                       style={{
-                        position: "absolute",
+                        position: "fixed",
                         bottom: "10px",
                         right: "10px"
                       }}
@@ -658,15 +701,9 @@ class ClassView extends Component {
     const { match } = this.props;
     const { id } = match.params;
 
-    const { isSummary, searchValue, hiddentTags } = this.state;
+    const { isSummary, searchValue, hiddentTags, hiddenUsers } = this.state;
 
     return ingredients
-      .filter(
-        ingredient =>
-          ingredient.tags.length
-            ? ingredient.tags.some(tag => !hiddentTags.get(tag.id))
-            : !hiddentTags.get(undefined)
-      )
       .filter(
         ingredient =>
           ingredient.name.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -675,11 +712,21 @@ class ClassView extends Component {
             tag.name.toLowerCase().includes(searchValue.toLowerCase())
           )
       )
+      .filter(
+        ingredient =>
+          ingredient.tags.length
+            ? ingredient.tags.some(tag => !hiddentTags.get(tag.id))
+            : !hiddentTags.get(undefined)
+      )
       .map(ingredient => ({
         ...ingredient,
-        totalOrders: ingredient.orders
+        orders: ingredient.orders
           .filter(o => o.class.id === id) // filter by class (only this class)
-          .reduce((acc, cur) => acc + cur.amount, 0)
+          .filter(o => !hiddenUsers.get(o.madeBy.id))
+      })) // filter by user
+      .map(ingredient => ({
+        ...ingredient,
+        totalOrders: ingredient.orders.reduce((acc, cur) => acc + cur.amount, 0)
       })) // reduce to total
       .filter(ingredient => (isSummary ? ingredient.totalOrders : true));
   };
