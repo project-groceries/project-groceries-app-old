@@ -91,8 +91,58 @@ export const orderItem = css`
     transform: scale(1.2);
   }
 `;
+
 export const noPrint = css`
   @media print {
     display: none;
+  }
+`;
+
+export const fullCheck = css`
+  margin: 20px;
+
+  & > label {
+    display: flex;
+
+    padding: 10px;
+    margin: 5px;
+    min-width: 200px;
+    text-align: center;
+    box-shadow: 0px 0px 3px 0px #e4e4e4;
+    background-color: #eee;
+
+    transition: all 0.3s ease;
+
+    & > * {
+      margin: auto 10px;
+    }
+
+    svg:nth-of-type(1) {
+      display: none;
+    }
+
+    svg:nth-of-type(2) {
+      display: block;
+    }
+  }
+
+  & > label:hover {
+    cursor: pointer;
+  }
+
+  & > input {
+    display: none;
+  }
+
+  & > input:checked + label {
+    background-color: #cacaca;
+
+    svg:nth-of-type(1) {
+      display: block;
+    }
+
+    svg:nth-of-type(2) {
+      display: none;
+    }
   }
 `;

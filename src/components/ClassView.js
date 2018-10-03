@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Query } from "react-apollo";
 import { CLASS_VIEW_QUERY } from "../queries";
 import Spinner from "./Spinner";
-import { fullPage, bar, circleIcon, noPrint } from "../styles";
+import { fullPage, bar, circleIcon, noPrint, fullCheck } from "../styles";
 import CreateIngredients from "./CreateIngredients";
 import { Dialog } from "@reach/dialog";
 import { css } from "emotion";
@@ -12,6 +12,8 @@ import Unenrol from "./Unenrol";
 import DeleteClass from "./DeleteClass";
 import Close from "./svg/Close";
 import OrderRecipe from "./OrderRecipe";
+import Visibility from "./svg/Visibility";
+import VisibilityOff from "./svg/VisibilityOff";
 
 const classViewGrid = css`
   display: grid;
@@ -91,7 +93,7 @@ const classViewGrid = css`
 
 const menu = css`
   width: 250px;
-  background-color: gainsboro;
+  background-color: whitesmoke;
   position: fixed;
   top: 0;
   right: 0;
@@ -193,7 +195,7 @@ class ClassView extends Component {
       menuIsOpen: false,
       isSummary: false,
       searchValue: "",
-      tagFilters: null
+      hiddentTags: new Map()
     };
   }
 
@@ -221,14 +223,14 @@ class ClassView extends Component {
               activeIngredients,
               menuIsOpen,
               isSummary,
-              searchValue
-              // tagFilters
+              searchValue,
+              hiddentTags
             } = this.state;
             const {
               type,
               enrolledIn,
               classes,
-              school: { ingredients /*, tags*/ }
+              school: { ingredients, tags }
             } = data.user;
 
             const appropriateClasses =
@@ -246,6 +248,8 @@ class ClassView extends Component {
                       background-color: white;
                       position: sticky;
                       top: 0;
+
+                      z-index: 2;
                     `}
                   >
                     <h2>{appropriateClass.name}</h2>
@@ -258,6 +262,8 @@ class ClassView extends Component {
                       background-color: white;
                       position: sticky;
                       top: 40px;
+
+                      z-index: 2;
 
                       @media (max-width: 768px) {
                         #search {
@@ -486,6 +492,7 @@ class ClassView extends Component {
                     className={css`
                       ${menu};
                       ${menuIsOpen ? menuOpen : ""};
+                      z-index: 2;
                     `}
                   >
                     <div
@@ -493,7 +500,65 @@ class ClassView extends Component {
                         margin: 10px;
                       `}
                     >
-                      <h2>Hello</h2>
+                      {/* <h2>Hello</h2> */}
+                      {tags.length ? (
+                        <Fragment>
+                          <div className={fullCheck}>
+                            <input
+                              id="filter-tag-undefined"
+                              name="filter-tag-undefined"
+                              name="filter-tag-undefined"
+                              type="checkbox"
+                              defaultChecked={true}
+                              onChange={e => {
+                                // checked={this.state.isGoing}
+                                const value = e.target.checked;
+
+                                this.setState(prevState => {
+                                  prevState.hiddentTags.set(undefined, !value);
+
+                                  return { hiddentTags: prevState.hiddentTags };
+                                });
+                              }}
+                            />
+                            <label htmlFor="filter-tag-undefined">
+                              <Visibility />
+                              <VisibilityOff />
+                              <span>No Tags</span>
+                            </label>
+                          </div>
+                          {tags.map(tag => (
+                            <div key={tag.id} className={fullCheck}>
+                              <input
+                                id={`filter-tag-${tag.id}`}
+                                name={`filter-tag-${tag.id}`}
+                                name={`filter-tag-${tag.id}`}
+                                type="checkbox"
+                                defaultChecked={true}
+                                // checked={this.state.isGoing}
+                                onChange={e => {
+                                  const value = e.target.checked;
+
+                                  this.setState(prevState => {
+                                    prevState.hiddentTags.set(tag.id, !value);
+
+                                    return {
+                                      hiddentTags: prevState.hiddentTags
+                                    };
+                                  });
+                                }}
+                              />
+                              <label htmlFor={`filter-tag-${tag.id}`}>
+                                <Visibility />
+                                <VisibilityOff />
+                                <span>{tag.name}</span>
+                              </label>
+                            </div>
+                          ))}
+                        </Fragment>
+                      ) : (
+                        <p>No Tags</p>
+                      )}
                     </div>
                     <button
                       className="default"
@@ -588,15 +653,15 @@ class ClassView extends Component {
     const { match } = this.props;
     const { id } = match.params;
 
-    const { isSummary, searchValue } = this.state;
+    const { isSummary, searchValue, hiddentTags } = this.state;
 
     return ingredients
-      .map(ingredient => ({
-        ...ingredient,
-        totalOrders: ingredient.orders
-          .filter(o => o.class.id === id) // filter by class (only this class)
-          .reduce((acc, cur) => acc + cur.amount, 0) // reduce to total
-      }))
+      .filter(
+        ingredient =>
+          ingredient.tags.length
+            ? ingredient.tags.some(tag => !hiddentTags.get(tag.id))
+            : !hiddentTags.get(undefined)
+      )
       .filter(
         ingredient =>
           ingredient.name.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -605,6 +670,12 @@ class ClassView extends Component {
             tag.name.toLowerCase().includes(searchValue.toLowerCase())
           )
       )
+      .map(ingredient => ({
+        ...ingredient,
+        totalOrders: ingredient.orders
+          .filter(o => o.class.id === id) // filter by class (only this class)
+          .reduce((acc, cur) => acc + cur.amount, 0)
+      })) // reduce to total
       .filter(ingredient => (isSummary ? ingredient.totalOrders : true));
   };
 
