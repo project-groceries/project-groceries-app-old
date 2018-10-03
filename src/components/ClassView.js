@@ -44,7 +44,7 @@ const classViewGrid = css`
     grid-template-columns: 1fr;
     grid-template-rows: 50px 30px 1fr;
 
-    overflow: auto;
+    overflow: hidden;
 
     & > div:first-child {
       display: flex;
@@ -84,6 +84,10 @@ const classViewGrid = css`
         border-radius: 5px;
       }
     }
+  }
+
+  & > div.active {
+    overflow: auto;
   }
 
   & > div[data-active="true"] {
@@ -417,6 +421,7 @@ class ClassView extends Component {
                         <div
                           key={ingredient.id}
                           data-active={activeIngredients.get(ingredient.id)}
+                          className={activeIngredients.get(ingredient.id) ? "active" : ""}
                         >
                           <div
                             onClick={e => {
