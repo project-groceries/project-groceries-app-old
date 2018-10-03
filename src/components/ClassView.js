@@ -189,7 +189,7 @@ class ClassView extends Component {
       isAddOrderModalOpen: false,
       isOrderRecipeModalOpen: false,
       isUnenrolModalOpen: false,
-      activeIngredient: null,
+      activeIngredients: new Map(),
       menuIsOpen: false,
       isSummary: false,
       searchValue: "",
@@ -218,7 +218,7 @@ class ClassView extends Component {
               isAddOrderModalOpen,
               isOrderRecipeModalOpen,
               isUnenrolModalOpen,
-              activeIngredient,
+              activeIngredients,
               menuIsOpen,
               isSummary,
               searchValue
@@ -410,21 +410,33 @@ class ClassView extends Component {
                       return (
                         <div
                           key={ingredient.id}
-                          data-active={
-                            activeIngredient === ingredient.id ? true : false
-                          }
+                          data-active={activeIngredients.get(ingredient.id)}
                         >
                           <div
                             onClick={e => {
                               e.preventDefault();
 
-                              if (activeIngredient === ingredient.id) {
-                                this.setState({
-                                  activeIngredient: null
+                              if (activeIngredients.get(ingredient.id)) {
+                                this.setState(prevState => {
+                                  prevState.activeIngredients.set(
+                                    ingredient.id,
+                                    false
+                                  );
+                                  return {
+                                    activeIngredient:
+                                      prevState.activeIngredients
+                                  };
                                 });
                               } else {
-                                this.setState({
-                                  activeIngredient: ingredient.id
+                                this.setState(prevState => {
+                                  prevState.activeIngredients.set(
+                                    ingredient.id,
+                                    true
+                                  );
+                                  return {
+                                    activeIngredient:
+                                      prevState.activeIngredients
+                                  };
                                 });
                               }
                             }}
