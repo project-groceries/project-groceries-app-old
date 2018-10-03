@@ -40,7 +40,7 @@ export const circleIcon = css`
   align-items: center;
   transition: all 0.3s ease;
   position: absolute;
-  top: 10px;
+  // top: 10px;
   // right: 10px;
 
   &:hover {

@@ -18,9 +18,9 @@ import SamsungTVLoader from "./SamsungTVLoader";
 import { USER_QUERY } from "../queries";
 import DeclareAccountType from "./DeclareAccountType";
 import { css } from "emotion";
-import Group from "./svg/Group";
+import People from "./svg/People";
 import List from "./svg/List";
-import Cart from "./svg/Cart";
+import ShoppingBasket from "./svg/ShoppingBasket";
 import Overview from "./Overview";
 import Classes from "./Classes";
 import Orders from "./Orders";
@@ -29,6 +29,7 @@ import { Offline } from "react-detect-offline";
 import Menu from "./svg/Menu";
 import { circleIcon, noPrint } from "../styles";
 import Signup from "./Signup";
+import Power from "./svg/Power";
 
 const bodyWrapper = css`
   @media screen {
@@ -247,7 +248,7 @@ class App extends Component {
                       <div className={menuSection}>
                         <Link to="/classes" onClick={this._closeMenu}>
                           <div className="menuSectionTitle">
-                            <Group />
+                            <People />
                             <h3>Classes</h3>
                           </div>
                         </Link>
@@ -281,7 +282,7 @@ class App extends Component {
                       <div className={menuSection}>
                         <Link to="/ingredients" onClick={this._closeMenu}>
                           <div className="menuSectionTitle">
-                            <Cart />
+                            <ShoppingBasket />
                             <h3>Ingredients</h3>
                           </div>
                         </Link>
@@ -314,6 +315,7 @@ class App extends Component {
                       <div
                         className={css`
                           ${circleIcon};
+                          top: 10px;
                           left: 10px;
                           ${menuIsOpen ? "transform: translateX(250px);" : ""};
                         `}
@@ -330,17 +332,17 @@ class App extends Component {
                         onClick={this._closeMenu}
                         className={css`
                           ${circleIcon} left: 10px;
-                          top: 70px;
+                          top: 80px;
                         `}
                       >
-                        <Group />
+                        <People />
                       </Link>
                       <Link
                         to="/orders"
                         onClick={this._closeMenu}
                         className={css`
                           ${circleIcon} left: 10px;
-                          top: 120px;
+                          top: 130px;
                         `}
                       >
                         <List />
@@ -350,11 +352,28 @@ class App extends Component {
                         onClick={this._closeMenu}
                         className={css`
                           ${circleIcon} left: 10px;
-                          top: 170px;
+                          top: 180px;
                         `}
                       >
-                        <Cart />
+                        <ShoppingBasket />
                       </Link>
+                      <div
+                        to="/ingredients"
+                        onClick={() => {
+                          this.setState({ menuIsOpen: false });
+
+                          client.resetStore();
+                          cookies.remove("token", {
+                            path: "/"
+                          });
+                        }}
+                        className={css`
+                          ${circleIcon} bottom: 10px;
+                          left: 10px;
+                        `}
+                      >
+                        <Power />
+                      </div>
                     </div>
                     <main>
                       {school ? (
