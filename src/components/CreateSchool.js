@@ -62,9 +62,9 @@ class CreateSchool extends Component {
               }}
             >
               <div className="form__group">
-                <label htmlFor="name">School Name</label>
+                <label htmlFor="schoolName">School Name</label>
                 <input
-                  id="name"
+                  id="schoolName"
                   value={name}
                   onChange={e => this.setState({ name: e.target.value })}
                   type="text"
