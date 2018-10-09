@@ -272,6 +272,9 @@ export const CLASS_VIEW_QUERY = gql`
           id
           name
         }
+        recipes {
+          id
+        }
         ingredients {
           id
           name

@@ -235,7 +235,7 @@ class ClassView extends Component {
               type,
               enrolledIn,
               classes,
-              school: { ingredients, tags }
+              school: { recipes, ingredients, tags }
             } = data.user;
 
             const appropriateClasses =
@@ -299,19 +299,72 @@ class ClassView extends Component {
                     >
                       <Close />
                     </div>
-                    <div
-                      className={css`
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                      `}
-                    >
-                      <h4>Order</h4>
-                      <div>
+                    {recipes.length ? (
+                      <div
+                        className={css`
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: center;
+                          align-items: center;
+                        `}
+                      >
+                        <h4>Order</h4>
+                        <div>
+                          <input
+                            type="button"
+                            value="Ingredients"
+                            className="success"
+                            onClick={this._toggleAddOrderModal}
+                          />
+                          <Dialog isOpen={isAddOrderModalOpen}>
+                            <button
+                              className="close-button"
+                              onClick={() =>
+                                this.setState({ isAddOrderModalOpen: false })
+                              }
+                            >
+                              <span aria-hidden>×</span>
+                            </button>
+                            <CreateOrder
+                              classId={id}
+                              onCompleted={() =>
+                                this.setState({ isAddOrderModalOpen: false })
+                              }
+                            />
+                          </Dialog>
+                          <input
+                            type="button"
+                            value="A Recipe"
+                            className="default"
+                            onClick={this._toggleOrderRecipeModal}
+                          />
+                          <Dialog isOpen={isOrderRecipeModalOpen}>
+                            <button
+                              className="close-button"
+                              onClick={() =>
+                                this.setState({
+                                  isOrderRecipeModalOpen: false
+                                })
+                              }
+                            >
+                              <span aria-hidden>×</span>
+                            </button>
+                            <OrderRecipe
+                              classId={id}
+                              onCompleted={() =>
+                                this.setState({
+                                  isOrderRecipeModalOpen: false
+                                })
+                              }
+                            />
+                          </Dialog>
+                        </div>
+                      </div>
+                    ) : (
+                      <Fragment>
                         <input
                           type="button"
-                          value="Ingredients"
+                          value="Order Ingredients"
                           className="success"
                           onClick={this._toggleAddOrderModal}
                         />
@@ -331,30 +384,8 @@ class ClassView extends Component {
                             }
                           />
                         </Dialog>
-                        <input
-                          type="button"
-                          value="A Recipe"
-                          className="default"
-                          onClick={this._toggleOrderRecipeModal}
-                        />
-                        <Dialog isOpen={isOrderRecipeModalOpen}>
-                          <button
-                            className="close-button"
-                            onClick={() =>
-                              this.setState({ isOrderRecipeModalOpen: false })
-                            }
-                          >
-                            <span aria-hidden>×</span>
-                          </button>
-                          <OrderRecipe
-                            classId={id}
-                            onCompleted={() =>
-                              this.setState({ isOrderRecipeModalOpen: false })
-                            }
-                          />
-                        </Dialog>
-                      </div>
-                    </div>
+                      </Fragment>
+                    )}
                     <input
                       id="search"
                       type="text"

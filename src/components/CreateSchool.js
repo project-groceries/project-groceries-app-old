@@ -32,6 +32,7 @@ class CreateSchool extends Component {
         <Mutation
           mutation={CREATE_SCHOOL_MUTATION}
           variables={{ name, teacherCode }}
+          update={data => this._success(data)}
           onCompleted={data => this._success(data)}
           onError={error => this._announceError(error)}
           update={(cache, { data: { createSchool } }) => {
