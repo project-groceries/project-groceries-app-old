@@ -545,12 +545,12 @@ class ClassView extends Component {
                         margin: 10px;
                       `}
                     >
-                      <h3>Filter ingredients by tag</h3>
-                      <small>
-                        ⓘ Only show ingredients that have the selected tags
-                      </small>
                       {tags.length ? (
                         <Fragment>
+                          <h3>Filter ingredients by tag</h3>
+                          <small>
+                            ⓘ Only show ingredients that have the selected tags
+                          </small>
                           <div className={fullCheck}>
                             <input
                               id="filter-tag-undefined"
@@ -603,7 +603,7 @@ class ClassView extends Component {
                           ))}
                         </Fragment>
                       ) : (
-                        <p>No Tags</p>
+                        ""
                       )}
                       <h3>Filter orders by students</h3>
                       <small>ⓘ Only show orders by selected students</small>
