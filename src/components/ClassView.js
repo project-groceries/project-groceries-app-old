@@ -605,35 +605,41 @@ class ClassView extends Component {
                       ) : (
                         ""
                       )}
-                      <h3>Filter orders by students</h3>
-                      <small>ⓘ Only show orders by selected students</small>
-                      {classUsers.map(user => (
-                        <div key={user.id} className={fullCheck}>
-                          <input
-                            id={`filter-user-${user.id}`}
-                            name={`filter-user-${user.id}`}
-                            type="checkbox"
-                            defaultChecked={true}
-                            // checked={this.state.isGoing}
-                            onChange={e => {
-                              const value = e.target.checked;
+                      {appropriateClass.students.length ? (
+                        <Fragment>
+                          <h3>Filter orders by students</h3>
+                          <small>ⓘ Only show orders by selected students</small>
+                          {classUsers.map(user => (
+                            <div key={user.id} className={fullCheck}>
+                              <input
+                                id={`filter-user-${user.id}`}
+                                name={`filter-user-${user.id}`}
+                                type="checkbox"
+                                defaultChecked={true}
+                                // checked={this.state.isGoing}
+                                onChange={e => {
+                                  const value = e.target.checked;
 
-                              this.setState(prevState => {
-                                prevState.hiddenUsers.set(user.id, !value);
+                                  this.setState(prevState => {
+                                    prevState.hiddenUsers.set(user.id, !value);
 
-                                return {
-                                  hiddenUsers: prevState.hiddenUsers
-                                };
-                              });
-                            }}
-                          />
-                          <label htmlFor={`filter-user-${user.id}`}>
-                            <Visibility />
-                            <VisibilityOff />
-                            <span>{user.name}</span>
-                          </label>
-                        </div>
-                      ))}
+                                    return {
+                                      hiddenUsers: prevState.hiddenUsers
+                                    };
+                                  });
+                                }}
+                              />
+                              <label htmlFor={`filter-user-${user.id}`}>
+                                <Visibility />
+                                <VisibilityOff />
+                                <span>{user.name}</span>
+                              </label>
+                            </div>
+                          ))}
+                        </Fragment>
+                      ) : (
+                        ""
+                      )}
                     </div>
                     <button
                       className="default"
