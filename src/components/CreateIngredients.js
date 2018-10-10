@@ -83,7 +83,7 @@ class CreateIngredients extends React.Component {
                     });
 
                     if (numberOfDuplicateIngredients > 0) {
-                      alert("duplicate ingredients were not added");
+                      console.log("duplicate ingredients were not added");
                       // new Toast({
                       //   message: "Some duplicate ingredients were not added",
                       //   type: "warning"

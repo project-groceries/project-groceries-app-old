@@ -22,7 +22,7 @@
   "plugins": ["import", "jsx-a11y", "react"],
   "rules": {
     "indent": [
-      "error",
+      "warn",
       2,
       {
         "SwitchCase": 1

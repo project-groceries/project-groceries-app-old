@@ -112,11 +112,8 @@ class CreateOrder extends Component {
                         const amount = e.target.value;
 
                         this.setState(prevState => {
-                          const currentIngredient = prevState.orderedIngredients.get(
-                            id
-                          );
                           prevState.orderedIngredients.set(id, {
-                            ...currentIngredient,
+                            ...prevState.orderedIngredients.get(id),
                             amount: amount
                           });
 
