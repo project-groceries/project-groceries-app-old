@@ -4,8 +4,7 @@ class UndrawNoData extends Component {
   render() {
     return (
       <svg
-        data-name="Layer 1" // xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
+        data-name="Layer 1"
         viewBox="0 0 820.16 780.81"
         width={this.props.width}
         height={this.props.height}
@@ -20,9 +19,9 @@ class UndrawNoData extends Component {
             gradientTransform="translate(-3.62 1.57)"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0" stop-color="gray" stop-opacity=".25" />
-            <stop offset=".54" stop-color="gray" stop-opacity=".12" />
-            <stop offset="1" stop-color="gray" stop-opacity=".1" />
+            <stop offset="0" stopColor="gray" stopOpacity=".25" />
+            <stop offset=".54" stopColor="gray" stopOpacity=".12" />
+            <stop offset="1" stopColor="gray" stopOpacity=".1" />
           </linearGradient>
           <linearGradient
             id="b"
@@ -32,7 +31,6 @@ class UndrawNoData extends Component {
             y2="130.75"
             gradientTransform="translate(-63.92 7.85)"
           />
-          // xlink:href="#a"
           <linearGradient
             id="c"
             x1="540.17"
@@ -41,7 +39,6 @@ class UndrawNoData extends Component {
             y2="82.43"
             gradientTransform="rotate(-12.11 545.066 460.65)"
           />
-          // xlink:href="#a"
           <linearGradient
             id="d"
             x1="476.4"
@@ -49,7 +46,6 @@ class UndrawNoData extends Component {
             x2="476.4"
             y2="127.12"
           />
-          // xlink:href="#a"
           <linearGradient
             id="e"
             x1="476.94"
@@ -57,7 +53,6 @@ class UndrawNoData extends Component {
             x2="476.94"
             y2="106.68"
           />
-          // xlink:href="#a"
           <linearGradient
             id="f"
             x1="666.86"
@@ -65,7 +60,6 @@ class UndrawNoData extends Component {
             x2="666.86"
             y2="117.95"
           />
-          // xlink:href="#a"
         </defs>
         <path
           fill="#e0e0e0"
