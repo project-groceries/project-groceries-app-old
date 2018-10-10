@@ -204,8 +204,6 @@ class CreateOrder extends Component {
                                 })
                               );
 
-                              console.log("ingredients", ingredients);
-
                               this.setState({
                                 mutationLoading: true
                               });

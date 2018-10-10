@@ -98,6 +98,7 @@ class CreateSchool extends Component {
   _announceError = async error => {
     const { toastManager } = this.props;
 
+    // eslint-disable-next-line
     console.log("error", error);
 
     this.setState({ loading: false });
