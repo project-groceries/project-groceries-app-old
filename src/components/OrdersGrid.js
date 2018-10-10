@@ -7,6 +7,7 @@ import { orderItem } from "../styles";
 import { css } from "emotion";
 import Close from "./svg/Close";
 import Done from "./svg/Done";
+import UndrawNoData from "./svg/UndrawNoData";
 import { withToastManager } from "react-toast-notifications";
 
 class OrdersGrid extends Component {
@@ -36,7 +37,7 @@ class OrdersGrid extends Component {
           );
           const orders = type === "TEACHER" ? classOrders : ownOrders;
 
-          return (
+          return orders.length ? (
             <div
               className={css`
                 // column-count: 4;
@@ -175,6 +176,14 @@ class OrdersGrid extends Component {
                   </div>
                 )
               )}
+            </div>
+          ) : (
+            <div
+              className="flex-center column"
+              style={{ height: "calc(100vh - 70px)" }}
+            >
+              <UndrawNoData height="200px" />
+              <p>There are no orders yet</p>
             </div>
           );
         }}
