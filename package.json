@@ -14,6 +14,7 @@
     "babel-eslint": "7.2.3",
     "babel-jest": "20.0.3",
     "babel-loader": "7.1.2",
+    "babel-plugin-add-react-displayname": "^0.0.5",
     "babel-preset-react-app": "^3.1.1",
     "babel-runtime": "6.26.0",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
@@ -36,6 +37,7 @@
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
     "logrocket": "^0.6.16",
+    "logrocket-react": "2",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",
@@ -107,6 +109,9 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      "add-react-displayname"
     ]
   },
   "eslintConfig": {

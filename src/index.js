@@ -20,7 +20,9 @@ import Cookies from "universal-cookie";
 import { ToastProvider } from "react-toast-notifications";
 
 import LogRocket from "logrocket";
+import setupLogRocketReact from "logrocket-react";
 LogRocket.init("5ox9mo/project-groceries");
+setupLogRocketReact(LogRocket);
 
 LogRocket.getSessionURL(function(sessionURL) {
   Raven.setDataCallback(function(data) {
