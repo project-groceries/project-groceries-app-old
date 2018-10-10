@@ -2,6 +2,6 @@
   "alias": ["app.projectgroceries.com"],
   "type": "static",
   "static": {
-    "public": "public"
+    "public": "src"
   }
 }
