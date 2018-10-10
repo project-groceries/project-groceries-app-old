@@ -1,4 +1,7 @@
 {
+  "alias": ["app.projectgroceries.com"],
   "type": "static",
-  "alias": ["app.projectgroceries.com"]
+  "static": {
+    "public": "public"
+  }
 }
