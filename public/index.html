@@ -62,11 +62,22 @@
   <script>(function () { var w = window; var ic = w.Intercom; if (typeof ic === "function") { ic('reattach_activator'); ic('update', intercomSettings); } else { var d = document; var i = function () { i.c(arguments) }; i.q = []; i.c = function (args) { i.q.push(args) }; w.Intercom = i; function l() { var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://widget.intercom.io/widget/e1sx7dly'; var x = d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); } if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); } } })()</script>
 </head>
 
-<body>
+<body style="margin: 0">
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>
-  <div id="root"></div>
+  <div id="root">
+    <div style="width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Work Sans', 'Helvetica Neue', Roboto, sans-serif">
+      <!-- <img src={logo} alt="Project Groceries" height="80px" className={css` transform: translateY(30px); `} /> -->
+      <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 550" fill="#83c674" style="height: 50vh">
+        <path d="M275 79.2a81.2 81.2 0 0 1 81.2 81.2h22.3a103.5 103.5 0 0 0-207 0h22.3A81.2 81.2 0 0 1 275 79.2z"></path>
+        <path d="M39.3 160.4v332.8h471.4V160.3H39.3zm417 215H319c-94.5-1.8-189.4 6.2-189.4 6.2-38.2 5.4-38.3-13.3-38.3-13.3s0-18.7 38.3-13.4c0 0 40.9 8 135.4 6.2 0 0 9.3.2 19.6-6 0 0 14.4-11.2 29.7-12.2C444.4 350 454.6 365 454.6 365c8.3 8.9 1.8 10.3 1.8 10.3zM421 309.8s-93.6-8-186.9-6.2c0 0-7.9 0-20.2 12.7 0 0-7 8.9-32.3 4.9 0 0-58.6-4.3-86.8-5.9v-3.2l83-2.7s4.6-2 0-4.7l-83-1.8v-2.8l83-2s1.8-.1 2.2-1.5c-.4-1.4-2.2-1.6-2.2-1.6l-83-2v-2.7l83-1.8c4.6-2.8 0-4.7 0-4.7l-83-2.8v-3.2c28.2-1.5 86.9-5.8 86.9-5.8 25.3-4 32.2 4.8 32.2 4.8 12.3 12.8 20.3 12.7 20.3 12.7 93.3 1.8 186.8-6 186.8-6 37.7-5.3 37.8 13.1 37.8 13.1s0 18.4-37.8 13.2z"></path>
+      </svg>
+      <h2>Patience is a virtue</h2>
+
+      <!-- <SamsungTVLoader /> -->
+    </div>
+  </div>
   <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
