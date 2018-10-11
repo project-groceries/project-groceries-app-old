@@ -8,5 +8,8 @@
         "destination": "/index.html"
       }
     ]
+  },
+  "env": {
+    "GENERATE_SOURCEMAP": true
   }
 }
