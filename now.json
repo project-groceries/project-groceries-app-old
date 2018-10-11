@@ -10,6 +10,6 @@
     ]
   },
   "env": {
-    "GENERATE_SOURCEMAP": true
+    "GENERATE_SOURCEMAP": "true"
   }
 }
