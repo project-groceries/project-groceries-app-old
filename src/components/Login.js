@@ -21,6 +21,7 @@ class Login extends Component {
       password: "",
       name: "",
       error: false,
+      errorMessage: "---",
       success: false,
       loading: false
     };
@@ -28,7 +29,14 @@ class Login extends Component {
 
   render() {
     const { history } = this.props;
-    const { email, password, error, success, loading } = this.state;
+    const {
+      email,
+      password,
+      error,
+      errorMessage,
+      success,
+      loading
+    } = this.state;
     const title = "Log In";
 
     return (
@@ -65,7 +73,7 @@ class Login extends Component {
           <div className="card card--w-fluid">
             {error ? (
               <small id="incorrect" className="card warning">
-                Incorrect Details
+                {errorMessage}
               </small>
             ) : (
               ""
@@ -192,8 +200,12 @@ class Login extends Component {
     );
   }
 
-  _announceError = async (/*error*/) => {
-    this.setState({ error: true, loading: false });
+  _announceError = async error => {
+    this.setState({
+      error: true,
+      errorMessage: error.message.replace("GraphQL error: ", ""),
+      loading: false
+    });
   };
 
   _confirm = async data => {

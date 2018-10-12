@@ -75,10 +75,19 @@ const authLink = setContext((_, { headers }) => {
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.map(({ message, locations, path }) => {
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      );
-      throw new Error(` [GraphQL Error]: ${message}`);
+      if (
+        message === "Invalid password" ||
+        message === "No such user found" ||
+        message ===
+          "A unique constraint would be violated on User. Details: Field name = email"
+      ) {
+        console.log("Disaster averted");
+      } else {
+        console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+        );
+        throw new Error(`[GraphQL Error]: ${message}`);
+      }
     });
   if (networkError) {
     console.log(`[Network error]: ${networkError}`);
