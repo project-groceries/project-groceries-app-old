@@ -31,6 +31,8 @@ import { circleIcon, noPrint } from "../styles";
 import Signup from "./Signup";
 import Power from "./svg/Power";
 
+import Tooltip from "@atlaskit/tooltip";
+
 const bodyWrapper = css`
   @media screen {
     height: 100vh;
@@ -327,53 +329,65 @@ class App extends Component {
                       >
                         <Menu />
                       </div>
-                      <Link
-                        to="/classes"
-                        onClick={this._closeMenu}
-                        className={css`
-                          ${circleIcon} left: 10px;
-                          top: 80px;
-                        `}
+                      <Tooltip position="right" content="Classes" delay={100}>
+                        <Link
+                          to="/classes"
+                          onClick={this._closeMenu}
+                          className={css`
+                            ${circleIcon} left: 10px;
+                            top: 80px;
+                          `}
+                        >
+                          <People />
+                        </Link>
+                      </Tooltip>
+                      <Tooltip position="right" content="Orders" delay={100}>
+                        <Link
+                          to="/orders"
+                          onClick={this._closeMenu}
+                          className={css`
+                            ${circleIcon} left: 10px;
+                            top: 130px;
+                          `}
+                        >
+                          <List />
+                        </Link>
+                      </Tooltip>
+                      <Tooltip
+                        position="right"
+                        content="Ingredients"
+                        delay={100}
                       >
-                        <People />
-                      </Link>
-                      <Link
-                        to="/orders"
-                        onClick={this._closeMenu}
-                        className={css`
-                          ${circleIcon} left: 10px;
-                          top: 130px;
-                        `}
-                      >
-                        <List />
-                      </Link>
-                      <Link
-                        to="/ingredients"
-                        onClick={this._closeMenu}
-                        className={css`
-                          ${circleIcon} left: 10px;
-                          top: 180px;
-                        `}
-                      >
-                        <ShoppingBasket />
-                      </Link>
-                      <div
-                        to="/ingredients"
-                        onClick={() => {
-                          this.setState({ menuIsOpen: false });
+                        <Link
+                          to="/ingredients"
+                          onClick={this._closeMenu}
+                          className={css`
+                            ${circleIcon} left: 10px;
+                            top: 180px;
+                          `}
+                        >
+                          <ShoppingBasket />
+                        </Link>
+                      </Tooltip>
+                      <Tooltip position="right" content="Sign Out" delay={100}>
+                        <div
+                          to="/ingredients"
+                          onClick={() => {
+                            this.setState({ menuIsOpen: false });
 
-                          client.resetStore();
-                          cookies.remove("token", {
-                            path: "/"
-                          });
-                        }}
-                        className={css`
-                          ${circleIcon} bottom: 10px;
-                          left: 10px;
-                        `}
-                      >
-                        <Power />
-                      </div>
+                            client.resetStore();
+                            cookies.remove("token", {
+                              path: "/"
+                            });
+                          }}
+                          className={css`
+                            ${circleIcon} bottom: 10px;
+                            left: 10px;
+                          `}
+                        >
+                          <Power />
+                        </div>
+                      </Tooltip>
                     </div>
                     <main>
                       {school ? (
