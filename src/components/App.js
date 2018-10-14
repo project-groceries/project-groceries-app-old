@@ -185,7 +185,6 @@ class App extends Component {
                     id: school ? school.id : "",
                     name: school ? school.name : ""
                   }
-                  // created_at: "yolo" // Signup date
                 });
 
                 // Mixpanel user identification

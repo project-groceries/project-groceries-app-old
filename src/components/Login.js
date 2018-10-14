@@ -219,11 +219,7 @@ class Login extends Component {
     cookies.set("token", token, { path: "/" });
 
     this.setState({ success: true, loading: false });
-    // this._saveUserData(token);
   };
-
-  // _saveUserData = token => {
-  // };
 }
 
 export default withCookies(Login);
