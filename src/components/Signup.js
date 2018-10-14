@@ -231,7 +231,9 @@ class Login extends Component {
 
   _confirm = async data => {
     const { cookies } = this.props;
+    const { email } = this.state;
 
+    mixpanel.alias(email);
     mixpanel.track("Signed up");
 
     const { token } = data.signup;

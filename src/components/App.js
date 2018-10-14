@@ -189,7 +189,6 @@ class App extends Component {
                 });
 
                 // Mixpanel user identification
-                mixpanel.identify(email);
                 mixpanel.people.set({
                   // only special properties need the $
                   $email: email,
