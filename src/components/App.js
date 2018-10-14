@@ -225,26 +225,10 @@ class App extends Component {
                           align-items: center;
                           justify-content: space-between;
                           height: 60px;
-                          padding: 5px;
+                          padding: 10px;
                         `}
                       >
-                        {/* <div
-                          className={css`
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            background-color: ${isTeacher
-                              ? "#83c674"
-                              : "white"};
-                            height: 50px;
-                            width: 50px;
-                            border-radius: 50%;
-                            margin: 10px;
-                          `}
-                        >
-                          <h1>{name.toUpperCase()[0]}</h1>
-                        </div> */}
-                        <Avatar size="medium" src={avatar} />
+                        <Avatar size="large" src={avatar} />
                         <h1>{school ? school.name : "No School"}</h1>
                       </div>
 
