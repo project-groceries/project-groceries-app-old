@@ -32,6 +32,7 @@ import Signup from "./Signup";
 import Power from "./svg/Power";
 
 import Tooltip from "@atlaskit/tooltip";
+import Avatar from "@atlaskit/avatar";
 
 const bodyWrapper = css`
   @media screen {
@@ -162,7 +163,8 @@ class App extends Component {
                   createdAt,
                   school,
                   classes,
-                  enrolledIn
+                  enrolledIn,
+                  avatar
                 } = data.user;
                 const hasCompletedDetails = Boolean(
                   school && hasDeclaredAccountType
@@ -226,7 +228,7 @@ class App extends Component {
                           padding: 5px;
                         `}
                       >
-                        <div
+                        {/* <div
                           className={css`
                             display: flex;
                             justify-content: center;
@@ -241,7 +243,8 @@ class App extends Component {
                           `}
                         >
                           <h1>{name.toUpperCase()[0]}</h1>
-                        </div>
+                        </div> */}
+                        <Avatar size="medium" src={avatar} />
                         <h1>{school ? school.name : "No School"}</h1>
                       </div>
 

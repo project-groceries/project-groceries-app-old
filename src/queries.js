@@ -25,6 +25,7 @@ export const USER_QUERY = gql`
       type
       createdAt
       hasDeclaredAccountType
+      avatar
       school {
         id
         name

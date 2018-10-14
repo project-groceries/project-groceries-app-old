@@ -8,6 +8,14 @@
   dependencies:
     prop-types "^15.5.10"
 
+"@atlaskit/avatar@^14.1.1":
+  version "14.1.1"
+  resolved "https://registry.yarnpkg.com/@atlaskit/avatar/-/avatar-14.1.1.tgz#385120095db024abf40c2fa285ec1829ba49a5c3"
+  dependencies:
+    "@atlaskit/analytics-next" "^3.0.6"
+    "@atlaskit/theme" "^6.1.0"
+    "@atlaskit/tooltip" "^12.1.1"
+
 "@atlaskit/portal@^0.0.10":
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/@atlaskit/portal/-/portal-0.0.10.tgz#fb0303e719a4db30d49c25b38d78ffbd46f38106"
@@ -15,13 +23,13 @@
     babel-runtime "^6.26.0"
     tiny-invariant "^0.0.3"
 
-"@atlaskit/theme@^6.0.2":
+"@atlaskit/theme@^6.0.2", "@atlaskit/theme@^6.1.0":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@atlaskit/theme/-/theme-6.1.0.tgz#5c2ce483782473961e5b54cd99ad7e9edc91fac4"
   dependencies:
     prop-types "^15.5.10"
 
-"@atlaskit/tooltip@^12.1.2":
+"@atlaskit/tooltip@^12.1.1", "@atlaskit/tooltip@^12.1.2":
   version "12.1.2"
   resolved "https://registry.yarnpkg.com/@atlaskit/tooltip/-/tooltip-12.1.2.tgz#5f99db2eb7e9b7069a88a22dc7169512b469a27d"
   dependencies:
