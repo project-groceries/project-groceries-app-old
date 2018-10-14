@@ -1,3 +1,5 @@
+/* global mixpanel */
+
 import React, { Component, Fragment } from "react";
 import { Query, Mutation } from "react-apollo";
 import Select from "react-select";
@@ -109,6 +111,8 @@ class JoinSchool extends Component {
   _success = () => {
     const { toastManager } = this.props;
     const { label } = this.state.selectedOption;
+
+    mixpanel.track("Joined school");
 
     this.setState({ loading: false });
     toastManager.add(`🏫 Boo Yah! You have successfully joined "${label}"`, {

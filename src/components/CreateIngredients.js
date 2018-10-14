@@ -1,3 +1,5 @@
+/* global mixpanel */
+
 import React from "react";
 import CreateIngredientsSubForm from "./CreateIngredientsSubForm";
 import { Query, Mutation } from "react-apollo";
@@ -81,6 +83,8 @@ class CreateIngredients extends React.Component {
                         });
                       }
                     });
+
+                    mixpanel.track("Ingredients created");
 
                     if (numberOfDuplicateIngredients > 0) {
                       console.log("duplicate ingredients were not added");

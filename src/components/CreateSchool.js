@@ -1,3 +1,5 @@
+/* global mixpanel */
+
 import React, { Component, Fragment } from "react";
 import { Mutation } from "react-apollo";
 import { withToastManager } from "react-toast-notifications";
@@ -110,6 +112,8 @@ class CreateSchool extends Component {
 
   _success = async () => {
     const { toastManager } = this.props;
+
+    mixpanel.track("Created school");
 
     this.setState({ loading: false });
     toastManager.add("🏫 Boo Yah! You have successfully created a school", {

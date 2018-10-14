@@ -71,7 +71,7 @@ class Unenrol extends Component {
   _success = async () => {
     const { toastManager, onCompleted } = this.props;
 
-    mixpanel.track("Unenrolled");
+    mixpanel.track("Unenrolled from class");
 
     this.setState({ loading: false });
     toastManager.add("You have been unenrolled", {
