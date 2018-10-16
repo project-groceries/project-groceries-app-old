@@ -5,6 +5,7 @@
   "dependencies": {
     "@atlaskit/avatar": "^14.1.1",
     "@atlaskit/banner": "^7.0.8",
+    "@atlaskit/button": "^9.0.15",
     "@atlaskit/field-text": "^7.0.11",
     "@atlaskit/tooltip": "^12.1.2",
     "@reach/dialog": "^0.1.0",

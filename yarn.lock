@@ -2,6 +2,14 @@
 # yarn lockfile v1
 
 
+"@atlaskit/analytics-next@^3.0.10":
+  version "3.0.10"
+  resolved "https://registry.yarnpkg.com/@atlaskit/analytics-next/-/analytics-next-3.0.10.tgz#c3ca3ef83101e6887b5057d476521e9459a502fd"
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    babel-runtime "^6.26.0"
+    prop-types "^15.5.10"
+
 "@atlaskit/analytics-next@^3.0.6":
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/@atlaskit/analytics-next/-/analytics-next-3.0.8.tgz#0f9207ae46706f4d908dfe3668b702ca501a27ee"
@@ -20,6 +28,16 @@
   version "7.0.8"
   resolved "https://registry.yarnpkg.com/@atlaskit/banner/-/banner-7.0.8.tgz#9547cab313745edef718b73107de3e51a631aff0"
   dependencies:
+    "@atlaskit/theme" "^6.1.1"
+    "@babel/runtime" "^7.0.0"
+    babel-runtime "^6.26.0"
+
+"@atlaskit/button@^9.0.15":
+  version "9.0.15"
+  resolved "https://registry.yarnpkg.com/@atlaskit/button/-/button-9.0.15.tgz#5d88c00258afe0deed5c520049e4e52a12264413"
+  dependencies:
+    "@atlaskit/analytics-next" "^3.0.10"
+    "@atlaskit/spinner" "9.0.10"
     "@atlaskit/theme" "^6.1.1"
     "@babel/runtime" "^7.0.0"
     babel-runtime "^6.26.0"
@@ -72,6 +90,15 @@
   dependencies:
     babel-runtime "^6.26.0"
     tiny-invariant "^0.0.3"
+
+"@atlaskit/spinner@9.0.10":
+  version "9.0.10"
+  resolved "https://registry.yarnpkg.com/@atlaskit/spinner/-/spinner-9.0.10.tgz#4cb6526fcd2a527a0b2c6fca0fca7fe1c1017e64"
+  dependencies:
+    "@atlaskit/theme" "^6.1.1"
+    "@babel/runtime" "^7.0.0"
+    babel-runtime "^6.26.0"
+    react-transition-group "^2.2.1"
 
 "@atlaskit/spinner@^9.0.8":
   version "9.0.9"

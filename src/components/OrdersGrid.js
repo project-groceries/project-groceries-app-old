@@ -9,6 +9,8 @@ import Close from "./svg/Close";
 import Done from "./svg/Done";
 import UndrawNoData from "./svg/UndrawNoData";
 import { withToastManager } from "react-toast-notifications";
+import { Link } from "react-router-dom";
+import Button from "@atlaskit/button";
 
 class OrdersGrid extends Component {
   constructor(props) {
@@ -184,6 +186,12 @@ class OrdersGrid extends Component {
             >
               <UndrawNoData height="200px" />
               <p>There are no orders yet</p>
+              <p>
+                You can order ingredients from{" "}
+                <Link to="/classes">
+                  <Button appearance="link">class pages</Button>
+                </Link>
+              </p>
             </div>
           );
         }}
