@@ -89,6 +89,12 @@ class DeclareAccountType extends Component {
                           label: "Teacher"
                         }
                       ]}
+                      defaultValue={
+                        type && {
+                          value: type,
+                          label: type[0] + type.slice(1).toLowerCase()
+                        }
+                      }
                       autoFocus={true}
                       aria-label="Select your account type"
                       placeholder="I am a..."
