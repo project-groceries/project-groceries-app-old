@@ -58,7 +58,7 @@
       }
     ],
     "no-unused-vars": [
-      "error",
+      "warn",
       {
         "varsIgnorePattern": "[iI]gnored"
       }

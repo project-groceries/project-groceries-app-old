@@ -74,8 +74,8 @@ export const CREATE_SCHOOL_MUTATION = gql`
 `;
 
 export const DECLARE_ACCOUNT_TYPE_MUTATION = gql`
-  mutation DeclareAccountType($type: String!) {
-    declareAccountType(type: $type) {
+  mutation DeclareAccountType($type: String!, $teacherCode: String!) {
+    declareAccountType(type: $type, teacherCode: $teacherCode) {
       id
       hasDeclaredAccountType
       type

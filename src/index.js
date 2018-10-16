@@ -77,11 +77,12 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     graphQLErrors.map(({ message, locations, path }) => {
       if (
         message === "Invalid password" ||
+        message === "Invalid teacher code" ||
         message === "No such user found" ||
         message ===
           "A unique constraint would be violated on User. Details: Field name = email"
       ) {
-        console.log("Disaster averted");
+        console.log("Disaster averted", message);
       } else {
         console.log(
           `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
