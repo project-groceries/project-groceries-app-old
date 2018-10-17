@@ -43,7 +43,7 @@ class CreateClass extends Component {
               // onError={this._announceError}
               // update={this._success}
             >
-              {(mutation, { loading, error }) => {
+              {(mutation, { loading }) => {
                 return loading ? (
                   <Spinner />
                 ) : (
