@@ -183,6 +183,7 @@ class App extends Component {
                   name, // Full name
                   email, // Email address
                   "Account Type": type,
+                  "Has Classes": !!userClasses.length,
                   company: {
                     id: school ? school.id : "",
                     name: school ? school.name : ""

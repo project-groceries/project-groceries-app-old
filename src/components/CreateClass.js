@@ -1,22 +1,23 @@
 /* global mixpanel */
 import React, { Component } from "react";
 import { Query, Mutation } from "react-apollo";
+import { withRouter } from "react-router";
 import { withToastManager } from "react-toast-notifications";
 import { CREATE_CLASS_QUERY, CREATE_CLASS_MUTATION } from "../queries";
 import { css } from "emotion";
+import Spinner from "./Spinner";
 
 class CreateClass extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      name: "",
-      mutationLoading: false
+      name: ""
     };
   }
 
   render() {
-    const { name, mutationLoading } = this.state;
+    const { name } = this.state;
 
     return (
       <Query query={CREATE_CLASS_QUERY}>
@@ -35,23 +36,17 @@ class CreateClass extends Component {
 
           const { classes } = data.user;
 
-          return mutationLoading ? (
-            <div id="spinner" className="card">
-              <div className="spinner">
-                <div className="bounce1" />
-                <div className="bounce2" />
-                <div className="bounce3" />
-              </div>
-            </div>
-          ) : (
+          return (
             <Mutation
               mutation={CREATE_CLASS_MUTATION}
               onCompleted={this._success}
-              onError={this._announceError}
-              update={this._success}
+              // onError={this._announceError}
+              // update={this._success}
             >
-              {mutation => {
-                return (
+              {(mutation, { loading, error }) => {
+                return loading ? (
+                  <Spinner />
+                ) : (
                   <form
                     className={css`
                       text-align: center;
@@ -62,9 +57,7 @@ class CreateClass extends Component {
                     `}
                     onSubmit={e => {
                       e.preventDefault();
-                      this.setState({
-                        mutationLoading: true
-                      });
+                      this.setState({});
 
                       if (name) {
                         mutation({ variables: { name } });
@@ -99,26 +92,25 @@ class CreateClass extends Component {
   _announceError = async () => {
     const { toastManager } = this.props;
 
-    this.setState({ mutationLoading: false });
     toastManager.add("An error occurred", {
       appearance: "error",
       autoDismiss: true
     });
   };
 
-  _success = async () => {
-    const { toastManager, onCompleted } = this.props;
+  _success = async ({ createClass: { id } }) => {
+    const { history, toastManager, onCompleted } = this.props;
 
     mixpanel.track("Created class");
 
-    this.setState({ mutationLoading: false });
     toastManager.add("Class created successfully", {
       appearance: "success",
       autoDismiss: true
     });
 
+    history.push(`/classes/${id}`);
     if (onCompleted) onCompleted();
   };
 }
 
-export default withToastManager(CreateClass);
+export default withToastManager(withRouter(CreateClass));
