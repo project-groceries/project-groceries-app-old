@@ -2,8 +2,5 @@
   "alias": ["app.projectgroceries.com"],
   "env": {
     "GENERATE_SOURCEMAP": "true"
-  },
-  "scripts": {
-    "start": "yarn run prod"
   }
 }
