@@ -16,4 +16,4 @@ COPY . .
 
 # Build the app and move the resulting build to the `/public` directory
 RUN yarn build
-RUN mv ./build /public
+RUN mv ./build ./public
