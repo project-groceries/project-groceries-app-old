@@ -22,6 +22,5 @@ app.get("*", function(req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-// const PORT = process.env.PORT || 80;
-// console.log("port is", PORT);
-app.listen(80);
+const PORT = process.env.PORT || 80;
+app.listen(PORT);
