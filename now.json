@@ -1,15 +1,9 @@
 {
   "alias": ["app.projectgroceries.com"],
-  "type": "static",
-  "static": {
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  },
   "env": {
     "GENERATE_SOURCEMAP": "true"
+  },
+  "scripts": {
+    "start": "yarn run prod"
   }
 }
