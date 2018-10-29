@@ -23,6 +23,7 @@ import List from "./svg/List";
 import ShoppingBasket from "./svg/ShoppingBasket";
 import Overview from "./Overview";
 import Classes from "./Classes";
+import ClassView from "./ClassView";
 import Orders from "./Orders";
 import Ingredients from "./Ingredients";
 import { Offline } from "react-detect-offline";
@@ -33,6 +34,24 @@ import Power from "./svg/Power";
 
 import Tooltip from "@atlaskit/tooltip";
 import Avatar from "@atlaskit/avatar";
+// import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
+import InlineDialog from "@atlaskit/inline-dialog";
+
+import styled from "styled-components";
+import { AddShoppingCart, Close } from "styled-icons/material";
+import OrderCarousel from "./OrderCarousel";
+
+const WhiteAddShoppingCart = styled(AddShoppingCart)`
+  color: white;
+  width: 28px;
+  height: 32px;
+`;
+
+const WhiteClose = styled(Close)`
+  color: white;
+  width: 28px;
+  height: 32px;
+`;
 
 const bodyWrapper = css`
   @media screen {
@@ -85,6 +104,7 @@ const offlineBanner = css`
   right: calc(50% - 125px);
   border-radius: 10px;
   text-align: center;
+  z-index: 2;
 `;
 
 class App extends Component {
@@ -98,7 +118,8 @@ class App extends Component {
     const { cookies } = this.props;
     this.state = {
       hasToken: cookies.get("token") || undefined,
-      menuIsOpen: false
+      menuIsOpen: false,
+      isOrderModalOpen: false
     };
   }
 
@@ -117,7 +138,7 @@ class App extends Component {
 
   render() {
     const { cookies } = this.props;
-    const { hasToken, menuIsOpen } = this.state;
+    const { hasToken, menuIsOpen, isOrderModalOpen } = this.state;
 
     return (
       <Fragment>
@@ -378,16 +399,134 @@ class App extends Component {
                     <main>
                       {school ? (
                         hasDeclaredAccountType ? (
-                          <Switch>
-                            <Route exact path="/" component={Overview} />
-                            <Route path="/classes" component={Classes} />
-                            <Route exact path="/orders" component={Orders} />
-                            <Route
-                              path="/ingredients"
-                              component={Ingredients}
-                            />
-                            <Route render={() => <Redirect to="/" />} />
-                          </Switch>
+                          <Fragment>
+                            <Switch>
+                              <Route exact path="/" component={Overview} />
+                              <Route
+                                exact
+                                path="/classes"
+                                component={Classes}
+                              />
+                              <Route
+                                exact
+                                path="/classes/:id"
+                                component={ClassView}
+                              />
+                              <Route exact path="/orders" component={Orders} />
+                              <Route
+                                path="/ingredients"
+                                component={Ingredients}
+                              />
+                              <Route render={() => <Redirect to="/" />} />
+                            </Switch>
+                            {userClasses.length && (
+                              <Fragment>
+                                <InlineDialog
+                                  onClose={() => {
+                                    this.setState({ dialogOpen: false });
+                                  }}
+                                  content={
+                                    <div
+                                      className={css`
+                                        height: 400px;
+                                        overflow: auto;
+                                        width: 400px;
+                                      `}
+                                    >
+                                      <OrderCarousel />
+                                    </div>
+                                  }
+                                  placement="left-end"
+                                  isOpen={isOrderModalOpen}
+                                >
+                                  <button
+                                    className={css`
+                                      margin: 0;
+                                      position: fixed;
+                                      bottom: 20px;
+                                      right: calc(20px + 60px + 20px + 20px);
+                                      width: 60px;
+                                      height: 60px;
+                                      border-radius: 30px;
+                                      background: #83c674;
+
+                                      box-shadow: 0 1px 6px 0
+                                          rgba(0, 0, 0, 0.06),
+                                        0 2px 32px 0 rgba(0, 0, 0, 0.16);
+
+                                      display: flex;
+                                      justify-content: center;
+                                      align-items: center;
+
+                                      transition: all 0.3s ease;
+
+                                      &:hover {
+                                        transform: scale(1.1);
+                                      }
+                                    `}
+                                    onClick={() =>
+                                      this.setState(pp => ({
+                                        isOrderModalOpen: !pp.isOrderModalOpen
+                                      }))
+                                    }
+                                  >
+                                    {isOrderModalOpen ? (
+                                      <WhiteClose />
+                                    ) : (
+                                      <WhiteAddShoppingCart />
+                                    )}
+                                  </button>
+                                </InlineDialog>
+                                {/* <ModalTransition>
+                                  {isOrderModalOpen && (
+                                    <Modal
+                                      actions={[
+                                        {
+                                          text: "Close",
+                                          onClick: () =>
+                                            this.setState({
+                                              isOrderModalOpen: false
+                                            })
+                                        },
+                                        {
+                                          text: "Secondary Action",
+                                          onClick: () =>
+                                            console.log("you played yourself")
+                                        }
+                                      ]}
+                                      onClose={() =>
+                                        this.setState({
+                                          isOrderModalOpen: false
+                                        })
+                                      }
+                                      heading="Modal Title"
+                                    >
+                                      <p>
+                                        Sit nulla est ex deserunt exercitation
+                                        anim occaecat. Nostrud ullamco deserunt
+                                        aute id consequat veniam incididunt duis
+                                        in sint irure nisi. Mollit officia
+                                        cillum Lorem ullamco minim nostrud elit
+                                        officia tempor esse quis.
+                                      </p>
+                                      <p>
+                                        Sunt ad dolore quis aute consequat.
+                                        Magna exercitation reprehenderit magna
+                                        aute tempor cupidatat consequat elit
+                                        dolor adipisicing. Mollit dolor eiusmod
+                                        sunt ex incididunt cillum quis. Velit
+                                        duis sit officia eiusmod Lorem aliqua
+                                        enim laboris do dolor eiusmod. Et mollit
+                                        incididunt nisi consectetur esse laborum
+                                        eiusmod pariatur proident Lorem eiusmod
+                                        et. Culpa deserunt nostrud ad veniam.
+                                      </p>
+                                    </Modal>
+                                  )}
+                                </ModalTransition> */}
+                              </Fragment>
+                            )}
+                          </Fragment>
                         ) : (
                           <DeclareAccountType />
                         )

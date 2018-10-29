@@ -30,7 +30,7 @@
     ],
     "linebreak-style": ["off", "windows"],
     "max-len": [
-      "error",
+      "warn",
       {
         "code": 80,
         "ignoreComments": true,

@@ -111,17 +111,13 @@ export const OVERVIEW_QUERY = gql`
 
 export const CLASSES_QUERY = gql`
   query overviewQuery {
+    classes {
+      id
+      name
+    }
     user {
       id
       type
-      classes {
-        id
-        name
-      }
-      enrolledIn {
-        id
-        name
-      }
     }
   }
 `;
@@ -240,62 +236,57 @@ export const CLASSES_GRID_QUERY = gql`
 
 export const CLASS_VIEW_QUERY = gql`
   query classViewQuery {
-    user {
+    classes {
       id
-      type
-      enrolledIn {
+      name
+      teacher {
         id
         name
-        teacher {
-          id
-          name
-        }
-        students {
+      }
+      students {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const CLASS_VIEW_GRID_QUERY = gql`
+  query classViewGridQuery(
+    $id: ID!
+    $first: Int
+    $skip: Int
+    $filter: [String]
+    $filteredUsers: [ID!]
+    $orderBy: IngredientOrderByInput
+    $summary: Boolean
+  ) {
+    ingredients(
+      first: $first
+      skip: $skip
+      filter: $filter
+      orderBy: $orderBy
+      summary: $summary
+    ) {
+      id
+      name
+      unit
+      tags {
+        id
+        name
+      }
+      orders(where: { class: { id: $id }, madeBy: { id_in: $filteredUsers } }) {
+        id
+        amount
+        madeBy {
           id
           name
         }
       }
-      classes {
-        id
-        name
-        teacher {
-          id
-          name
-        }
-        students {
-          id
-          name
-        }
-      }
-      school {
-        id
-        tags {
-          id
-          name
-        }
-        recipes {
-          id
-        }
-        ingredients {
-          id
-          name
-          unit
-          orders {
-            id
-            amount
-            madeBy {
-              id
-              name
-            }
-            class {
-              id
-            }
-          }
-          tags {
-            id
-            name
-          }
-        }
+    }
+    ingredientsConnection(filter: $filter, summary: $summary) {
+      aggregate {
+        count
       }
     }
   }
@@ -645,6 +636,26 @@ export const ORDER_RECIPE_QUERY = gql`
           }
         }
       }
+    }
+  }
+`;
+
+export const ORDER_CAROUSEL_QUERY = gql`
+  query orderCarouselQuery {
+    user {
+      id
+    }
+    classes {
+      id
+      name
+    }
+    ingredients {
+      id
+      name
+    }
+    recipes {
+      id
+      name
     }
   }
 `;

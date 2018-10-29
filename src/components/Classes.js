@@ -6,8 +6,8 @@ import SamsungTVLoader from "./SamsungTVLoader";
 import Enrol from "./Enrol";
 import CreateClass from "./CreateClass";
 import ClassesGrid from "./ClassesGrid";
-import { Switch, Route } from "react-router-dom";
-import ClassView from "./ClassView";
+// import { Switch, Route } from "react-router-dom";
+// import ClassView from "./ClassView";
 import { css } from "emotion";
 
 class Classes extends Component {
@@ -24,12 +24,15 @@ class Classes extends Component {
 
           if (error) return <div>Error</div>;
 
-          const { match } = this.props;
-          const { isExact } = match;
+          // const { match } = this.props;
+          // const { isExact } = match;
 
-          const { classes, enrolledIn, type } = data.user;
-          const userClasses = type === "TEACHER" ? classes : enrolledIn;
-          const noClasses = !userClasses.length;
+          const {
+            classes,
+            user: { type }
+          } = data;
+          // const userClasses = type === "TEACHER" ? classes : enrolledIn;
+          const noClasses = !classes.length;
 
           return noClasses ? (
             type === "STUDENT" ? (
@@ -46,35 +49,11 @@ class Classes extends Component {
             <Fragment>
               <div
                 className={css`
-                  display: grid;
-                  grid-template-columns: ${isExact ? "1fr" : "300px 1fr;"};
-                  height: 100vh;
-
-                  & > div {
-                    // height: 100vh;
-                    overflow: auto;
-                  }
-
-                  @media (max-width: 1000px) {
-                    grid-template-columns: 1fr;
-
-                    & > div:first-child {
-                      ${isExact ? "" : "display: none;"};
-                    }
-                  }
+                  ${overviewSection};
                 `}
               >
-                <div
-                  className={css`
-                    ${overviewSection};
-                  `}
-                >
-                  <h1>Classes</h1>
-                  <ClassesGrid />
-                </div>
-                <Switch>
-                  <Route path="/classes/:id" component={ClassView} />
-                </Switch>
+                <h1>Classes</h1>
+                <ClassesGrid />
               </div>
             </Fragment>
           );
