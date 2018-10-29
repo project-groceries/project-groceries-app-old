@@ -19,9 +19,9 @@ class UndrawChef extends Component {
             y2="218.92"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0" stop-color="gray" stop-opacity=".25" />
-            <stop offset=".54" stop-color="gray" stop-opacity=".12" />
-            <stop offset="1" stop-color="gray" stop-opacity=".1" />
+            <stop offset="0" stopColor="gray" stopOpacity=".25" />
+            <stop offset=".54" stopColor="gray" stopOpacity=".12" />
+            <stop offset="1" stopColor="gray" stopOpacity=".1" />
           </linearGradient>
         </defs>
         <ellipse
@@ -330,8 +330,8 @@ class UndrawChef extends Component {
           d="M751.56 531.75s37.67 20.91 49.75 38.22 59.32 40.68 59.32 40.68"
           fill="none"
           stroke="#535461"
-          stroke-miterlimit="10"
-          stroke-width="2"
+          strokeMiterlimit="10"
+          strokeWidth="2"
         />
         <path
           d="M837.41 510.86c16.39 11.86 23.22 30.41 23.22 30.41s-19.75-.68-36.15-12.53-23.22-30.41-23.22-30.41 19.76.67 36.15 12.53z"
@@ -341,8 +341,8 @@ class UndrawChef extends Component {
           d="M801.26 498.33s20.47 11.42 27.08 20.8 32.29 22.14 32.29 22.14"
           fill="none"
           stroke="#535461"
-          stroke-miterlimit="10"
-          stroke-width="2"
+          strokeMiterlimit="10"
+          strokeWidth="2"
         />
         <path
           d="M884.45 540.33c-18.83 20.69-22.81 47.74-22.81 47.74s26.55-6.52 45.38-27.21 22.81-47.74 22.81-47.74-26.55 6.51-45.38 27.21z"
@@ -352,8 +352,8 @@ class UndrawChef extends Component {
           d="M929.83 513.12s-24.53 21.21-30.76 35.83-37.43 39.12-37.43 39.12"
           fill="none"
           stroke="#535461"
-          stroke-miterlimit="10"
-          stroke-width="2"
+          strokeMiterlimit="10"
+          strokeWidth="2"
         />
       </svg>
     );
