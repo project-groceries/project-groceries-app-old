@@ -267,6 +267,7 @@ export const CLASS_VIEW_GRID_QUERY = gql`
       filter: $filter
       orderBy: $orderBy
       summary: $summary
+      classId: $id
     ) {
       id
       name
