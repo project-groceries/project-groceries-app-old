@@ -250,8 +250,14 @@ class ClassView extends Component {
                         value: "createdAt_DESC"
                       }}
                       options={[
-                        { label: "Name (ascending)", value: "name_ASC" },
-                        { label: "Name (descending)", value: "name_DESC" },
+                        {
+                          label: "Alphabetical (ascending)",
+                          value: "name_ASC"
+                        },
+                        {
+                          label: "Alphabetical (descending)",
+                          value: "name_DESC"
+                        },
                         { label: "Unit (ascending)", value: "unit_ASC" },
                         { label: "Unit (descending)", value: "unit_DESC" },
                         { label: "Oldest (ascending)", value: "createdAt_ASC" },

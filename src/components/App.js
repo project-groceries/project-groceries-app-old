@@ -34,7 +34,6 @@ import Power from "./svg/Power";
 
 import Tooltip from "@atlaskit/tooltip";
 import Avatar from "@atlaskit/avatar";
-// import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
 import InlineDialog from "@atlaskit/inline-dialog";
 
 import styled from "styled-components";
@@ -119,7 +118,7 @@ class App extends Component {
     this.state = {
       hasToken: cookies.get("token") || undefined,
       menuIsOpen: false,
-      isOrderModalOpen: false
+      isOrderDialogOpen: false
     };
   }
 
@@ -138,7 +137,7 @@ class App extends Component {
 
   render() {
     const { cookies } = this.props;
-    const { hasToken, menuIsOpen, isOrderModalOpen } = this.state;
+    const { hasToken, menuIsOpen, isOrderDialogOpen } = this.state;
 
     return (
       <Fragment>
@@ -422,9 +421,9 @@ class App extends Component {
                             {userClasses.length && (
                               <Fragment>
                                 <InlineDialog
-                                  onClose={() => {
-                                    this.setState({ dialogOpen: false });
-                                  }}
+                                  // onClose={() => {
+                                  //   this.setState({ isOrderDialogOpen: false });
+                                  // }}
                                   content={
                                     <div
                                       className={css`
@@ -437,7 +436,7 @@ class App extends Component {
                                     </div>
                                   }
                                   placement="left-end"
-                                  isOpen={isOrderModalOpen}
+                                  isOpen={isOrderDialogOpen}
                                 >
                                   <button
                                     className={css`
@@ -464,66 +463,20 @@ class App extends Component {
                                         transform: scale(1.1);
                                       }
                                     `}
-                                    onClick={() =>
+                                    onClick={e => {
+                                      e.preventDefault();
                                       this.setState(pp => ({
-                                        isOrderModalOpen: !pp.isOrderModalOpen
-                                      }))
-                                    }
+                                        isOrderDialogOpen: !pp.isOrderDialogOpen
+                                      }));
+                                    }}
                                   >
-                                    {isOrderModalOpen ? (
+                                    {isOrderDialogOpen ? (
                                       <WhiteClose />
                                     ) : (
                                       <WhiteAddShoppingCart />
                                     )}
                                   </button>
                                 </InlineDialog>
-                                {/* <ModalTransition>
-                                  {isOrderModalOpen && (
-                                    <Modal
-                                      actions={[
-                                        {
-                                          text: "Close",
-                                          onClick: () =>
-                                            this.setState({
-                                              isOrderModalOpen: false
-                                            })
-                                        },
-                                        {
-                                          text: "Secondary Action",
-                                          onClick: () =>
-                                            console.log("you played yourself")
-                                        }
-                                      ]}
-                                      onClose={() =>
-                                        this.setState({
-                                          isOrderModalOpen: false
-                                        })
-                                      }
-                                      heading="Modal Title"
-                                    >
-                                      <p>
-                                        Sit nulla est ex deserunt exercitation
-                                        anim occaecat. Nostrud ullamco deserunt
-                                        aute id consequat veniam incididunt duis
-                                        in sint irure nisi. Mollit officia
-                                        cillum Lorem ullamco minim nostrud elit
-                                        officia tempor esse quis.
-                                      </p>
-                                      <p>
-                                        Sunt ad dolore quis aute consequat.
-                                        Magna exercitation reprehenderit magna
-                                        aute tempor cupidatat consequat elit
-                                        dolor adipisicing. Mollit dolor eiusmod
-                                        sunt ex incididunt cillum quis. Velit
-                                        duis sit officia eiusmod Lorem aliqua
-                                        enim laboris do dolor eiusmod. Et mollit
-                                        incididunt nisi consectetur esse laborum
-                                        eiusmod pariatur proident Lorem eiusmod
-                                        et. Culpa deserunt nostrud ad veniam.
-                                      </p>
-                                    </Modal>
-                                  )}
-                                </ModalTransition> */}
                               </Fragment>
                             )}
                           </Fragment>

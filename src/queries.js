@@ -660,3 +660,18 @@ export const ORDER_CAROUSEL_QUERY = gql`
     }
   }
 `;
+
+export const CREATE_RECIPE_QUERY = gql`
+  query createRecipeQuery {
+    ingredients {
+      id
+      name
+    }
+    user {
+      id
+      school {
+        id
+      }
+    }
+  }
+`;

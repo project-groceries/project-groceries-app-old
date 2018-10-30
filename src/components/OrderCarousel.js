@@ -7,9 +7,11 @@ import Spinner from "./Spinner";
 import { RadioSelect } from "@atlaskit/select";
 import Select from "react-select";
 import Button from "@atlaskit/button";
+import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
 import styled from "styled-components";
 import { Close } from "styled-icons/material";
 import UndrawChef from "./svg/UndrawChef";
+import CreateRecipe from "./CreateRecipe";
 
 const BlackClose = styled(Close)`
   color: black;
@@ -30,12 +32,18 @@ class OrderCarousel extends Component {
     this.state = {
       isRecipe: true,
       currentClass: null,
-      selectedIngredients: new Map()
+      selectedIngredients: new Map(),
+      isCreateRecipeModalOpen: false
     };
   }
 
   render() {
-    const { isRecipe, currentClass, selectedIngredients } = this.state;
+    const {
+      isRecipe,
+      currentClass,
+      selectedIngredients,
+      isCreateRecipeModalOpen
+    } = this.state;
 
     return (
       <div
@@ -138,10 +146,6 @@ class OrderCarousel extends Component {
                                 data.value,
                                 { ...data, amount: 1 }
                               )
-                              // [
-                              //   ...prev.selectedIngredients,
-                              //   { ...data, amount: 1 }
-                              // ]
                             }))
                           }
                         />
@@ -160,7 +164,7 @@ class OrderCarousel extends Component {
                                     padding: 10px;
 
                                     & > input {
-                                      width: 100px;
+                                      width: 50px;
                                     }
                                   `}
                                 >
@@ -256,6 +260,38 @@ class OrderCarousel extends Component {
                       >
                         <UndrawChef width="250px" />
                         <p>There are no recipes yet</p>
+                        <Button
+                          appearance="link"
+                          onClick={() =>
+                            this.setState({ isCreateRecipeModalOpen: true })
+                          }
+                          isLoading={loading}
+                        >
+                          Create Recipe
+                        </Button>
+                        <ModalTransition>
+                          {isCreateRecipeModalOpen && (
+                            <Modal
+                              actions={[
+                                {
+                                  text: "Close",
+                                  onClick: () =>
+                                    this.setState({
+                                      isCreateRecipeModalOpen: false
+                                    })
+                                }
+                              ]}
+                              onClose={() =>
+                                this.setState({
+                                  isCreateRecipeModalOpen: false
+                                })
+                              }
+                              heading="Create Recipe"
+                            >
+                              <CreateRecipe />
+                            </Modal>
+                          )}
+                        </ModalTransition>
                       </div>
                     ) : (
                       <Fragment>
