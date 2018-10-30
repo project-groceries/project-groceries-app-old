@@ -91,8 +91,12 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
       }
     });
   if (networkError) {
-    console.log(`[Network error]: ${networkError}`);
-    throw new Error(`[Network error]: ${networkError}`);
+    if (networkError == "TypeError: Failed to fetch") {
+      console.log("Network distaster averted", networkError);
+    } else {
+      console.log(`[Network error]: ${networkError}`);
+      throw new Error(`[Network error]: ${networkError}`);
+    }
   }
 });
 
