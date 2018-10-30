@@ -32,6 +32,9 @@ class OrderCarousel extends Component {
     this.state = {
       isRecipe: true,
       currentClass: null,
+      currentRecipe: null,
+      selectedRecipe: null,
+      servings: 1,
       selectedIngredients: new Map(),
       isCreateRecipeModalOpen: false
     };
@@ -41,6 +44,9 @@ class OrderCarousel extends Component {
     const {
       isRecipe,
       currentClass,
+      currentRecipe,
+      selectedRecipe,
+      servings,
       selectedIngredients,
       isCreateRecipeModalOpen
     } = this.state;
@@ -117,6 +123,8 @@ class OrderCarousel extends Component {
               if (error) return <div>Error</div>;
 
               const { user, classes, ingredients, recipes } = data;
+
+              console.log("recipes", recipes);
 
               return (
                 <Fragment>
@@ -308,7 +316,140 @@ class OrderCarousel extends Component {
                             this.setState({ currentClass: data })
                           }
                         />
-                        {currentClass && <h1>Ta Da</h1>}
+                        {currentClass && (
+                          <Fragment>
+                            <RadioSelect
+                              className="radio-select"
+                              classNamePrefix="react-select"
+                              value={selectedRecipe}
+                              options={recipes.map(r => ({
+                                label: r.name,
+                                value: r.id
+                              }))}
+                              placeholder="Select a recipe to order"
+                              onChange={data =>
+                                this.setState({
+                                  selectedRecipe: data,
+                                  currentRecipe: recipes.find(
+                                    r => r.id === data.value
+                                  )
+                                })
+                              }
+                            />
+                            {currentRecipe && (
+                              <Fragment>
+                                <div>
+                                  <h3>Servings</h3>
+                                  <div
+                                    className={css`
+                                      display: flex;
+                                      justify-content: space-around;
+
+                                      & > span {
+                                        width: 40px;
+                                        height: 40px;
+                                        border-radius: 50%;
+                                        background-color: whitesmoke;
+
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+
+                                        transition: all 0.3s ease;
+                                      }
+
+                                      & > span:hover {
+                                        cursor: pointer;
+                                        transform: scale(1.1);
+                                      }
+                                    `}
+                                  >
+                                    <span
+                                      onClick={() =>
+                                        this.setState(pp => ({
+                                          servings:
+                                            pp.servings > 1
+                                              ? pp.servings - 1
+                                              : 1
+                                        }))
+                                      }
+                                    >
+                                      -
+                                    </span>
+                                    <p>{servings}</p>
+                                    <span
+                                      onClick={() =>
+                                        this.setState(pp => ({
+                                          servings: pp.servings + 1
+                                        }))
+                                      }
+                                    >
+                                      +
+                                    </span>
+                                  </div>
+                                </div>
+                                {currentRecipe.ingredients.map(
+                                  ({ id, amount, ingredient: { name } }) => (
+                                    <div
+                                      key={id}
+                                      className={css`
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+
+                                        background-color: whitesmoke;
+                                        padding: 10px;
+                                      `}
+                                    >
+                                      <small>{name}</small>
+                                      <small>{amount * servings}</small>
+                                    </div>
+                                  )
+                                )}
+                                <Mutation mutation={CREATE_ORDERS_MUTATION}>
+                                  {(mutation, { loading, error }) => {
+                                    if (error) return <div>Error</div>;
+
+                                    return (
+                                      <Button
+                                        appearance="primary"
+                                        onClick={() => {
+                                          const orders = currentRecipe.ingredients.map(
+                                            recipeIngredient => ({
+                                              amount:
+                                                servings *
+                                                recipeIngredient.amount,
+                                              ingredient: {
+                                                connect: {
+                                                  id:
+                                                    recipeIngredient.ingredient
+                                                      .id
+                                                }
+                                              },
+                                              madeBy: {
+                                                connect: { id: user.id }
+                                              },
+                                              class: {
+                                                connect: {
+                                                  id: currentClass.value
+                                                }
+                                              }
+                                            })
+                                          );
+
+                                          mutation({ variables: { orders } });
+                                        }}
+                                        isLoading={loading}
+                                      >
+                                        Order Recipe
+                                      </Button>
+                                    );
+                                  }}
+                                </Mutation>
+                              </Fragment>
+                            )}
+                          </Fragment>
+                        )}
                       </Fragment>
                     )}
                   </div>

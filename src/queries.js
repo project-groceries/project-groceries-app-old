@@ -657,6 +657,14 @@ export const ORDER_CAROUSEL_QUERY = gql`
     recipes {
       id
       name
+      ingredients {
+        id
+        amount
+        ingredient {
+          id
+          name
+        }
+      }
     }
   }
 `;
