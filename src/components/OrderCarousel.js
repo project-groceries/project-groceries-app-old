@@ -124,8 +124,6 @@ class OrderCarousel extends Component {
 
               const { user, classes, ingredients, recipes } = data;
 
-              console.log("recipes", recipes);
-
               return (
                 <Fragment>
                   <div>

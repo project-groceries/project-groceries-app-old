@@ -9,8 +9,6 @@ import UndrawFileSearching from "./svg/UndrawFileSearching";
 import Button from "@atlaskit/button";
 import { CheckboxSelect, RadioSelect } from "@atlaskit/select";
 import InlineDialog from "@atlaskit/inline-dialog";
-import Close from "./svg/Close";
-import { Link } from "react-router-dom";
 import Toggle from "./Toggle";
 
 class ClassView extends Component {
@@ -87,28 +85,6 @@ class ClassView extends Component {
                       z-index: 1;
                     `}
                   >
-                    <Link
-                      to="/"
-                      className={css`
-                        height: 40px;
-                        width: 40px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        transition: all 0.3s ease;
-                        background-color: rgb(220, 220, 220);
-                        border-radius: 50%;
-                        position: fixed;
-                        left: 70px;
-                        top: 10px;
-
-                        &:hover {
-                          background-color: rgb(180, 180, 180);
-                        }
-                      `}
-                    >
-                      <Close />
-                    </Link>
                     <h2>{appropriateClass.name}</h2>
                   </div>
                   <ClassViewGrid
