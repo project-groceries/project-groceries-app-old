@@ -124,6 +124,7 @@ class ClassViewGrid extends Component {
           orderBy,
           summary: isSummary
         }}
+        pollInterval={500}
       >
         {({ loading, error, data }) => {
           const hasData = Object.keys(data).length;

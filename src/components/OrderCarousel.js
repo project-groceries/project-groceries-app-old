@@ -143,6 +143,7 @@ class OrderCarousel extends Component {
                         <Select
                           placeholder="Select an ingredient to add to the order"
                           value=""
+                          maxMenuHeight={200}
                           options={ingredients
                             .filter(i => !selectedIngredients.has(i.id))
                             .map(i => ({ value: i.id, label: i.name }))}
