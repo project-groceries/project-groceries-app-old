@@ -18,9 +18,9 @@ class UndrawFileSearching extends Component {
             y2="130.21"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0" stop-color="gray" stop-opacity=".25" />
-            <stop offset=".54" stop-color="gray" stop-opacity=".12" />
-            <stop offset="1" stop-color="gray" stop-opacity=".1" />
+            <stop offset="0" stopColor="gray" stopOpacity=".25" />
+            <stop offset=".54" stopColor="gray" stopOpacity=".12" />
+            <stop offset="1" stopColor="gray" stopOpacity=".1" />
           </linearGradient>
           <linearGradient
             id="c"
@@ -88,9 +88,9 @@ class UndrawFileSearching extends Component {
             y2="362.71"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0" stop-color="#b3b3b3" stop-opacity=".25" />
-            <stop offset=".54" stop-color="#b3b3b3" stop-opacity=".1" />
-            <stop offset="1" stop-color="#b3b3b3" stop-opacity=".05" />
+            <stop offset="0" stopColor="#b3b3b3" stopOpacity=".25" />
+            <stop offset=".54" stopColor="#b3b3b3" stopOpacity=".1" />
+            <stop offset="1" stopColor="#b3b3b3" stopOpacity=".05" />
           </linearGradient>
           <linearGradient
             id="b"
@@ -100,9 +100,9 @@ class UndrawFileSearching extends Component {
             y2="487.6"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0" stop-opacity=".12" />
-            <stop offset=".55" stop-opacity=".09" />
-            <stop offset="1" stop-opacity=".02" />
+            <stop offset="0" stopOpacity=".12" />
+            <stop offset=".55" stopOpacity=".09" />
+            <stop offset="1" stopOpacity=".02" />
           </linearGradient>
           <linearGradient
             id="l"
@@ -144,7 +144,7 @@ class UndrawFileSearching extends Component {
           fill="#fff"
           d="M202.54 262.18h143.79v96.93H202.54z"
         />
-        <g clip-path="url(#e)" fill="#83c674">
+        <g clipPath="url(#e)" fill="#83c674">
           <path
             opacity=".4"
             d="M190.35 355.61l36.21-56.06 15.18 24.52 32.7-33.86 28.03 33.86 24.52-50.21 63.06 100.43-204.37-7.01 4.67-11.67z"
@@ -167,7 +167,7 @@ class UndrawFileSearching extends Component {
           fill="#fff"
           d="M202.54 468.88h143.79v96.93H202.54z"
         />
-        <g clip-path="url(#h)" fill="#bdbdbd">
+        <g clipPath="url(#h)" fill="#bdbdbd">
           <path
             opacity=".4"
             d="M190.35 562.31l36.21-56.06 15.18 24.53 32.7-33.87 28.03 33.87 24.52-50.22 63.06 100.43-204.37-7 4.67-11.68z"

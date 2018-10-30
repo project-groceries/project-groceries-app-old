@@ -28,7 +28,7 @@ class ClassView extends Component {
   }
 
   render() {
-    const { match, history } = this.props;
+    const { match } = this.props;
     const { id } = match.params;
 
     const {
@@ -67,10 +67,9 @@ class ClassView extends Component {
             // I don't think 'class' is a valid variable name ... so 'appropriateClass'
             const appropriateClass = classes.find(c => c.id == id);
             // console.log("class", appropriateClass);
-            const users = [
-              appropriateClass.teacher,
-              ...appropriateClass.students
-            ];
+            const users = appropriateClass
+              ? [appropriateClass.teacher, ...appropriateClass.students]
+              : undefined;
 
             return appropriateClass ? (
               <Fragment>
