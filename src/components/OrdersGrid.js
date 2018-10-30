@@ -42,7 +42,7 @@ class OrdersGrid extends Component {
           return orders.length ? (
             <div
               className={css`
-                // column-count: 4;
+                // column-count: 3;
                 // column-gap: 1em;
 
                 margin: 1.5em auto;
@@ -51,17 +51,17 @@ class OrdersGrid extends Component {
 
                 /* Masonry on large screens */
                 @media only screen and (min-width: 1024px) {
-                  column-count: 4;
+                  column-count: 3;
                 }
 
                 /* Masonry on medium-sized screens */
                 @media only screen and (max-width: 1023px) and (min-width: 768px) {
-                  column-count: 3;
+                  column-count: 2;
                 }
 
                 /* Masonry on small screens */
                 @media only screen and (max-width: 767px) and (min-width: 540px) {
-                  column-count: 2;
+                  column-count: 1;
                 }
 
                 & > div {
@@ -83,7 +83,7 @@ class OrdersGrid extends Component {
                     className={css`
                       border-left: 5px solid rgb(201, 201, 201);
                       padding: 10px;
-                      width: 350px;
+                      // width: 450px;
                       margin: 10px 20px;
                     `}
                   >
@@ -91,7 +91,7 @@ class OrdersGrid extends Component {
                     <h4>{madeBy.name}</h4>
                     {orders.map(({ id, amount, ingredient }) => (
                       <div key={id} className={orderItem}>
-                        <h3>{ingredient.name}</h3>
+                        <small>{ingredient.name}</small>
                         {editMap.get(id) ? (
                           <Fragment>
                             <input
