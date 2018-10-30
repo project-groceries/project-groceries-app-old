@@ -11,6 +11,7 @@ import UndrawNoData from "./svg/UndrawNoData";
 import { withToastManager } from "react-toast-notifications";
 import { Link } from "react-router-dom";
 import Button from "@atlaskit/button";
+import { formatDistance } from "date-fns";
 
 class OrdersGrid extends Component {
   constructor(props) {
@@ -87,7 +88,11 @@ class OrdersGrid extends Component {
                       margin: 10px 20px;
                     `}
                   >
-                    <h2>{dateCreated.toDateString()}</h2>
+                    <h2>
+                      {formatDistance(dateCreated, new Date(), {
+                        addSuffix: true
+                      })}
+                    </h2>
                     <h4>{madeBy.name}</h4>
                     {orders.map(({ id, amount, ingredient }) => (
                       <div key={id} className={orderItem}>
