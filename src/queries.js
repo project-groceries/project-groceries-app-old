@@ -236,6 +236,10 @@ export const CLASSES_GRID_QUERY = gql`
 
 export const CLASS_VIEW_QUERY = gql`
   query classViewQuery {
+    user {
+      id
+      type
+    }
     classes {
       id
       name

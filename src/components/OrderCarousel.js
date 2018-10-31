@@ -272,7 +272,6 @@ class OrderCarousel extends Component {
                           onClick={() =>
                             this.setState({ isCreateRecipeModalOpen: true })
                           }
-                          isLoading={loading}
                         >
                           Create Recipe
                         </Button>

@@ -7,6 +7,7 @@ import { withRouter } from "react-router";
 import { withToastManager } from "react-toast-notifications";
 import { DELETE_CLASS_MUTATION } from "../queries";
 import Spinner from "./Spinner";
+import Button from "@atlaskit/button";
 
 class DeleteClass extends Component {
   constructor(props) {
@@ -25,26 +26,29 @@ class DeleteClass extends Component {
         variables={{ id }}
       >
         {(mutation, { loading }) => {
-          return loading ? (
-            <Spinner />
-          ) : (
+          return (
             <div
               className={css`
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
+
+                & > * {
+                  margin: 10px;
+                }
               `}
             >
               <small>Are you sure? This action cannot be undone.</small>
-              <input
-                type="button"
-                value="Yes, delete this class"
-                className="error"
+              <Button
+                appearance="danger"
+                isLoading={loading}
                 onClick={() => {
                   mutation();
                 }}
-              />
+              >
+                Yes, delete this class
+              </Button>
             </div>
           );
         }}
@@ -71,7 +75,7 @@ class DeleteClass extends Component {
       autoDismiss: true
     });
 
-    history.push("/classes");
+    history.push("/");
     if (onCompleted) onCompleted();
   };
 }

@@ -10,6 +10,9 @@ import Button from "@atlaskit/button";
 import { CheckboxSelect, RadioSelect } from "@atlaskit/select";
 import InlineDialog from "@atlaskit/inline-dialog";
 import Toggle from "./Toggle";
+import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
+import DeleteClass from "./DeleteClass";
+import Unenrol from "./Unenrol";
 
 class ClassView extends Component {
   constructor(props) {
@@ -23,7 +26,8 @@ class ClassView extends Component {
       filteredUsers: null,
       orderBy: "createdAt_DESC",
       isSummary: false,
-      summaryDialogOpen: false
+      summaryDialogOpen: false,
+      isDeleteClassModalOpen: false
     };
   }
 
@@ -39,7 +43,8 @@ class ClassView extends Component {
       filteredUsers,
       orderBy,
       isSummary,
-      summaryDialogOpen
+      summaryDialogOpen,
+      isDeleteClassModalOpen
     } = this.state;
 
     return (
@@ -62,7 +67,10 @@ class ClassView extends Component {
 
             if (error) return <div>Error</div>;
 
-            const { classes } = data;
+            const {
+              classes,
+              user: { type }
+            } = data;
 
             // I don't think 'class' is a valid variable name ... so 'appropriateClass'
             const appropriateClass = classes.find(c => c.id == id);
@@ -244,6 +252,49 @@ class ClassView extends Component {
                       placeholder="Sort by..."
                       onChange={data => this.setState({ orderBy: data.value })}
                     />
+                  </div>
+                  <div>
+                    <Button
+                      appearance="danger"
+                      onClick={() =>
+                        this.setState({ isDeleteClassModalOpen: true })
+                      }
+                    >
+                      {type == "TEACHER"
+                        ? "Delete Class"
+                        : "Unenroll From Class"}
+                    </Button>
+                    <ModalTransition>
+                      {isDeleteClassModalOpen && (
+                        <Modal
+                          actions={[
+                            {
+                              text: "Close",
+                              onClick: () =>
+                                this.setState({
+                                  isDeleteClassModalOpen: false
+                                })
+                            }
+                          ]}
+                          onClose={() =>
+                            this.setState({
+                              isDeleteClassModalOpen: false
+                            })
+                          }
+                          heading={
+                            type == "TEACHER"
+                              ? "Delete Class"
+                              : "Unenroll From Class"
+                          }
+                        >
+                          {type === "TEACHER" ? (
+                            <DeleteClass id={id} />
+                          ) : (
+                            <Unenrol id={id} />
+                          )}
+                        </Modal>
+                      )}
+                    </ModalTransition>
                   </div>
                 </div>
               </Fragment>
