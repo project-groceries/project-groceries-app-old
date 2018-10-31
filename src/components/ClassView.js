@@ -255,7 +255,7 @@ class ClassView extends Component {
                   </div>
                   <div>
                     <Button
-                      appearance="danger"
+                      appearance={type === "TEACHER" ? "danger" : "warning"}
                       onClick={() =>
                         this.setState({ isDeleteClassModalOpen: true })
                       }

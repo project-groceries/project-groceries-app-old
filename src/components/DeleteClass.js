@@ -6,7 +6,6 @@ import { Mutation } from "react-apollo";
 import { withRouter } from "react-router";
 import { withToastManager } from "react-toast-notifications";
 import { DELETE_CLASS_MUTATION } from "../queries";
-import Spinner from "./Spinner";
 import Button from "@atlaskit/button";
 
 class DeleteClass extends Component {

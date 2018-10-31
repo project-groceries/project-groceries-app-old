@@ -179,6 +179,9 @@ export const CREATE_CLASS_MUTATION = gql`
       students {
         id
       }
+      orders {
+        id
+      }
     }
   }
 `;

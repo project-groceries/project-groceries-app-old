@@ -1,22 +1,25 @@
 /* global mixpanel */
 
 import React, { Component, Fragment } from "react";
+import { withRouter } from "react-router";
 import { Query, Mutation } from "react-apollo";
 import Select from "react-select";
 import { ENROL_QUERY, ENROL_INTO_CLASS_MUTATION } from "../queries";
+
+import Button from "@atlaskit/button";
+import { css } from "emotion";
 
 class Enrol extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      selectedOption: null,
-      mutationLoading: false
+      selectedOption: null
     };
   }
 
   render() {
-    const { selectedOption, mutationLoading } = this.state;
+    const { selectedOption } = this.state;
 
     return (
       <Query query={ENROL_QUERY}>
@@ -51,51 +54,58 @@ class Enrol extends Component {
           return allClasses.length ? (
             unenrolledClasses.length ? (
               <Fragment>
-                {mutationLoading && (
-                  <div id="spinner" className="card">
-                    <div className="spinner">
-                      <div className="bounce1" />
-                      <div className="bounce2" />
-                      <div className="bounce3" />
-                    </div>
-                  </div>
-                )}
                 <Mutation
                   mutation={ENROL_INTO_CLASS_MUTATION}
-                  update={this._success}
-                  onError={this._announceError}
+                  onCompleted={this._success}
+                  // onError={this._announceError}
+                  // update={this._success}
                 >
-                  {mutation => (
-                    <form
-                      className="pad-children"
-                      onSubmit={e => {
-                        e.preventDefault();
+                  {(mutation, { loading }) => {
+                    return (
+                      <div
+                        className={css`
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: center;
+                          align-items: center;
 
-                        if (selectedOption) {
-                          const { value } = selectedOption;
-                          this.setState({
-                            mutationLoading: true
-                          });
-                          mutation({ variables: { id: value } });
-                        }
-                      }}
-                    >
-                      <Fragment>
-                        <div className="form__group">
-                          <Select
-                            onChange={this._handleChange}
-                            options={options}
-                            autoFocus={true}
-                            aria-label="Select a class"
-                            placeholder="Select a class"
-                          />
-                        </div>
-                        <button type="submit" className="btn info">
-                          Enrol into class
-                        </button>
-                      </Fragment>
-                    </form>
-                  )}
+                          min-height: 300px;
+
+                          & > * {
+                            margin: 7px;
+                          }
+                        `}
+                      >
+                        <Fragment>
+                          <div className="form__group">
+                            <Select
+                              onChange={this._handleChange}
+                              options={options}
+                              autoFocus={true}
+                              aria-label="Select a class"
+                              placeholder="Select a class"
+                              maxMenuHeight={200}
+                            />
+                          </div>
+                          <Button
+                            appearance="primary"
+                            onClick={() => {
+                              if (selectedOption) {
+                                const { value } = selectedOption;
+                                this.setState({
+                                  mutationLoading: true
+                                });
+                                mutation({ variables: { id: value } });
+                              }
+                            }}
+                            isLoading={loading}
+                          >
+                            Enrol into class
+                          </Button>
+                        </Fragment>
+                      </div>
+                    );
+                  }}
                 </Mutation>
               </Fragment>
             ) : (
@@ -118,18 +128,15 @@ class Enrol extends Component {
     this.setState({ selectedOption });
   };
 
-  _announceError = async () => {
-    this.setState({ mutationLoading: false });
-  };
-
   _success = () => {
     mixpanel.track("Enrolled into class");
 
-    const { onCompleted } = this.props;
+    const { onCompleted, history } = this.props;
+    const { selectedOption } = this.state;
 
-    this.setState({ mutationLoading: false });
+    history.push(`/classes/${selectedOption.value}`);
     if (onCompleted) onCompleted();
   };
 }
 
-export default Enrol;
+export default withRouter(Enrol);

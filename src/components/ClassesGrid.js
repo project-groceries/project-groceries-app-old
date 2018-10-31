@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 import { Query } from "react-apollo";
 import { Link } from "react-router-dom";
-import { Dialog } from "@reach/dialog";
-import {
-  CLASSES_GRID_QUERY,
-  NEW_CLASS_SUBSCRIPTION,
-  NEW_ORDERS_SUBSCRIPTION
-} from "../queries";
+import { CLASSES_GRID_QUERY } from "../queries";
 import Spinner from "./Spinner";
 import { css } from "emotion";
 import Add from "./svg/Add";
 import CreateClass from "./CreateClass";
 import Enrol from "./Enrol";
 import { noPrint } from "../styles";
+import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
 
 const classesGrid = css`
   padding: 5px;
@@ -88,13 +84,11 @@ class ClassesGrid extends Component {
     const { isOpen } = this.state;
 
     return (
-      <Query query={CLASSES_GRID_QUERY}>
-        {({ loading, error, data, subscribeToMore }) => {
-          if (loading) return <Spinner />;
+      <Query query={CLASSES_GRID_QUERY} pollInterval={500}>
+        {({ loading, error, data }) => {
+          const hasData = Object.keys(data).length;
+          if (!hasData && loading) return <Spinner />;
           if (error) return <p>Error</p>;
-
-          this._subscribeToNewClasses(subscribeToMore);
-          this._subscribeToNewOrders(subscribeToMore);
 
           const { type, classes, enrolledIn } = data.user;
           const userClasses = type === "TEACHER" ? classes : enrolledIn;
@@ -112,52 +106,48 @@ class ClassesGrid extends Component {
                   </div>
                 </Link>
               ))}
-              <span onClick={this._toggleModal}>
+              <span onClick={() => this.setState({ isOpen: true })}>
                 <Add />
               </span>
-              <Dialog isOpen={isOpen}>
-                <button
-                  className="close-button"
-                  onClick={() => this.setState({ isOpen: false })}
-                >
-                  <span aria-hidden>×</span>
-                </button>
-                {type === "TEACHER" ? (
-                  <CreateClass
-                    onCompleted={() => this.setState({ isOpen: false })}
-                  />
-                ) : (
-                  <Enrol onCompleted={() => this.setState({ isOpen: false })} />
+              <ModalTransition>
+                {isOpen && (
+                  <Modal
+                    actions={[
+                      {
+                        text: "Close",
+                        onClick: () =>
+                          this.setState({
+                            isOpen: false
+                          })
+                      }
+                    ]}
+                    onClose={() =>
+                      this.setState({
+                        isOpen: false
+                      })
+                    }
+                    heading={
+                      type == "TEACHER" ? "Create Class" : "Enrol Into A Class"
+                    }
+                  >
+                    {type === "TEACHER" ? (
+                      <CreateClass
+                        onCompleted={() => this.setState({ isOpen: false })}
+                      />
+                    ) : (
+                      <Enrol
+                        onCompleted={() => this.setState({ isOpen: false })}
+                      />
+                    )}
+                  </Modal>
                 )}
-              </Dialog>
+              </ModalTransition>
             </div>
           );
         }}
       </Query>
     );
   }
-
-  _toggleModal = () => {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
-  };
-
-  _subscribeToNewClasses = subscribeToMore => {
-    subscribeToMore({
-      document: NEW_CLASS_SUBSCRIPTION
-      // updateQuery: (prev, { subscriptionData }) => {
-      //   if (!subscriptionData.data) return prev;
-      // }
-    });
-  };
-
-  _subscribeToNewOrders = subscribeToMore => {
-    subscribeToMore({
-      document: NEW_ORDERS_SUBSCRIPTION
-      // updateQuery: (prev, { subscriptionData }) => {
-      //   if (!subscriptionData.data) return prev;
-      // }
-    });
-  };
 }
 
 export default ClassesGrid;

@@ -5,7 +5,8 @@ import { withRouter } from "react-router";
 import { withToastManager } from "react-toast-notifications";
 import { CREATE_CLASS_QUERY, CREATE_CLASS_MUTATION } from "../queries";
 import { css } from "emotion";
-import Spinner from "./Spinner";
+import Button from "@atlaskit/button";
+import { FieldTextStateless } from "@atlaskit/field-text";
 
 class CreateClass extends Component {
   constructor(props) {
@@ -44,42 +45,39 @@ class CreateClass extends Component {
               // update={this._success}
             >
               {(mutation, { loading }) => {
-                return loading ? (
-                  <Spinner />
-                ) : (
-                  <form
+                return (
+                  <div
                     className={css`
-                      text-align: center;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: center;
+                      align-items: center;
 
                       & > * {
-                        padding: 7px;
+                        margin: 7px;
                       }
                     `}
-                    onSubmit={e => {
-                      e.preventDefault();
-                      this.setState({});
-
-                      if (name) {
-                        mutation({ variables: { name } });
-                      }
-                    }}
                   >
                     <h2>Create {classes.length ? "a" : "your first"} class</h2>
-                    <div className="form__group">
-                      <label htmlFor="name">Class Name</label>
-                      <input
-                        id="name"
-                        value={name}
-                        onChange={e => this.setState({ name: e.target.value })}
-                        type="text"
-                        placeholder="Year 8 Home Ec"
-                        required={true}
-                      />
-                    </div>
-                    <button type="submit" className="btn info">
+                    <FieldTextStateless
+                      label="Class Name"
+                      onChange={e => this.setState({ name: e.target.value })}
+                      value={name}
+                      required
+                      placeholder="Year 8 Home Ec"
+                    />
+                    <Button
+                      appearance="primary"
+                      onClick={() => {
+                        if (name) {
+                          mutation({ variables: { name } });
+                        }
+                      }}
+                      isLoading={loading}
+                    >
                       Create Class
-                    </button>
-                  </form>
+                    </Button>
+                  </div>
                 );
               }}
             </Mutation>

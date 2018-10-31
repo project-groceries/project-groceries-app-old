@@ -3,54 +3,47 @@
 import React, { Component } from "react";
 import { css } from "emotion";
 import { Mutation } from "react-apollo";
+import { withRouter } from "react-router";
 import { UNENROL_MUTATION } from "../queries";
 import { withToastManager } from "react-toast-notifications";
-import Spinner from "./Spinner";
+import Button from "@atlaskit/button";
 
 class Unenrol extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: false
-    };
-  }
-
   render() {
     const { id } = this.props;
-    const { loading } = this.state;
 
-    return loading ? (
-      <Spinner />
-    ) : (
+    return (
       <div
         className={css`
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
+
+          & > * {
+            margin: 10px;
+          }
         `}
       >
         <small>Are you sure?</small>
         <Mutation
           mutation={UNENROL_MUTATION}
           onCompleted={this._success}
-          onError={this._announceError}
-          update={this._success}
+          // onError={this._announceError}
+          // update={this._success}
           variables={{ id }}
         >
-          {mutation => {
+          {(mutation, { loading }) => {
             return (
-              <input
-                type="button"
-                value="Yes, unenroll me from this class"
-                className="warning"
+              <Button
+                appearance="warning"
+                isLoading={loading}
                 onClick={() => {
-                  this.setState({ loading: true });
-
                   mutation();
                 }}
-              />
+              >
+                Yes, unenroll me from this class
+              </Button>
             );
           }}
         </Mutation>
@@ -69,7 +62,7 @@ class Unenrol extends Component {
   };
 
   _success = async () => {
-    const { toastManager, onCompleted } = this.props;
+    const { history, toastManager, onCompleted } = this.props;
 
     mixpanel.track("Unenrolled from class");
 
@@ -79,8 +72,9 @@ class Unenrol extends Component {
       autoDismiss: true
     });
 
+    history.push("/");
     if (onCompleted) onCompleted();
   };
 }
 
-export default withToastManager(Unenrol);
+export default withToastManager(withRouter(Unenrol));
