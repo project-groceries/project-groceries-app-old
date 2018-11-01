@@ -97,7 +97,7 @@ class ClassViewGrid extends Component {
 
     this.state = {
       page: 1,
-      ingredientsPerPage: 10
+      ingredientsPerPage: 30
     };
   }
 

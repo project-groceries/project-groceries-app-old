@@ -180,6 +180,36 @@ class ClassView extends Component {
                     />
                   </div>
                   <div>
+                    <h4>Sort Ingredients</h4>
+                    <RadioSelect
+                      className="radio-select"
+                      classNamePrefix="react-select"
+                      defaultValue={{
+                        label: "Newest (ascending)",
+                        value: "createdAt_DESC"
+                      }}
+                      options={[
+                        {
+                          label: "Alphabetical (ascending)",
+                          value: "name_ASC"
+                        },
+                        {
+                          label: "Alphabetical (descending)",
+                          value: "name_DESC"
+                        },
+                        { label: "Unit (ascending)", value: "unit_ASC" },
+                        { label: "Unit (descending)", value: "unit_DESC" },
+                        { label: "Oldest (ascending)", value: "createdAt_ASC" },
+                        {
+                          label: "Newest (descending)",
+                          value: "createdAt_DESC"
+                        }
+                      ]}
+                      placeholder="Sort by..."
+                      onChange={data => this.setState({ orderBy: data.value })}
+                    />
+                  </div>
+                  <div>
                     <h4>
                       Filter Users{" "}
                       <InlineDialog
@@ -222,36 +252,6 @@ class ClassView extends Component {
                           filteredUsers: users.map(u => u.value)
                         })
                       }
-                    />
-                  </div>
-                  <div>
-                    <h4>Sort Ingredients</h4>
-                    <RadioSelect
-                      className="radio-select"
-                      classNamePrefix="react-select"
-                      defaultValue={{
-                        label: "Newest (ascending)",
-                        value: "createdAt_DESC"
-                      }}
-                      options={[
-                        {
-                          label: "Alphabetical (ascending)",
-                          value: "name_ASC"
-                        },
-                        {
-                          label: "Alphabetical (descending)",
-                          value: "name_DESC"
-                        },
-                        { label: "Unit (ascending)", value: "unit_ASC" },
-                        { label: "Unit (descending)", value: "unit_DESC" },
-                        { label: "Oldest (ascending)", value: "createdAt_ASC" },
-                        {
-                          label: "Newest (descending)",
-                          value: "createdAt_DESC"
-                        }
-                      ]}
-                      placeholder="Sort by..."
-                      onChange={data => this.setState({ orderBy: data.value })}
                     />
                   </div>
                   {type === "TEACHER" && (
