@@ -275,6 +275,7 @@ export const CLASS_VIEW_GRID_QUERY = gql`
       orderBy: $orderBy
       summary: $summary
       classId: $id
+      filteredUsers: $filteredUsers
     ) {
       id
       name
@@ -292,7 +293,11 @@ export const CLASS_VIEW_GRID_QUERY = gql`
         }
       }
     }
-    ingredientsConnection(filter: $filter, summary: $summary) {
+    ingredientsConnection(
+      filter: $filter
+      summary: $summary
+      filteredUsers: $filteredUsers
+    ) {
       aggregate {
         count
       }
