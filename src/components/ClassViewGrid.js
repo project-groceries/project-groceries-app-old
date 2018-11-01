@@ -97,7 +97,7 @@ class ClassViewGrid extends Component {
 
     this.state = {
       page: 1,
-      totalPages: 10
+      ingredientsPerPage: 10
     };
   }
 
@@ -110,21 +110,21 @@ class ClassViewGrid extends Component {
 
   render() {
     const { filter, filteredUsers, id, orderBy, isSummary } = this.props;
-    const { page } = this.state;
+    const { page, ingredientsPerPage } = this.state;
 
     return (
       <Query
         query={CLASS_VIEW_GRID_QUERY}
         variables={{
           id,
-          first: 30,
-          skip: (page - 1) * 30,
+          first: ingredientsPerPage,
+          skip: (page - 1) * ingredientsPerPage,
           filter,
           filteredUsers,
           orderBy,
           summary: isSummary
         }}
-        pollInterval={500}
+        pollInterval={5000}
       >
         {({ loading, error, data }) => {
           const hasData = Object.keys(data).length;
@@ -151,7 +151,10 @@ class ClassViewGrid extends Component {
             }
           } = data;
 
-          const pageCount = Math.ceil(ingredientCount / 30);
+          const pageCount = Math.ceil(ingredientCount / ingredientsPerPage);
+          console.log("OG ingredient count", ingredients.length);
+          console.log("ingredient count", ingredientCount);
+          console.log("page count", pageCount);
 
           return (
             <Fragment>

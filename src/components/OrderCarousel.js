@@ -136,7 +136,13 @@ class OrderCarousel extends Component {
                         value: c.id
                       }))}
                       placeholder="Select a class to place the orders in"
-                      onChange={data => this.setState({ currentClass: data })}
+                      onChange={data => {
+                        if (data.value) {
+                          this.setState({
+                            currentClass: data
+                          });
+                        }
+                      }}
                     />
                     {currentClass && (
                       <Fragment>
@@ -147,14 +153,19 @@ class OrderCarousel extends Component {
                           options={ingredients
                             .filter(i => !selectedIngredients.has(i.id))
                             .map(i => ({ value: i.id, label: i.name }))}
-                          onChange={data =>
-                            this.setState(prev => ({
-                              selectedIngredients: prev.selectedIngredients.set(
-                                data.value,
-                                { ...data, amount: 1 }
-                              )
-                            }))
-                          }
+                          onChange={data => {
+                            if (data.value) {
+                              this.setState(prev => ({
+                                selectedIngredients: prev.selectedIngredients.set(
+                                  data.value,
+                                  {
+                                    ...data,
+                                    amount: 1
+                                  }
+                                )
+                              }));
+                            }
+                          }}
                         />
                         {selectedIngredients.size > 0 && (
                           <Fragment>
@@ -310,9 +321,11 @@ class OrderCarousel extends Component {
                             value: c.id
                           }))}
                           placeholder="Select a class to place the orders in"
-                          onChange={data =>
-                            this.setState({ currentClass: data })
-                          }
+                          onChange={data => {
+                            if (data.value) {
+                              this.setState({ currentClass: data });
+                            }
+                          }}
                         />
                         {currentClass && (
                           <Fragment>
@@ -325,14 +338,16 @@ class OrderCarousel extends Component {
                                 value: r.id
                               }))}
                               placeholder="Select a recipe to order"
-                              onChange={data =>
-                                this.setState({
-                                  selectedRecipe: data,
-                                  currentRecipe: recipes.find(
-                                    r => r.id === data.value
-                                  )
-                                })
-                              }
+                              onChange={data => {
+                                if (data.value) {
+                                  this.setState({
+                                    selectedRecipe: data,
+                                    currentRecipe: recipes.find(
+                                      r => r.id === data.value
+                                    )
+                                  });
+                                }
+                              }}
                             />
                             {currentRecipe && (
                               <Fragment>

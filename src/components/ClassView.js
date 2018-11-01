@@ -107,6 +107,7 @@ class ClassView extends Component {
                     ${noPrint};
                     text-align: center;
                     padding: 10px;
+                    padding-bottom: 100px;
 
                     & > div {
                       margin-top: 35px;
@@ -253,6 +254,18 @@ class ClassView extends Component {
                       onChange={data => this.setState({ orderBy: data.value })}
                     />
                   </div>
+                  {type === "TEACHER" && (
+                    <div>
+                      <Button
+                        appearance="warning"
+                        // onClick={() =>
+                        //   this.setState({ isDeleteClassModalOpen: true })
+                        // }
+                      >
+                        Clear Orders
+                      </Button>
+                    </div>
+                  )}
                   <div>
                     <Button
                       appearance={type === "TEACHER" ? "danger" : "warning"}
