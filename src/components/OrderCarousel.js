@@ -225,7 +225,10 @@ class OrderCarousel extends Component {
                                 </div>
                               )
                             )}
-                            <Mutation mutation={CREATE_ORDERS_MUTATION}>
+                            <Mutation
+                              mutation={CREATE_ORDERS_MUTATION}
+                              onCompleted={this.onCompleted}
+                            >
                               {(mutation, { loading, error }) => {
                                 if (error) return <div>Error</div>;
 
@@ -423,7 +426,10 @@ class OrderCarousel extends Component {
                                     </div>
                                   )
                                 )}
-                                <Mutation mutation={CREATE_ORDERS_MUTATION}>
+                                <Mutation
+                                  mutation={CREATE_ORDERS_MUTATION}
+                                  onCompleted={this.onCompleted}
+                                >
                                   {(mutation, { loading, error }) => {
                                     if (error) return <div>Error</div>;
 
