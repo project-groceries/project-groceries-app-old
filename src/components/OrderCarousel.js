@@ -5,7 +5,6 @@ import { Query, Mutation } from "react-apollo";
 import { ORDER_CAROUSEL_QUERY, CREATE_ORDERS_MUTATION } from "../queries";
 import Spinner from "./Spinner";
 import { RadioSelect } from "@atlaskit/select";
-import Select from "react-select";
 import AsyncSelect from "react-select/lib/Async";
 import Button from "@atlaskit/button";
 import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
@@ -25,17 +24,6 @@ const BlackClose = styled(Close)`
     transform: scale(2);
   }
 `;
-
-const colourOptions = [
-  { value: "red", label: "red" },
-  { value: "blue", label: "blue" },
-  { value: "green", label: "green" },
-  { value: "yellow", label: "yellow" },
-  { value: "orange", label: "orange" },
-  { value: "indigo", label: "indigo" },
-  { value: "violet", label: "violet" },
-  { value: "teal", label: "teal" }
-];
 
 class OrderCarousel extends Component {
   constructor(props) {
@@ -158,29 +146,7 @@ class OrderCarousel extends Component {
                     />
                     {currentClass && (
                       <Fragment>
-                        {/* <Select
-                          placeholder="Select an ingredient to add to the order"
-                          value=""
-                          maxMenuHeight={200}
-                          options={ingredients
-                            .filter(i => !selectedIngredients.has(i.id))
-                            .map(i => ({ value: i.id, label: i.name }))}
-                          onChange={data => {
-                            if (data.value) {
-                              this.setState(prev => ({
-                                selectedIngredients: prev.selectedIngredients.set(
-                                  data.value,
-                                  {
-                                    ...data,
-                                    amount: 1
-                                  }
-                                )
-                              }));
-                            }
-                          }}
-                        /> */}
                         <AsyncSelect
-                          // cacheOptions
                           value=""
                           placeholder="Select an ingredient to add to the order"
                           maxMenuHeight={200}
@@ -189,7 +155,6 @@ class OrderCarousel extends Component {
                               this.filterIngredients(inputValue, ingredients)
                             );
                           }}
-                          // defaultOptions
                           onInputChange={this.handleInputChange}
                           onChange={data => {
                             if (data.value) {

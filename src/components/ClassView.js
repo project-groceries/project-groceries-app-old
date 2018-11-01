@@ -107,7 +107,7 @@ class ClassView extends Component {
                     ${noPrint};
                     text-align: center;
                     padding: 10px;
-                    padding-bottom: 100px;
+                    height: calc(100% - 100px);
 
                     & > div {
                       margin-top: 35px;
