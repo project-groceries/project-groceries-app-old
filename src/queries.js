@@ -428,6 +428,9 @@ export const CREATE_ORDERS_MUTATION = gql`
             id
           }
         }
+        orderSession {
+          id
+        }
         madeBy {
           id
           orders {
@@ -692,6 +695,14 @@ export const CREATE_RECIPE_QUERY = gql`
       school {
         id
       }
+    }
+  }
+`;
+
+export const CLEAR_ORDERS_MUTATION = gql`
+  mutation clearOrders($classId: ID!) {
+    clearOrders(classId: $classId) {
+      count
     }
   }
 `;

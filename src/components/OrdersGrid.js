@@ -25,7 +25,7 @@ class OrdersGrid extends Component {
 
   render() {
     return (
-      <Query query={ORDERS_QUERY}>
+      <Query query={ORDERS_QUERY} pollInterval={5000}>
         {({ loading, error, data }) => {
           if (loading) return <Spinner />;
 

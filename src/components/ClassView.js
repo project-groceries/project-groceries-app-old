@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import { css } from "emotion";
-import { CLASS_VIEW_QUERY } from "../queries";
+import { CLASS_VIEW_QUERY, CLEAR_ORDERS_MUTATION } from "../queries";
 import ClassViewGrid from "./ClassViewGrid";
 import Spinner from "./Spinner";
 import { fullPage, bar, noPrint } from "../styles";
@@ -256,14 +256,23 @@ class ClassView extends Component {
                   </div>
                   {type === "TEACHER" && (
                     <div>
-                      <Button
-                        appearance="warning"
-                        // onClick={() =>
-                        //   this.setState({ isDeleteClassModalOpen: true })
-                        // }
-                      >
-                        Clear Orders
-                      </Button>
+                      <Mutation mutation={CLEAR_ORDERS_MUTATION}>
+                        {(mutation, { loading, error }) => {
+                          if (error) return <div>Error</div>;
+
+                          return (
+                            <Button
+                              appearance="warning"
+                              onClick={() =>
+                                mutation({ variables: { classId: id } })
+                              }
+                              isLoading={loading}
+                            >
+                              Clear Orders
+                            </Button>
+                          );
+                        }}
+                      </Mutation>
                     </div>
                   )}
                   <div>

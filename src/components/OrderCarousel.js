@@ -12,6 +12,7 @@ import styled from "styled-components";
 import { Close } from "styled-icons/material";
 import UndrawChef from "./svg/UndrawChef";
 import CreateRecipe from "./CreateRecipe";
+import { withToastManager } from "react-toast-notifications";
 
 const BlackClose = styled(Close)`
   color: black;
@@ -494,6 +495,21 @@ class OrderCarousel extends Component {
       return [];
     }
   };
+
+  onCompleted = async () => {
+    const { toastManager, onCompleted } = this.props;
+    const { isRecipe } = this.state;
+
+    window.mixpanel.track("Made orders");
+
+    const action = isRecipe ? "recipe was ordered" : "custom order was made";
+    toastManager.add(`Your ${action} successfully`, {
+      appearance: "success",
+      autoDismiss: true
+    });
+
+    if (onCompleted) onCompleted();
+  };
 }
 
-export default OrderCarousel;
+export default withToastManager(OrderCarousel);

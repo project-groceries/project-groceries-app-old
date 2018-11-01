@@ -246,7 +246,13 @@ class App extends Component {
                                         width: 400px;
                                       `}
                                     >
-                                      <OrderCarousel />
+                                      <OrderCarousel
+                                        onCompleted={() =>
+                                          this.setState({
+                                            isOrderDialogOpen: false
+                                          })
+                                        }
+                                      />
                                     </div>
                                   }
                                   placement="left-end"

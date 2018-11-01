@@ -135,9 +135,19 @@ class ClassesGrid extends Component {
                         onCompleted={() => this.setState({ isOpen: false })}
                       />
                     ) : (
-                      <Enrol
-                        onCompleted={() => this.setState({ isOpen: false })}
-                      />
+                      <div
+                        className={css`
+                          min-height: 300px;
+
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                        `}
+                      >
+                        <Enrol
+                          onCompleted={() => this.setState({ isOpen: false })}
+                        />
+                      </div>
                     )}
                   </Modal>
                 )}

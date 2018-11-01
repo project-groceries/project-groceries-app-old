@@ -69,8 +69,6 @@ class Enrol extends Component {
                           justify-content: center;
                           align-items: center;
 
-                          min-height: 300px;
-
                           & > * {
                             margin: 7px;
                           }
@@ -84,7 +82,7 @@ class Enrol extends Component {
                               autoFocus={true}
                               aria-label="Select a class"
                               placeholder="Select a class"
-                              maxMenuHeight={200}
+                              maxMenuHeight={100}
                             />
                           </div>
                           <Button

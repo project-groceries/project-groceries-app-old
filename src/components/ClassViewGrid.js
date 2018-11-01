@@ -152,9 +152,6 @@ class ClassViewGrid extends Component {
           } = data;
 
           const pageCount = Math.ceil(ingredientCount / ingredientsPerPage);
-          console.log("OG ingredient count", ingredients.length);
-          console.log("ingredient count", ingredientCount);
-          console.log("page count", pageCount);
 
           return (
             <Fragment>
