@@ -65,6 +65,13 @@ export const CREATE_SCHOOL_MUTATION = gql`
     createSchool(name: $name) {
       id
       name
+      users {
+        id
+        school {
+          id
+          name
+        }
+      }
     }
   }
 `;

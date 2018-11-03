@@ -13,7 +13,6 @@ import Login from "./Login";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
 import { Query } from "react-apollo";
-import NoSchool from "./NoSchool";
 import SamsungTVLoader from "./SamsungTVLoader";
 import { USER_QUERY } from "../queries";
 import DeclareAccountType from "./DeclareAccountType";
@@ -32,6 +31,7 @@ import InlineDialog from "@atlaskit/inline-dialog";
 import styled from "styled-components";
 import { AddShoppingCart, Close, Home } from "styled-icons/material";
 import OrderCarousel from "./OrderCarousel";
+import JoinSchool from "./JoinSchool";
 
 const WhiteAddShoppingCart = styled(AddShoppingCart)`
   color: white;
@@ -215,7 +215,7 @@ class App extends Component {
                         </div>
                       </Tooltip>
                     </div>
-                    <main>
+                    <div>
                       {school ? (
                         hasDeclaredAccountType ? (
                           <Fragment>
@@ -301,9 +301,9 @@ class App extends Component {
                           <DeclareAccountType />
                         )
                       ) : (
-                        <NoSchool />
+                        <JoinSchool />
                       )}
-                    </main>
+                    </div>
                   </Fragment>
                 );
               }}

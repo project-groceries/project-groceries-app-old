@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import Select from "react-select";
 import AsyncSelect from "react-select/lib/Async";
 import { Query, Mutation } from "react-apollo";
 import { CREATE_RECIPE_QUERY, CREATE_RECIPE_MUTATION } from "../queries";
