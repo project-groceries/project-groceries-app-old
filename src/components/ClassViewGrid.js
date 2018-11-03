@@ -6,6 +6,7 @@ import { CLASS_VIEW_GRID_QUERY } from "../queries";
 // import OGSpinner from "./Spinner";
 import { bar } from "../styles";
 import Spinner from "@atlaskit/spinner";
+import UndrawNoData from "./svg/UndrawNoData";
 
 const classViewGrid = css`
   display: grid;
@@ -127,7 +128,7 @@ class ClassViewGrid extends Component {
         pollInterval={5000}
       >
         {({ loading, error, data }) => {
-          const hasData = Object.keys(data).length;
+          const hasData = data ? Object.keys(data).length : undefined;
           if (!hasData && loading)
             return (
               <div
@@ -153,7 +154,7 @@ class ClassViewGrid extends Component {
 
           const pageCount = Math.ceil(ingredientCount / ingredientsPerPage);
 
-          return (
+          return ingredients.length ? (
             <Fragment>
               <div className={classViewGrid}>
                 {loading && (
@@ -260,6 +261,25 @@ class ClassViewGrid extends Component {
                 />
               </div>
             </Fragment>
+          ) : (
+            <div
+              className={css`
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+              `}
+            >
+              <UndrawNoData height="200px" />
+              <h3>No Ingredients match the criteria</h3>
+              {isSummary && (
+                <small>
+                  Note: this could mean that no ingredients have been ordered
+                  yet
+                </small>
+              )}
+            </div>
           );
         }}
       </Query>

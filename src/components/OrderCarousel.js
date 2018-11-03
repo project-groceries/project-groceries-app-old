@@ -107,9 +107,10 @@ class OrderCarousel extends Component {
           }
         />
         <div data-recipe={isRecipe}>
-          <Query query={ORDER_CAROUSEL_QUERY}>
+          <Query query={ORDER_CAROUSEL_QUERY} pollInterval={5000}>
             {({ loading, error, data }) => {
-              if (loading)
+              const hasData = data ? Object.keys(data).length : undefined;
+              if (!hasData && loading)
                 return (
                   <Fragment>
                     <div>
@@ -156,7 +157,6 @@ class OrderCarousel extends Component {
                               this.filterIngredients(inputValue, ingredients)
                             );
                           }}
-                          onInputChange={this.handleInputChange}
                           onChange={data => {
                             if (data.value) {
                               this.setState(prev => ({
@@ -272,6 +272,35 @@ class OrderCarousel extends Component {
                     )}
                   </div>
                   <div>
+                    <ModalTransition>
+                      {isCreateRecipeModalOpen && (
+                        <Modal
+                          actions={[
+                            {
+                              text: "Close",
+                              onClick: () =>
+                                this.setState({
+                                  isCreateRecipeModalOpen: false
+                                })
+                            }
+                          ]}
+                          onClose={() =>
+                            this.setState({
+                              isCreateRecipeModalOpen: false
+                            })
+                          }
+                          heading="Create Recipe"
+                        >
+                          <CreateRecipe
+                            onCompleted={() =>
+                              this.setState({
+                                isCreateRecipeModalOpen: false
+                              })
+                            }
+                          />
+                        </Modal>
+                      )}
+                    </ModalTransition>
                     {!recipes.length ? (
                       <div
                         className={css`
@@ -293,29 +322,6 @@ class OrderCarousel extends Component {
                         >
                           Create Recipe
                         </Button>
-                        <ModalTransition>
-                          {isCreateRecipeModalOpen && (
-                            <Modal
-                              actions={[
-                                {
-                                  text: "Close",
-                                  onClick: () =>
-                                    this.setState({
-                                      isCreateRecipeModalOpen: false
-                                    })
-                                }
-                              ]}
-                              onClose={() =>
-                                this.setState({
-                                  isCreateRecipeModalOpen: false
-                                })
-                              }
-                              heading="Create Recipe"
-                            >
-                              <CreateRecipe />
-                            </Modal>
-                          )}
-                        </ModalTransition>
                       </div>
                     ) : (
                       <Fragment>
@@ -473,6 +479,18 @@ class OrderCarousel extends Component {
                             )}
                           </Fragment>
                         )}
+                        <div>
+                          <Button
+                            appearance="subtle"
+                            onClick={() =>
+                              this.setState({
+                                isCreateRecipeModalOpen: true
+                              })
+                            }
+                          >
+                            Or Create Another Recipe
+                          </Button>
+                        </div>
                       </Fragment>
                     )}
                   </div>
@@ -486,20 +504,14 @@ class OrderCarousel extends Component {
     );
   }
 
-  handleInputChange = inputValue => {
-    // const inputValue = newValue.replace(/\W/g, "");
-    this.setState({ inputValue });
-    return inputValue;
-  };
-
   filterIngredients = (inputValue, ingredients) => {
-    if (inputValue.length > 2) {
-      return ingredients
-        .filter(i => i.name.toLowerCase().includes(inputValue.toLowerCase()))
-        .map(i => ({ value: i.id, label: i.name }));
-    } else {
-      return [];
-    }
+    const { selectedIngredients } = this.state;
+
+    return ingredients
+      .filter(i => i.name.toLowerCase().includes(inputValue.toLowerCase()))
+      .filter(i => !selectedIngredients.has(i.id))
+      .map(i => ({ value: i.id, label: i.name }))
+      .slice(0, inputValue.length > 2 ? undefined : 40); // reduce results for faster loading
   };
 
   onCompleted = async () => {

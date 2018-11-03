@@ -61,9 +61,10 @@ class ClassView extends Component {
           }
         `}
       >
-        <Query query={CLASS_VIEW_QUERY}>
+        <Query query={CLASS_VIEW_QUERY} pollInterval={5000}>
           {({ loading, error, data }) => {
-            if (loading) return <Spinner />;
+            const hasData = data ? Object.keys(data).length : undefined;
+            if (!hasData && loading) return <Spinner />;
 
             if (error) return <div>Error</div>;
 

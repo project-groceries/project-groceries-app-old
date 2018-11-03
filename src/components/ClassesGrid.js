@@ -86,16 +86,18 @@ class ClassesGrid extends Component {
     return (
       <Query query={CLASSES_GRID_QUERY} pollInterval={5000}>
         {({ loading, error, data }) => {
-          const hasData = Object.keys(data).length;
+          const hasData = data ? Object.keys(data).length : undefined;
           if (!hasData && loading) return <Spinner />;
           if (error) return <p>Error</p>;
 
-          const { type, classes, enrolledIn } = data.user;
-          const userClasses = type === "TEACHER" ? classes : enrolledIn;
+          const {
+            user: { type },
+            classes
+          } = data;
 
           return (
             <div className={`${classesGrid} ${noPrint}`}>
-              {userClasses.map(c => (
+              {classes.map(c => (
                 <Link to={`/classes/${c.id}`} key={c.id}>
                   <div>
                     <h3>{c.name}</h3>

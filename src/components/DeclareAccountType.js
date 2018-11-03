@@ -21,7 +21,7 @@ class DeclareAccountType extends Component {
   }
 
   render() {
-    const { /*loading, error,*/ errorMessage, type, teacherCode } = this.state;
+    const { /*loading, error,*/ errorMessage, type } = this.state;
 
     return (
       <main className="flex-center" style={{ height: "100%" }}>
@@ -74,10 +74,8 @@ class DeclareAccountType extends Component {
                         const { value } = selectedOption;
 
                         this.setState({ type: value });
-                        if (value === "STUDENT") {
-                          this.setState({ loading: true });
-                          mutation({ variables: { type: value, teacherCode } });
-                        }
+                        this.setState({ loading: true });
+                        mutation({ variables: { type: value } });
                       }}
                       options={[
                         {
@@ -99,30 +97,7 @@ class DeclareAccountType extends Component {
                       aria-label="Select your account type"
                       placeholder="I am a..."
                     />
-                    {type === "TEACHER" && (
-                      <FieldTextStateless
-                        label="Teacher Code"
-                        onChange={e =>
-                          this.setState({ teacherCode: e.target.value })
-                        }
-                        value={teacherCode}
-                        required
-                      />
-                    )}
                   </div>
-                  {type === "TEACHER" && (
-                    <div>
-                      <button
-                        className="default"
-                        onClick={() => {
-                          this.setState({ loading: true });
-                          mutation({ variables: { type, teacherCode } });
-                        }}
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  )}
                 </Fragment>
               )
             }

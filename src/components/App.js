@@ -143,18 +143,15 @@ class App extends Component {
                   );
                 if (error) return <div>Error</div>;
 
+                const { user, classes } = data;
                 const {
                   email,
                   name,
                   type,
                   hasDeclaredAccountType,
                   createdAt,
-                  school,
-                  classes,
-                  enrolledIn
-                } = data.user;
-                const isTeacher = type === "TEACHER";
-                const userClasses = isTeacher ? classes : enrolledIn;
+                  school
+                } = user;
 
                 LogRocket.identify(email, {
                   name,
@@ -167,7 +164,7 @@ class App extends Component {
                   name, // Full name
                   email, // Email address
                   "Account Type": type,
-                  "Has Classes": !!userClasses.length,
+                  "Has Classes": !!classes.length,
                   company: {
                     id: school ? school.id : "",
                     name: school ? school.name : ""
@@ -232,7 +229,7 @@ class App extends Component {
                               <Route exact path="/orders" component={Orders} />
                               <Route render={() => <Redirect to="/" />} />
                             </Switch>
-                            {userClasses.length && (
+                            {classes.length && (
                               <Fragment>
                                 <InlineDialog
                                   // onClose={() => {

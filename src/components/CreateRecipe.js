@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import Select from "react-select";
+import AsyncSelect from "react-select/lib/Async";
 import { Query, Mutation } from "react-apollo";
 import { CREATE_RECIPE_QUERY, CREATE_RECIPE_MUTATION } from "../queries";
 import Spinner from "./Spinner";
@@ -8,6 +9,7 @@ import styled from "styled-components";
 import { Close } from "styled-icons/material";
 import { FieldTextStateless } from "@atlaskit/field-text";
 import Button from "@atlaskit/button";
+import { withToastManager } from "react-toast-notifications";
 
 const BlackClose = styled(Close)`
   color: black;
@@ -21,7 +23,7 @@ const BlackClose = styled(Close)`
   }
 `;
 
-export default class CreateRecipe extends Component {
+class CreateRecipe extends Component {
   state = { recipeName: "", recipeIngredients: new Map() };
 
   render() {
@@ -51,39 +53,35 @@ export default class CreateRecipe extends Component {
                 }
               `}
             >
-              {/* <input
-                type="text"
-                value={recipeName}
-                onChange={e => this.setState({ recipeName: e.target.value })}
-                placeholder="Give the recipe a name"
-              /> */}
               <FieldTextStateless
                 label="Recipe Name"
                 placeholder="Give the recipe a name"
                 onChange={e => this.setState({ recipeName: e.target.value })}
                 value={recipeName}
-                // required
+                required
               />
               {recipeName && (
                 <Fragment>
-                  <Select
-                    placeholder="Select an ingredient to add to the recipe"
+                  <AsyncSelect
                     value=""
+                    placeholder="Select an ingredient to add to the recipe"
                     maxMenuHeight={200}
-                    options={ingredients
-                      .filter(i => !recipeIngredients.has(i.id))
-                      .map(i => ({ value: i.id, label: i.name }))}
-                    onChange={data =>
-                      this.setState(prev => ({
-                        recipeIngredients: prev.recipeIngredients.set(
-                          data.value,
-                          {
-                            ...data,
-                            amount: 1
-                          }
-                        )
-                      }))
-                    }
+                    loadOptions={(inputValue, callback) => {
+                      callback(this.filterIngredients(inputValue, ingredients));
+                    }}
+                    onChange={data => {
+                      if (data.value) {
+                        this.setState(prev => ({
+                          recipeIngredients: prev.recipeIngredients.set(
+                            data.value,
+                            {
+                              ...data,
+                              amount: 1
+                            }
+                          )
+                        }));
+                      }
+                    }}
                   />
                   {recipeIngredients.size > 0 && (
                     <Fragment>
@@ -138,7 +136,10 @@ export default class CreateRecipe extends Component {
                           </div>
                         )
                       )}
-                      <Mutation mutation={CREATE_RECIPE_MUTATION}>
+                      <Mutation
+                        mutation={CREATE_RECIPE_MUTATION}
+                        onCompleted={this.onCompleted}
+                      >
                         {(mutation, { loading, error }) => {
                           if (error) return <div>Error</div>;
 
@@ -180,4 +181,29 @@ export default class CreateRecipe extends Component {
       </Query>
     );
   }
+
+  onCompleted = async () => {
+    const { toastManager, onCompleted } = this.props;
+
+    window.mixpanel.track("Created a recipe");
+
+    toastManager.add("Recipe created successfully", {
+      appearance: "success",
+      autoDismiss: true
+    });
+
+    if (onCompleted) onCompleted();
+  };
+
+  filterIngredients = (inputValue, ingredients) => {
+    const { recipeIngredients } = this.state;
+
+    return ingredients
+      .filter(i => i.name.toLowerCase().includes(inputValue.toLowerCase()))
+      .filter(i => !recipeIngredients.has(i.id))
+      .map(i => ({ value: i.id, label: i.name }))
+      .slice(0, inputValue.length > 2 ? undefined : 40); // reduce results for faster loading
+  };
 }
+
+export default withToastManager(CreateRecipe);

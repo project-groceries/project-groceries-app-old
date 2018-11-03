@@ -30,14 +30,10 @@ export const USER_QUERY = gql`
         id
         name
       }
-      classes {
-        id
-        name
-      }
-      enrolledIn {
-        id
-        name
-      }
+    }
+    classes {
+      id
+      name
     }
   }
 `;
@@ -65,8 +61,8 @@ export const JOIN_SCHOOL_MUTATION = gql`
 `;
 
 export const CREATE_SCHOOL_MUTATION = gql`
-  mutation CreateSchoolMutation($name: String!, $teacherCode: String!) {
-    createSchool(name: $name, teacherCode: $teacherCode) {
+  mutation CreateSchoolMutation($name: String!) {
+    createSchool(name: $name) {
       id
       name
     }
@@ -74,8 +70,8 @@ export const CREATE_SCHOOL_MUTATION = gql`
 `;
 
 export const DECLARE_ACCOUNT_TYPE_MUTATION = gql`
-  mutation DeclareAccountType($type: String!, $teacherCode: String!) {
-    declareAccountType(type: $type, teacherCode: $teacherCode) {
+  mutation DeclareAccountType($type: String!) {
+    declareAccountType(type: $type) {
       id
       hasDeclaredAccountType
       type
@@ -88,23 +84,13 @@ export const OVERVIEW_QUERY = gql`
     user {
       id
       type
-      classes {
-        id
-        name
-      }
-      enrolledIn {
-        id
-        name
-      }
       orders {
         id
-        amount
-        ingredient {
-          id
-          name
-          unit
-        }
       }
+    }
+    classes {
+      id
+      name
     }
   }
 `;
@@ -208,31 +194,20 @@ export const ENROL_INTO_CLASS_MUTATION = gql`
 
 export const CLASSES_GRID_QUERY = gql`
   query classesGridQuery {
+    classes {
+      id
+      name
+      teacher {
+        id
+        name
+      }
+      students {
+        id
+      }
+    }
     user {
       id
       type
-      classes {
-        id
-        name
-        teacher {
-          id
-          name
-        }
-        students {
-          id
-        }
-      }
-      enrolledIn {
-        id
-        name
-        teacher {
-          id
-          name
-        }
-        students {
-          id
-        }
-      }
     }
   }
 `;

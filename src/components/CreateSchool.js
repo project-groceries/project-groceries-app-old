@@ -6,18 +6,13 @@ import { withToastManager } from "react-toast-notifications";
 import { CREATE_SCHOOL_MUTATION, USER_QUERY } from "../queries";
 
 class CreateSchool extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      name: "",
-      teacherCode: "",
-      loading: false
-    };
-  }
+  state = {
+    name: "",
+    loading: false
+  };
 
   render() {
-    const { name, teacherCode, loading } = this.state;
+    const { name, loading } = this.state;
 
     return (
       <Fragment>
@@ -33,7 +28,7 @@ class CreateSchool extends Component {
 
         <Mutation
           mutation={CREATE_SCHOOL_MUTATION}
-          variables={{ name, teacherCode }}
+          variables={{ name }}
           update={data => this._success(data)}
           onCompleted={data => this._success(data)}
           onError={error => this._announceError(error)}
@@ -74,18 +69,6 @@ class CreateSchool extends Component {
                   placeholder="First Last"
                   required={true}
                 />
-              </div>
-              <div className="form__group">
-                <label htmlFor="password">Teacher Code</label>
-                <input
-                  id="teacherCode"
-                  value={teacherCode}
-                  onChange={e => this.setState({ teacherCode: e.target.value })}
-                  type="password"
-                  placeholder="******"
-                  required={true}
-                />
-                <small>ⓘ Code used to validate teachers.</small>
               </div>
               <button type="submit" className="btn info">
                 Create School

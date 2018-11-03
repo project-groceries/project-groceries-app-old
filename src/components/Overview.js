@@ -23,9 +23,9 @@ class Overview extends Component {
 
           if (error) return <div>Error</div>;
 
-          const { classes, enrolledIn, orders, type } = data.user;
-          const userClasses = type === "TEACHER" ? classes : enrolledIn;
-          const noClasses = !userClasses.length;
+          const { user, classes } = data;
+          const { orders, type } = user;
+          const noClasses = !classes.length;
 
           return noClasses ? (
             type === "STUDENT" ? (
@@ -46,24 +46,7 @@ class Overview extends Component {
               </div>
               <div className={overviewSection}>
                 <h1>Orders</h1>
-                {orders.length ? (
-                  <Fragment>
-                    <p>
-                      Showing the latest orders{" "}
-                      <Link to="/orders" className="btn default">
-                        See all orders
-                      </Link>
-                    </p>
-                    <OrdersGrid limit={5} />
-                  </Fragment>
-                ) : (
-                  <p>
-                    No orders to show{" "}
-                    <span role="img" aria-label="crying emoji">
-                      😭
-                    </span>
-                  </p>
-                )}
+                <OrdersGrid limit={5} />
               </div>
             </Fragment>
           );
