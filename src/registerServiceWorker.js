@@ -66,11 +66,20 @@ function registerValidSW(swUrl) {
               // It's the perfect time to display a "New content is
               // available; please refresh." message in your web app.
               console.log("New content is available; please refresh.");
+              window.newContent = true;
+
+              const newDiv = document.createElement("div");
+              newDiv.innerText = "There be new content yo";
+              document.body.appendChild(newDiv);
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
               console.log("Content is cached for offline use.");
+              window.newContent = false;
+              const newDiv = document.createElement("div");
+              newDiv.innerText = "OLD NEWS";
+              document.body.appendChild(newDiv);
             }
           }
         };
