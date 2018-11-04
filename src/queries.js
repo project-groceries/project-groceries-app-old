@@ -67,6 +67,7 @@ export const CREATE_SCHOOL_MUTATION = gql`
       name
       users {
         id
+        hasDeclaredAccountType
         school {
           id
           name
