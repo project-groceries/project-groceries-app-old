@@ -66,20 +66,24 @@ function registerValidSW(swUrl) {
               // It's the perfect time to display a "New content is
               // available; please refresh." message in your web app.
               console.log("New content is available; please refresh.");
-              window.newContent = true;
 
               const newDiv = document.createElement("div");
-              newDiv.innerText = "There be new content yo";
+              newDiv.style.position = "absolute";
+              newDiv.style.backgroundColor = "#83c674";
+              newDiv.style.padding = "10px";
+              newDiv.style.width = "250px";
+              newDiv.style.bottom = "10px";
+              newDiv.style.right = "calc(50% - 125px)";
+              newDiv.style.borderRadius = "10px";
+              newDiv.style.textAlign = "center";
+              newDiv.style.zIndex = 3;
+              newDiv.innerText = "New content is available; please refresh.";
               document.body.appendChild(newDiv);
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
               console.log("Content is cached for offline use.");
-              window.newContent = false;
-              const newDiv = document.createElement("div");
-              newDiv.innerText = "OLD NEWS";
-              document.body.appendChild(newDiv);
             }
           }
         };
