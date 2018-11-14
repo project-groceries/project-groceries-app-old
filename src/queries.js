@@ -529,47 +529,22 @@ export const CREATE_RECIPE_MUTATION = gql`
 
 export const ORDERS_QUERY = gql`
   query ordersQuery {
-    user {
+    orders {
       id
-      type
-      classes {
+      amount
+      ingredient {
         id
-        orders {
-          id
-          amount
-          ingredient {
-            id
-            name
-            unit
-          }
-          orderSession {
-            id
-            createdAt
-            updatedAt
-          }
-          madeBy {
-            id
-            name
-          }
-        }
+        name
+        unit
       }
-      orders {
+      orderSession {
         id
-        amount
-        ingredient {
-          id
-          name
-          unit
-        }
-        orderSession {
-          id
-          createdAt
-          updatedAt
-        }
-        madeBy {
-          id
-          name
-        }
+        createdAt
+        updatedAt
+      }
+      madeBy {
+        id
+        name
       }
     }
   }

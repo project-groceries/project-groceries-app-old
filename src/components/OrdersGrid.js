@@ -27,17 +27,10 @@ class OrdersGrid extends Component {
 
           if (error) return <p>Error</p>;
 
-          console.log("data", data);
-
           const { limit } = this.props;
           const { editMap, amountMap } = this.state;
 
-          const { type, classes, orders: ownOrders } = data.user;
-          const classOrders = classes.reduce(
-            (acc, cur) => [...acc, ...cur.orders],
-            []
-          );
-          const orders = type === "TEACHER" ? classOrders : ownOrders;
+          const { orders } = data;
 
           return orders.length ? (
             <Fragment>
