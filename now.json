@@ -1,5 +1,6 @@
 {
   "alias": ["app.projectgroceries.com"],
+  "version": 1,
   "type": "static",
   "static": {
     "rewrites": [
