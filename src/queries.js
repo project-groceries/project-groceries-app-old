@@ -398,35 +398,6 @@ export const CREATE_ORDERS_MUTATION = gql`
   ) {
     createOrders(orders: $orders) {
       id
-      createdAt
-      updatedAt
-      orders {
-        id
-        amount
-        createdAt
-        updatedAt
-        ingredient {
-          id
-          orders {
-            id
-          }
-        }
-        orderSession {
-          id
-        }
-        madeBy {
-          id
-          orders {
-            id
-          }
-        }
-        class {
-          id
-          orders {
-            id
-          }
-        }
-      }
     }
   }
 `;
