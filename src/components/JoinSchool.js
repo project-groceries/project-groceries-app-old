@@ -61,7 +61,7 @@ class JoinSchool extends Component {
                   onChange={this.handleChange}
                   // onInputChange={this.handleInputChange}
                   options={options}
-                  maxMenuHeight={300}
+                  maxMenuHeight={200}
                   styles={{
                     container: provided => ({
                       ...provided,
