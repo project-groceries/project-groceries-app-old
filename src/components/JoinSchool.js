@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Query, Mutation } from "react-apollo";
 // import Select from "react-select";
 import { withToastManager } from "react-toast-notifications";
+import sortBy from "lodash.sortby";
 import {
   JOIN_SCHOOL_MUTATION,
   FIND_SCHOOLS_QUERY,
@@ -34,10 +35,12 @@ class JoinSchool extends Component {
             if (error) return <div>Error</div>;
 
             const { schools } = data;
-            const options = schools.map(s => ({
-              value: s.id,
-              label: s.name
-            }));
+            const options = sortBy(schools, s => s.name.toLowerCase()).map(
+              s => ({
+                value: s.id,
+                label: s.name
+              })
+            );
 
             return (
               <div
@@ -61,7 +64,7 @@ class JoinSchool extends Component {
                   onChange={this.handleChange}
                   // onInputChange={this.handleInputChange}
                   options={options}
-                  maxMenuHeight={200}
+                  maxMenuHeight={250}
                   styles={{
                     container: provided => ({
                       ...provided,
