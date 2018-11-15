@@ -27,11 +27,15 @@ import Power from "./svg/Power";
 
 import Tooltip from "@atlaskit/tooltip";
 import InlineDialog from "@atlaskit/inline-dialog";
+import Flag, { FlagGroup } from "@atlaskit/flag";
+import Button from "@atlaskit/button";
 
 import styled from "styled-components";
 import { AddShoppingCart, Close, Home } from "styled-icons/material";
 import OrderCarousel from "./OrderCarousel";
 import JoinSchool from "./JoinSchool";
+
+import { FlagContext } from "../flag-context";
 
 const WhiteAddShoppingCart = styled(AddShoppingCart)`
   color: white;
@@ -75,20 +79,37 @@ const offlineBanner = css`
   z-index: 2;
 `;
 
+const getRandomDescription = () => {
+  const descriptions = [
+    "Marzipan croissant pie. Jelly beans gingerbread caramels brownie icing.",
+    "Fruitcake topping wafer pie candy dragée sesame snaps cake. Cake cake cheesecake. Pie tiramisu carrot cake tart tart dessert cookie. Lemon drops cookie tootsie roll marzipan liquorice cotton candy brownie halvah."
+  ];
+
+  return descriptions[Math.floor(Math.random() * descriptions.length)];
+};
+
+const getFlagData = (index, timeOffset = 0) => {
+  return {
+    created: Date.now() - timeOffset * 1000,
+    description: getRandomDescription(),
+    // icon: getRandomIcon(),
+    id: index,
+    key: index,
+    title: `${index + 1}: Whoa a new flag!`
+  };
+};
+
 class App extends Component {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired
   };
 
-  constructor(props) {
-    super(props);
-
-    const { cookies } = this.props;
-    this.state = {
-      hasToken: cookies.get("token") || undefined,
-      isOrderDialogOpen: false
-    };
-  }
+  state = {
+    hasToken: this.props.cookies.get("token") || undefined,
+    isOrderDialogOpen: false,
+    flags: []
+  };
+  flagCount = 0;
 
   componentWillUpdate() {
     const { cookies } = this.props;
@@ -106,6 +127,14 @@ class App extends Component {
   render() {
     const { cookies } = this.props;
     const { hasToken, isOrderDialogOpen } = this.state;
+
+    const actions = [
+      {
+        content: "Nice one!",
+        onClick: () => {}
+      },
+      { content: "Not right now thanks", onClick: this.dismissFlag }
+    ];
 
     return (
       <Fragment>
@@ -218,85 +247,102 @@ class App extends Component {
                     <div>
                       {school ? (
                         hasDeclaredAccountType ? (
-                          <Fragment>
-                            <Switch>
-                              <Route exact path="/" component={Overview} />
-                              <Route
-                                exact
-                                path="/classes/:id"
-                                component={ClassView}
-                              />
-                              <Route exact path="/orders" component={Orders} />
-                              <Route render={() => <Redirect to="/" />} />
-                            </Switch>
-                            {classes.length && (
-                              <Fragment>
-                                <InlineDialog
-                                  // onClose={() => {
-                                  //   this.setState({ isOrderDialogOpen: false });
-                                  // }}
-                                  content={
-                                    <div
-                                      className={css`
-                                        height: 400px;
-                                        overflow: auto;
-                                        width: 400px;
-                                      `}
-                                    >
-                                      <OrderCarousel
-                                        onCompleted={() =>
-                                          this.setState({
-                                            isOrderDialogOpen: false
-                                          })
-                                        }
-                                      />
-                                    </div>
-                                  }
-                                  placement="left-end"
-                                  isOpen={isOrderDialogOpen}
-                                >
-                                  <button
-                                    className={css`
-                                      margin: 0;
-                                      position: fixed;
-                                      bottom: 20px;
-                                      right: calc(20px + 60px + 20px + 20px);
-                                      width: 60px;
-                                      height: 60px;
-                                      border-radius: 30px;
-                                      background: #83c674;
-
-                                      box-shadow: 0 1px 6px 0
-                                          rgba(0, 0, 0, 0.06),
-                                        0 2px 32px 0 rgba(0, 0, 0, 0.16);
-
-                                      display: flex;
-                                      justify-content: center;
-                                      align-items: center;
-
-                                      transition: all 0.3s ease;
-
-                                      &:hover {
-                                        transform: scale(1.1);
-                                      }
-                                    `}
-                                    onClick={e => {
-                                      e.preventDefault();
-                                      this.setState(pp => ({
-                                        isOrderDialogOpen: !pp.isOrderDialogOpen
-                                      }));
-                                    }}
+                          <FlagContext.Provider
+                            value={{
+                              addFlag: this.addFlag,
+                              dismissFlag: this.dismissFlag
+                            }}
+                          >
+                            <Fragment>
+                              <FlagGroup onDismissed={this.dismissFlag}>
+                                {this.state.flags.map(flag => (
+                                  <Flag actions={actions} {...flag} />
+                                ))}
+                              </FlagGroup>
+                              <Button onClick={this.addFlag}>Add Flag</Button>
+                              <Switch>
+                                <Route exact path="/" component={Overview} />
+                                <Route
+                                  exact
+                                  path="/classes/:id"
+                                  component={ClassView}
+                                />
+                                <Route
+                                  exact
+                                  path="/orders"
+                                  component={Orders}
+                                />
+                                <Route render={() => <Redirect to="/" />} />
+                              </Switch>
+                              {classes.length && (
+                                <Fragment>
+                                  <InlineDialog
+                                    // onClose={() => {
+                                    //   this.setState({ isOrderDialogOpen: false });
+                                    // }}
+                                    content={
+                                      <div
+                                        className={css`
+                                          height: 400px;
+                                          overflow: auto;
+                                          width: 400px;
+                                        `}
+                                      >
+                                        <OrderCarousel
+                                          onCompleted={() =>
+                                            this.setState({
+                                              isOrderDialogOpen: false
+                                            })
+                                          }
+                                        />
+                                      </div>
+                                    }
+                                    placement="left-end"
+                                    isOpen={isOrderDialogOpen}
                                   >
-                                    {isOrderDialogOpen ? (
-                                      <WhiteClose />
-                                    ) : (
-                                      <WhiteAddShoppingCart />
-                                    )}
-                                  </button>
-                                </InlineDialog>
-                              </Fragment>
-                            )}
-                          </Fragment>
+                                    <button
+                                      className={css`
+                                        margin: 0;
+                                        position: fixed;
+                                        bottom: 20px;
+                                        right: calc(20px + 60px + 20px + 20px);
+                                        width: 60px;
+                                        height: 60px;
+                                        border-radius: 30px;
+                                        background: #83c674;
+
+                                        box-shadow: 0 1px 6px 0
+                                            rgba(0, 0, 0, 0.06),
+                                          0 2px 32px 0 rgba(0, 0, 0, 0.16);
+
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+
+                                        transition: all 0.3s ease;
+
+                                        &:hover {
+                                          transform: scale(1.1);
+                                        }
+                                      `}
+                                      onClick={e => {
+                                        e.preventDefault();
+                                        this.setState(pp => ({
+                                          isOrderDialogOpen: !pp.isOrderDialogOpen
+                                        }));
+                                      }}
+                                    >
+                                      {isOrderDialogOpen ? (
+                                        <WhiteClose />
+                                      ) : (
+                                        <WhiteAddShoppingCart />
+                                      )}
+                                    </button>
+                                  </InlineDialog>
+                                </Fragment>
+                              )}
+                            </Fragment>
+                          </FlagContext.Provider>
                         ) : (
                           <DeclareAccountType />
                         )
@@ -319,6 +365,17 @@ class App extends Component {
       </Fragment>
     );
   }
+
+  addFlag = () => {
+    const flags = this.state.flags.slice();
+    flags.unshift(getFlagData(this.flagCount++));
+    this.setState({ flags });
+  };
+
+  dismissFlag = () => {
+    this.setState(state => ({ flags: state.flags.slice(1) }));
+    this.flagCount--;
+  };
 }
 
 export default withCookies(App);

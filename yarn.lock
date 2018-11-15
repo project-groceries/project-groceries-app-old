@@ -78,6 +78,20 @@
     "@atlaskit/field-base" "^11.0.7"
     "@atlaskit/theme" "^6.0.2"
 
+"@atlaskit/flag@^9.1.4":
+  version "9.1.4"
+  resolved "https://registry.yarnpkg.com/@atlaskit/flag/-/flag-9.1.4.tgz#a4b87fca9d121b1e579e001620147de68f16789e"
+  dependencies:
+    "@atlaskit/analytics-next" "^3.0.10"
+    "@atlaskit/button" "^9.0.15"
+    "@atlaskit/icon" "^14.0.2"
+    "@atlaskit/portal" "^0.0.14"
+    "@atlaskit/theme" "^6.1.1"
+    "@babel/runtime" "^7.0.0"
+    babel-runtime "^6.26.0"
+    react-transition-group "^2.2.1"
+    uuid "^3.1.0"
+
 "@atlaskit/icon@^14.0.0":
   version "14.0.1"
   resolved "https://registry.yarnpkg.com/@atlaskit/icon/-/icon-14.0.1.tgz#e24b4c8577dcdc93250b0abad63ef0a57e3f69bf"
@@ -181,6 +195,15 @@
   dependencies:
     "@babel/runtime" "^7.0.0"
     babel-runtime "^6.26.0"
+    tiny-invariant "^0.0.3"
+
+"@atlaskit/portal@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@atlaskit/portal/-/portal-0.0.14.tgz#b7832a3dd1a820532b7391f0d336c532406377a5"
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    babel-runtime "^6.26.0"
+    exenv "^1.2.2"
     tiny-invariant "^0.0.3"
 
 "@atlaskit/select@^6.1.0":

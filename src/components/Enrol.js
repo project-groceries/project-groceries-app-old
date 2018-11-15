@@ -9,6 +9,8 @@ import { ENROL_QUERY, ENROL_INTO_CLASS_MUTATION } from "../queries";
 import Button from "@atlaskit/button";
 import { css } from "emotion";
 
+import { FlagContext } from "../flag-context";
+
 class Enrol extends Component {
   constructor(props) {
     super(props);
@@ -53,59 +55,61 @@ class Enrol extends Component {
 
           return allClasses.length ? (
             unenrolledClasses.length ? (
-              <Fragment>
-                <Mutation
-                  mutation={ENROL_INTO_CLASS_MUTATION}
-                  onCompleted={this._success}
-                  // onError={this._announceError}
-                  // update={this._success}
-                >
-                  {(mutation, { loading }) => {
-                    return (
-                      <div
-                        className={css`
-                          display: flex;
-                          flex-direction: column;
-                          justify-content: center;
-                          align-items: center;
+              <FlagContext.Consumer>
+                {({ addFlag }) => (
+                  <Mutation
+                    mutation={ENROL_INTO_CLASS_MUTATION}
+                    onCompleted={() => this._success(addFlag)}
+                    // onError={this._announceError}
+                    // update={this._success}
+                  >
+                    {(mutation, { loading }) => {
+                      return (
+                        <div
+                          className={css`
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
 
-                          & > * {
-                            margin: 7px;
-                          }
-                        `}
-                      >
-                        <Fragment>
-                          <div className="form__group">
-                            <Select
-                              onChange={this._handleChange}
-                              options={options}
-                              autoFocus={true}
-                              aria-label="Select a class"
-                              placeholder="Select a class"
-                              maxMenuHeight={100}
-                            />
-                          </div>
-                          <Button
-                            appearance="primary"
-                            onClick={() => {
-                              if (selectedOption) {
-                                const { value } = selectedOption;
-                                this.setState({
-                                  mutationLoading: true
-                                });
-                                mutation({ variables: { id: value } });
-                              }
-                            }}
-                            isLoading={loading}
-                          >
-                            Enrol into class
-                          </Button>
-                        </Fragment>
-                      </div>
-                    );
-                  }}
-                </Mutation>
-              </Fragment>
+                            & > * {
+                              margin: 7px;
+                            }
+                          `}
+                        >
+                          <Fragment>
+                            <div className="form__group">
+                              <Select
+                                onChange={this._handleChange}
+                                options={options}
+                                autoFocus={true}
+                                aria-label="Select a class"
+                                placeholder="Select a class"
+                                maxMenuHeight={100}
+                              />
+                            </div>
+                            <Button
+                              appearance="primary"
+                              onClick={() => {
+                                if (selectedOption) {
+                                  const { value } = selectedOption;
+                                  this.setState({
+                                    mutationLoading: true
+                                  });
+                                  mutation({ variables: { id: value } });
+                                }
+                              }}
+                              isLoading={loading}
+                            >
+                              Enrol into class
+                            </Button>
+                          </Fragment>
+                        </div>
+                      );
+                    }}
+                  </Mutation>
+                )}
+              </FlagContext.Consumer>
             ) : (
               <p>There are no other classes to enrol into.</p>
             )
@@ -126,11 +130,13 @@ class Enrol extends Component {
     this.setState({ selectedOption });
   };
 
-  _success = () => {
+  _success = addFlag => {
     mixpanel.track("Enrolled into class");
 
     const { onCompleted, history } = this.props;
     const { selectedOption } = this.state;
+
+    addFlag();
 
     history.push(`/classes/${selectedOption.value}`);
     if (onCompleted) onCompleted();
