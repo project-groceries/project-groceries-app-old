@@ -109,6 +109,15 @@
     babel-runtime "^6.26.0"
     uuid "^3.1.0"
 
+"@atlaskit/icon@^14.3.0":
+  version "14.3.0"
+  resolved "https://registry.yarnpkg.com/@atlaskit/icon/-/icon-14.3.0.tgz#cae3be0ff2281ab7c62a73d1921f912053edce77"
+  dependencies:
+    "@atlaskit/theme" "^6.1.1"
+    "@babel/runtime" "^7.0.0"
+    babel-runtime "^6.26.0"
+    uuid "^3.1.0"
+
 "@atlaskit/inline-dialog@^9.0.6":
   version "9.0.6"
   resolved "https://registry.yarnpkg.com/@atlaskit/inline-dialog/-/inline-dialog-9.0.6.tgz#c206dd164a3391de99473227e307381825e70717"

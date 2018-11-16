@@ -136,7 +136,12 @@ class Enrol extends Component {
     const { onCompleted, history } = this.props;
     const { selectedOption } = this.state;
 
-    addFlag();
+    addFlag({
+      type: "success",
+      title: "Enrolled",
+      description:
+        "You have successfully joined the class. Changes may take a few seconds to be reflected on the page."
+    });
 
     history.push(`/classes/${selectedOption.value}`);
     if (onCompleted) onCompleted();

@@ -28,7 +28,6 @@ import Power from "./svg/Power";
 import Tooltip from "@atlaskit/tooltip";
 import InlineDialog from "@atlaskit/inline-dialog";
 import Flag, { FlagGroup } from "@atlaskit/flag";
-import Button from "@atlaskit/button";
 
 import styled from "styled-components";
 import { AddShoppingCart, Close, Home } from "styled-icons/material";
@@ -36,6 +35,11 @@ import OrderCarousel from "./OrderCarousel";
 import JoinSchool from "./JoinSchool";
 
 import { FlagContext } from "../flag-context";
+
+import Error from "@atlaskit/icon/glyph/error";
+import Info from "@atlaskit/icon/glyph/info";
+import Tick from "@atlaskit/icon/glyph/check-circle";
+import Warning from "@atlaskit/icon/glyph/warning";
 
 const WhiteAddShoppingCart = styled(AddShoppingCart)`
   color: white;
@@ -79,23 +83,31 @@ const offlineBanner = css`
   z-index: 2;
 `;
 
-const getRandomDescription = () => {
-  const descriptions = [
-    "Marzipan croissant pie. Jelly beans gingerbread caramels brownie icing.",
-    "Fruitcake topping wafer pie candy dragée sesame snaps cake. Cake cake cheesecake. Pie tiramisu carrot cake tart tart dessert cookie. Lemon drops cookie tootsie roll marzipan liquorice cotton candy brownie halvah."
-  ];
+const getIcon = key => iconMap(key);
 
-  return descriptions[Math.floor(Math.random() * descriptions.length)];
+const iconMap = (key, color) => {
+  const icons = {
+    info: <Info label="Info icon" primaryColor={color || "#6554C0"} />,
+    success: <Tick label="Success icon" primaryColor={color || "#36B37E"} />,
+    warning: <Warning label="Warning icon" primaryColor={color || "#FFAB00"} />,
+    error: <Error label="Error icon" primaryColor={color || "#FF5630"} />
+  };
+
+  return key ? icons[key] : icons;
 };
 
-const getFlagData = (index, timeOffset = 0) => {
+const getFlagData = (
+  index,
+  type = "info",
+  title = "title",
+  description = "description"
+) => {
   return {
-    created: Date.now() - timeOffset * 1000,
-    description: getRandomDescription(),
-    // icon: getRandomIcon(),
+    description,
+    icon: getIcon(type),
     id: index,
     key: index,
-    title: `${index + 1}: Whoa a new flag!`
+    title
   };
 };
 
@@ -255,11 +267,14 @@ class App extends Component {
                           >
                             <Fragment>
                               <FlagGroup onDismissed={this.dismissFlag}>
-                                {this.state.flags.map(flag => (
-                                  <Flag actions={actions} {...flag} />
+                                {this.state.flags.map((flag, index) => (
+                                  <Flag
+                                    key={index}
+                                    actions={actions}
+                                    {...flag}
+                                  />
                                 ))}
                               </FlagGroup>
-                              <Button onClick={this.addFlag}>Add Flag</Button>
                               <Switch>
                                 <Route exact path="/" component={Overview} />
                                 <Route
@@ -366,9 +381,9 @@ class App extends Component {
     );
   }
 
-  addFlag = () => {
+  addFlag = ({ type, title, description }) => {
     const flags = this.state.flags.slice();
-    flags.unshift(getFlagData(this.flagCount++));
+    flags.unshift(getFlagData(this.flagCount++, type, title, description));
     this.setState({ flags });
   };
 

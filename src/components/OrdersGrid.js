@@ -11,8 +11,6 @@ import UndrawNoData from "./svg/UndrawNoData";
 import { withToastManager } from "react-toast-notifications";
 import { Link } from "react-router-dom";
 import { formatDistance } from "date-fns";
-import { FlagContext } from "../flag-context";
-import Button from "@atlaskit/button";
 
 class OrdersGrid extends Component {
   state = {
@@ -193,9 +191,6 @@ class OrdersGrid extends Component {
               className="flex-center column"
               style={limit ? {} : { height: "calc(100vh - 70px)" }}
             >
-              <FlagContext.Consumer>
-                {({ addFlag }) => <Button onClick={addFlag}>Add Flag</Button>}
-              </FlagContext.Consumer>
               <UndrawNoData height="200px" />
               <p>There are no orders yet</p>
             </div>
