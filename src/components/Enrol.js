@@ -10,6 +10,7 @@ import Button from "@atlaskit/button";
 import { css } from "emotion";
 
 import { FlagContext } from "../flag-context";
+import { changesNotice } from "../utils";
 
 class Enrol extends Component {
   constructor(props) {
@@ -138,9 +139,8 @@ class Enrol extends Component {
 
     addFlag({
       type: "success",
-      title: "Enrolled",
-      description:
-        "You have successfully joined the class. Changes may take a few seconds to be reflected on the page."
+      title: "Successfully Enrolled",
+      description: changesNotice
     });
 
     history.push(`/classes/${selectedOption.value}`);

@@ -8,7 +8,8 @@ import styled from "styled-components";
 import { Close } from "styled-icons/material";
 import { FieldTextStateless } from "@atlaskit/field-text";
 import Button from "@atlaskit/button";
-import { withToastManager } from "react-toast-notifications";
+import { FlagContext } from "../flag-context";
+import { changesNotice } from "../utils";
 
 const BlackClose = styled(Close)`
   color: black;
@@ -135,41 +136,45 @@ class CreateRecipe extends Component {
                           </div>
                         )
                       )}
-                      <Mutation
-                        mutation={CREATE_RECIPE_MUTATION}
-                        onCompleted={this.onCompleted}
-                      >
-                        {(mutation, { loading, error }) => {
-                          if (error) return <div>Error</div>;
+                      <FlagContext.Consumer>
+                        {({ addFlag }) => (
+                          <Mutation
+                            mutation={CREATE_RECIPE_MUTATION}
+                            onCompleted={() => this.onCompleted(addFlag)}
+                          >
+                            {(mutation, { loading, error }) => {
+                              if (error) return <div>Error</div>;
 
-                          return (
-                            <Button
-                              appearance="primary"
-                              onClick={() => {
-                                const ingredients = [...recipeIngredients].map(
-                                  ([id, ingredient]) => ({
-                                    amount: ingredient.amount,
-                                    ingredient: {
-                                      connect: { id }
-                                    }
-                                  })
-                                );
+                              return (
+                                <Button
+                                  appearance="primary"
+                                  onClick={() => {
+                                    const ingredients = [
+                                      ...recipeIngredients
+                                    ].map(([id, ingredient]) => ({
+                                      amount: ingredient.amount,
+                                      ingredient: {
+                                        connect: { id }
+                                      }
+                                    }));
 
-                                mutation({
-                                  variables: {
-                                    name: recipeName,
-                                    schoolId,
-                                    ingredients
-                                  }
-                                });
-                              }}
-                              isLoading={loading}
-                            >
-                              Create Recipe
-                            </Button>
-                          );
-                        }}
-                      </Mutation>
+                                    mutation({
+                                      variables: {
+                                        name: recipeName,
+                                        schoolId,
+                                        ingredients
+                                      }
+                                    });
+                                  }}
+                                  isLoading={loading}
+                                >
+                                  Create Recipe
+                                </Button>
+                              );
+                            }}
+                          </Mutation>
+                        )}
+                      </FlagContext.Consumer>
                     </Fragment>
                   )}
                 </Fragment>
@@ -181,14 +186,15 @@ class CreateRecipe extends Component {
     );
   }
 
-  onCompleted = async () => {
-    const { toastManager, onCompleted } = this.props;
+  onCompleted = addFlag => {
+    const { onCompleted } = this.props;
 
     window.mixpanel.track("Created a recipe");
 
-    toastManager.add("Recipe created successfully", {
-      appearance: "success",
-      autoDismiss: true
+    addFlag({
+      type: "success",
+      title: "Recipe created successfully",
+      description: changesNotice
     });
 
     if (onCompleted) onCompleted();
@@ -205,4 +211,4 @@ class CreateRecipe extends Component {
   };
 }
 
-export default withToastManager(CreateRecipe);
+export default CreateRecipe;

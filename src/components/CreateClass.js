@@ -2,11 +2,12 @@
 import React, { Component } from "react";
 import { Query, Mutation } from "react-apollo";
 import { withRouter } from "react-router";
-import { withToastManager } from "react-toast-notifications";
 import { CREATE_CLASS_QUERY, CREATE_CLASS_MUTATION } from "../queries";
 import { css } from "emotion";
 import Button from "@atlaskit/button";
 import { FieldTextStateless } from "@atlaskit/field-text";
+import { FlagContext } from "../flag-context";
+import { changesNotice } from "../utils";
 
 class CreateClass extends Component {
   constructor(props) {
@@ -38,72 +39,81 @@ class CreateClass extends Component {
           const { classes } = data.user;
 
           return (
-            <Mutation
-              mutation={CREATE_CLASS_MUTATION}
-              onCompleted={this._success}
-              // onError={this._announceError}
-              // update={this._success}
-            >
-              {(mutation, { loading }) => {
-                return (
-                  <div
-                    className={css`
-                      display: flex;
-                      flex-direction: column;
-                      justify-content: center;
-                      align-items: center;
+            <FlagContext.Consumer>
+              {({ addFlag }) => (
+                <Mutation
+                  mutation={CREATE_CLASS_MUTATION}
+                  onCompleted={data => this._success(data, addFlag)}
+                  onError={error => this._announceError(error, addFlag)}
+                  // update={this._success}
+                >
+                  {(mutation, { loading }) => {
+                    return (
+                      <div
+                        className={css`
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: center;
+                          align-items: center;
 
-                      & > * {
-                        margin: 7px;
-                      }
-                    `}
-                  >
-                    <h2>Create {classes.length ? "a" : "your first"} class</h2>
-                    <FieldTextStateless
-                      label="Class Name"
-                      onChange={e => this.setState({ name: e.target.value })}
-                      value={name}
-                      required
-                      placeholder="Year 8 Home Ec"
-                    />
-                    <Button
-                      appearance="primary"
-                      onClick={() => {
-                        if (name) {
-                          mutation({ variables: { name } });
-                        }
-                      }}
-                      isLoading={loading}
-                    >
-                      Create Class
-                    </Button>
-                  </div>
-                );
-              }}
-            </Mutation>
+                          & > * {
+                            margin: 7px;
+                          }
+                        `}
+                      >
+                        <h2>
+                          Create {classes.length ? "a" : "your first"} class
+                        </h2>
+                        <FieldTextStateless
+                          label="Class Name"
+                          onChange={e =>
+                            this.setState({ name: e.target.value })
+                          }
+                          value={name}
+                          required
+                          placeholder="Year 8 Home Ec"
+                        />
+                        <Button
+                          appearance="primary"
+                          onClick={() => {
+                            if (name) {
+                              mutation({ variables: { name } });
+                            }
+                          }}
+                          isLoading={loading}
+                        >
+                          Create Class
+                        </Button>
+                      </div>
+                    );
+                  }}
+                </Mutation>
+              )}
+            </FlagContext.Consumer>
           );
         }}
       </Query>
     );
   }
 
-  _announceError = async () => {
-    const { toastManager } = this.props;
-
-    toastManager.add("An error occurred", {
-      appearance: "error",
-      autoDismiss: true
+  _announceError = async (error, addFlag) => {
+    addFlag({
+      type: "error",
+      title: "Uh oh!",
+      description:
+        "There seems to have been an error. We'll try to get this sorted ASAP."
     });
   };
 
-  _success = async ({ createClass: { id } }) => {
-    const { history, toastManager, onCompleted } = this.props;
+  _success = async ({ createClass: { id } }, addFlag) => {
+    const { history, onCompleted } = this.props;
 
     mixpanel.track("Created class");
 
-    toastManager.add("Class created successfully", {
-      appearance: "success",
-      autoDismiss: true
+    addFlag({
+      type: "success",
+      title: "Class created successfully",
+      description: changesNotice
     });
 
     history.push(`/classes/${id}`);
@@ -111,4 +121,4 @@ class CreateClass extends Component {
   };
 }
 
-export default withToastManager(withRouter(CreateClass));
+export default withRouter(CreateClass);

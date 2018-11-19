@@ -8,9 +8,10 @@ import { css } from "emotion";
 import Close from "./svg/Close";
 import Done from "./svg/Done";
 import UndrawNoData from "./svg/UndrawNoData";
-import { withToastManager } from "react-toast-notifications";
 import { Link } from "react-router-dom";
 import { formatDistance } from "date-fns";
+import { FlagContext } from "../flag-context";
+import { changesNotice } from "../utils";
 
 class OrdersGrid extends Component {
   state = {
@@ -119,36 +120,41 @@ class OrdersGrid extends Component {
                                 required={true}
                               />
                               <small> {ingredient.unit}</small>
-                              <Mutation
-                                mutation={UPDATE_ORDER_MUTATION}
-                                onCompleted={this._editOrderSuccess}
-                                onError={this._announceEditOrderError}
-                                update={this._editOrderSuccess}
-                              >
-                                {mutation => {
-                                  return (
-                                    <Done
-                                      fill="green"
-                                      onClick={() => {
-                                        this.setState(prevState => {
-                                          prevState.editMap.set(id, false);
-                                          prevState.amountMap.delete(id);
-                                          return {
-                                            editMap: prevState.editMap
-                                          };
-                                        });
+                              <FlagContext.Consumer>
+                                {({ addFlag }) => (
+                                  <Mutation
+                                    mutation={UPDATE_ORDER_MUTATION}
+                                    onCompleted={() =>
+                                      this._editOrderSuccess(addFlag)
+                                    }
+                                    // update={this._editOrderSuccess}
+                                  >
+                                    {mutation => {
+                                      return (
+                                        <Done
+                                          fill="green"
+                                          onClick={() => {
+                                            this.setState(prevState => {
+                                              prevState.editMap.set(id, false);
+                                              prevState.amountMap.delete(id);
+                                              return {
+                                                editMap: prevState.editMap
+                                              };
+                                            });
 
-                                        mutation({
-                                          variables: {
-                                            id,
-                                            amount: amountMap.get(id)
-                                          }
-                                        });
-                                      }}
-                                    />
-                                  );
-                                }}
-                              </Mutation>
+                                            mutation({
+                                              variables: {
+                                                id,
+                                                amount: amountMap.get(id)
+                                              }
+                                            });
+                                          }}
+                                        />
+                                      );
+                                    }}
+                                  </Mutation>
+                                )}
+                              </FlagContext.Consumer>
                               <Close
                                 fill="red"
                                 onClick={() =>
@@ -233,29 +239,19 @@ class OrdersGrid extends Component {
     return orderSessions.reverse().slice(0, limit);
   };
 
-  _announceEditOrderError = async () => {
-    const { toastManager } = this.props;
-
-    this.setState({ mutationLoading: false });
-    toastManager.add("An error occurred", {
-      appearance: "error",
-      autoDismiss: true
-    });
-  };
-
-  _editOrderSuccess = async () => {
-    const { toastManager, onCompleted } = this.props;
+  _editOrderSuccess = addFlag => {
+    const { onCompleted } = this.props;
 
     window.mixpanel.track("Edited an order");
 
-    this.setState({ mutationLoading: false });
-    toastManager.add("The order was successfully edited", {
-      appearance: "success",
-      autoDismiss: true
+    addFlag({
+      type: "success",
+      title: "The order was successfully edited",
+      description: changesNotice
     });
 
     if (onCompleted) onCompleted();
   };
 }
 
-export default withToastManager(OrdersGrid);
+export default OrdersGrid;

@@ -5,10 +5,10 @@ import { css } from "emotion";
 import { Mutation } from "react-apollo";
 import { withRouter } from "react-router";
 import { UNENROL_MUTATION } from "../queries";
-import { withToastManager } from "react-toast-notifications";
 import Button from "@atlaskit/button";
 
 import { FlagContext } from "../flag-context";
+import { changesNotice } from "../utils";
 
 class Unenrol extends Component {
   render() {
@@ -58,12 +58,6 @@ class Unenrol extends Component {
   }
 
   _announceError = (error, addFlag) => {
-    const { toastManager } = this.props;
-
-    toastManager.add("An error occurred", {
-      appearance: "error",
-      autoDismiss: true
-    });
     addFlag({
       type: "error",
       title: "Uh oh!",
@@ -73,20 +67,14 @@ class Unenrol extends Component {
   };
 
   _success = addFlag => {
-    const { history, toastManager, onCompleted } = this.props;
+    const { history, onCompleted } = this.props;
 
     mixpanel.track("Unenrolled from class");
 
-    toastManager.add("You have been unenrolled", {
-      appearance: "success",
-      autoDismiss: true
-    });
-
     addFlag({
       type: "success",
-      title: "Unenrolled",
-      description:
-        "You have been unenrolled. Changes may take a few seconds to be reflected on the page."
+      title: "Successfully Unenrolled",
+      description: changesNotice
     });
 
     history.push("/");
@@ -94,4 +82,4 @@ class Unenrol extends Component {
   };
 }
 
-export default withToastManager(withRouter(Unenrol));
+export default withRouter(Unenrol);

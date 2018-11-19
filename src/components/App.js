@@ -96,20 +96,7 @@ const iconMap = (key, color) => {
   return key ? icons[key] : icons;
 };
 
-const getFlagData = (
-  index,
-  type = "info",
-  title = "title",
-  description = "description"
-) => {
-  return {
-    description,
-    icon: getIcon(type),
-    id: index,
-    key: index,
-    title
-  };
-};
+// const
 
 class App extends Component {
   static propTypes = {
@@ -140,13 +127,7 @@ class App extends Component {
     const { cookies } = this.props;
     const { hasToken, isOrderDialogOpen } = this.state;
 
-    const actions = [
-      {
-        content: "Nice one!",
-        onClick: () => {}
-      },
-      { content: "Not right now thanks", onClick: this.dismissFlag }
-    ];
+    // const actions = [{ content: "Dismiss", onClick: this.dismissFlag }];
 
     return (
       <Fragment>
@@ -267,12 +248,8 @@ class App extends Component {
                           >
                             <Fragment>
                               <FlagGroup onDismissed={this.dismissFlag}>
-                                {this.state.flags.map((flag, index) => (
-                                  <Flag
-                                    key={index}
-                                    actions={actions}
-                                    {...flag}
-                                  />
+                                {this.state.flags.map(flag => (
+                                  <Flag {...flag} />
                                 ))}
                               </FlagGroup>
                               <Switch>
@@ -380,10 +357,28 @@ class App extends Component {
       </Fragment>
     );
   }
+  getFlagData = (
+    index,
+    type = "info",
+    title = "title",
+    description = "description",
+    actions = [{ content: "Dismiss", onClick: this.dismissFlag }]
+  ) => {
+    return {
+      description,
+      icon: getIcon(type),
+      id: index,
+      key: index,
+      title,
+      actions
+    };
+  };
 
-  addFlag = ({ type, title, description }) => {
+  addFlag = ({ type, title, description, actions }) => {
     const flags = this.state.flags.slice();
-    flags.unshift(getFlagData(this.flagCount++, type, title, description));
+    flags.unshift(
+      this.getFlagData(this.flagCount++, type, title, description, actions)
+    );
     this.setState({ flags });
   };
 

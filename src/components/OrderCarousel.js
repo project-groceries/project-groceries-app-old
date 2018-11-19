@@ -12,7 +12,8 @@ import styled from "styled-components";
 import { Close } from "styled-icons/material";
 import UndrawChef from "./svg/UndrawChef";
 import CreateRecipe from "./CreateRecipe";
-import { withToastManager } from "react-toast-notifications";
+import { FlagContext } from "../flag-context";
+import { changesNotice } from "../utils";
 
 const BlackClose = styled(Close)`
   color: black;
@@ -225,9 +226,11 @@ class OrderCarousel extends Component {
                                 </div>
                               )
                             )}
+                            <FlagContext.Consumer>
+                              {({ addFlag }) =>
                             <Mutation
                               mutation={CREATE_ORDERS_MUTATION}
-                              onCompleted={this.onCompleted}
+                              onCompleted={() => this.onCompleted(addFlag)}
                             >
                               {(mutation, { loading, error }) => {
                                 if (error) return <div>Error</div>;
@@ -266,6 +269,8 @@ class OrderCarousel extends Component {
                                 );
                               }}
                             </Mutation>
+                            }
+                            </FlagContext.Consumer>
                           </Fragment>
                         )}
                       </Fragment>
@@ -432,9 +437,11 @@ class OrderCarousel extends Component {
                                     </div>
                                   )
                                 )}
+                                <FlagContext.Consumer>
+                                  {({ addFlag }) =>
                                 <Mutation
                                   mutation={CREATE_ORDERS_MUTATION}
-                                  onCompleted={this.onCompleted}
+                                  onCompleted={() => this.onCompleted(addFlag)}
                                 >
                                   {(mutation, { loading, error }) => {
                                     if (error) return <div>Error</div>;
@@ -475,6 +482,8 @@ class OrderCarousel extends Component {
                                     );
                                   }}
                                 </Mutation>
+                                }
+                                </FlagContext.Consumer>
                               </Fragment>
                             )}
                           </Fragment>
@@ -514,20 +523,22 @@ class OrderCarousel extends Component {
       .slice(0, inputValue.length > 2 ? undefined : 40); // reduce results for faster loading
   };
 
-  onCompleted = async () => {
-    const { toastManager, onCompleted } = this.props;
+  onCompleted = addFlag => {
+    const { onCompleted } = this.props;
     const { isRecipe } = this.state;
 
     window.mixpanel.track("Made orders");
 
     const action = isRecipe ? "recipe was ordered" : "custom order was made";
-    toastManager.add(`Your ${action} successfully`, {
-      appearance: "success",
-      autoDismiss: true
+
+    addFlag({
+      type: "success",
+      title: `Your ${action} successfully`,
+      description: changesNotice
     });
 
     if (onCompleted) onCompleted();
   };
 }
 
-export default withToastManager(OrderCarousel);
+export default OrderCarousel;

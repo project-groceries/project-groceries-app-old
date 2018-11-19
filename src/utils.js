@@ -31,3 +31,6 @@ export function timeDifferenceForDate(date) {
   const updated = new Date(date).getTime();
   return timeDifference(now, updated);
 }
+
+export const changesNotice =
+  "Changes may take a few seconds to be reflected on the page.";

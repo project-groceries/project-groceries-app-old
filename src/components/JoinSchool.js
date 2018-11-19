@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Query, Mutation } from "react-apollo";
 // import Select from "react-select";
-import { withToastManager } from "react-toast-notifications";
 import sortBy from "lodash.sortby";
 import {
   JOIN_SCHOOL_MUTATION,
@@ -12,6 +11,8 @@ import CreatableSelect from "react-select/lib/Creatable";
 import Spinner from "./Spinner";
 import { css } from "emotion";
 import Button from "@atlaskit/button";
+import { FlagContext } from "../flag-context";
+import { changesNotice } from "../utils";
 
 class JoinSchool extends Component {
   constructor(props) {
@@ -72,37 +73,41 @@ class JoinSchool extends Component {
                     })
                   }}
                 />
-                <Mutation
-                  mutation={
-                    create ? CREATE_SCHOOL_MUTATION : JOIN_SCHOOL_MUTATION
-                  }
-                  onCompleted={this.onCompleted}
-                >
-                  {(mutation, { loading }) => {
-                    return (
-                      <Button
-                        appearance="primary"
-                        onClick={() => {
-                          if (selectedOption) {
-                            const { value, label } = selectedOption;
-                            const variables = create
-                              ? { name: label }
-                              : { id: value };
-                            mutation({ variables });
-                          } else {
-                            toastManager.add("Please select a school", {
-                              appearance: "warning",
-                              autoDismiss: true
-                            });
-                          }
-                        }}
-                        isLoading={loading}
-                      >
-                        {create ? "Create" : "Join"} School
-                      </Button>
-                    );
-                  }}
-                </Mutation>
+                <FlagContext.Consumer>
+                  {({ addFlag }) => (
+                    <Mutation
+                      mutation={
+                        create ? CREATE_SCHOOL_MUTATION : JOIN_SCHOOL_MUTATION
+                      }
+                      onCompleted={() => this.onCompleted(addFlag)}
+                    >
+                      {(mutation, { loading }) => {
+                        return (
+                          <Button
+                            appearance="primary"
+                            onClick={() => {
+                              if (selectedOption) {
+                                const { value, label } = selectedOption;
+                                const variables = create
+                                  ? { name: label }
+                                  : { id: value };
+                                mutation({ variables });
+                              } else {
+                                toastManager.add("Please select a school", {
+                                  appearance: "warning",
+                                  autoDismiss: true
+                                });
+                              }
+                            }}
+                            isLoading={loading}
+                          >
+                            {create ? "Create" : "Join"} School
+                          </Button>
+                        );
+                      }}
+                    </Mutation>
+                  )}
+                </FlagContext.Consumer>
               </div>
             );
           }}
@@ -133,22 +138,18 @@ class JoinSchool extends Component {
     }
   };
 
-  onCompleted = () => {
-    const { toastManager } = this.props;
+  onCompleted = addFlag => {
     const { selectedOption, create } = this.state;
     const { label } = selectedOption;
 
     window.mixpanel.track(create ? "Created a school" : "Joined a school");
 
-    this.setState({ loading: false });
-    toastManager.add(
-      `🏫 You have successfully ${create ? "created" : "joined"} "${label}"`,
-      {
-        appearance: "success",
-        autoDismiss: true
-      }
-    );
+    addFlag({
+      type: "success",
+      title: `🏫 "${label}" ${create ? "created" : "joined"} successfully`,
+      description: changesNotice
+    });
   };
 }
 
-export default withToastManager(JoinSchool);
+export default JoinSchool;

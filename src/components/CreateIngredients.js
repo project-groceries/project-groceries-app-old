@@ -8,7 +8,6 @@ import {
   CREATE_INGREDIENTS_MUTATION
 } from "../queries";
 import Spinner from "./Spinner";
-import { withToastManager } from "react-toast-notifications/dist/ToastProvider";
 
 class CreateIngredients extends React.Component {
   constructor(props) {
@@ -44,17 +43,17 @@ class CreateIngredients extends React.Component {
               mutation={CREATE_INGREDIENTS_MUTATION}
               onError={() => {
                 this.setState({ mutationLoading: false });
-                toastManager.add("There was an error", {
-                  appearance: "error",
-                  autoDismiss: true
-                });
+                // toastManager.add("There was an error", {
+                //   appearance: "error",
+                //   autoDismiss: true
+                // });
               }}
               update={() => {
                 this.setState({ mutationLoading: false });
-                toastManager.add("Ingredients created successfully", {
-                  appearance: "success",
-                  autoDismiss: true
-                });
+                // toastManager.add("Ingredients created successfully", {
+                //   appearance: "success",
+                //   autoDismiss: true
+                // });
 
                 if (onCompleted) onCompleted();
               }}
@@ -276,4 +275,4 @@ class CreateIngredients extends React.Component {
   // };
 }
 
-export default withToastManager(CreateIngredients);
+export default CreateIngredients;
