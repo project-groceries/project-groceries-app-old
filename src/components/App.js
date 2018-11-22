@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from "react";
 import logo from "../logo.svg";
-import "@reach/dialog/styles.css";
+import "@material/fab/dist/mdc.fab.css";
 // import "../styles/App.css"
 // import LinkList from "./LinkList";
 // import CreateLink from "./CreateLink";
@@ -40,6 +40,15 @@ import Error from "@atlaskit/icon/glyph/error";
 import Info from "@atlaskit/icon/glyph/info";
 import Tick from "@atlaskit/icon/glyph/check-circle";
 import Warning from "@atlaskit/icon/glyph/warning";
+
+import { Fab } from "@rmwc/fab";
+
+const fabStyles = css`
+  background: #83c674;
+  position: fixed;
+  bottom: 20px;
+  right: calc(20px + 60px + 20px + 20px);
+`;
 
 const WhiteAddShoppingCart = styled(AddShoppingCart)`
   color: white;
@@ -292,44 +301,23 @@ class App extends Component {
                                     placement="left-end"
                                     isOpen={isOrderDialogOpen}
                                   >
-                                    <button
-                                      className={css`
-                                        margin: 0;
-                                        position: fixed;
-                                        bottom: 20px;
-                                        right: calc(20px + 60px + 20px + 20px);
-                                        width: 60px;
-                                        height: 60px;
-                                        border-radius: 30px;
-                                        background: #83c674;
-
-                                        box-shadow: 0 1px 6px 0
-                                            rgba(0, 0, 0, 0.06),
-                                          0 2px 32px 0 rgba(0, 0, 0, 0.16);
-
-                                        display: flex;
-                                        justify-content: center;
-                                        align-items: center;
-
-                                        transition: all 0.3s ease;
-
-                                        &:hover {
-                                          transform: scale(1.1);
-                                        }
-                                      `}
+                                    <Fab
+                                      icon={
+                                        isOrderDialogOpen ? (
+                                          <WhiteClose />
+                                        ) : (
+                                          <WhiteAddShoppingCart />
+                                        )
+                                      }
+                                      label={isOrderDialogOpen ? "" : "Order"}
+                                      className={fabStyles}
                                       onClick={e => {
                                         e.preventDefault();
                                         this.setState(pp => ({
                                           isOrderDialogOpen: !pp.isOrderDialogOpen
                                         }));
                                       }}
-                                    >
-                                      {isOrderDialogOpen ? (
-                                        <WhiteClose />
-                                      ) : (
-                                        <WhiteAddShoppingCart />
-                                      )}
-                                    </button>
+                                    />
                                   </InlineDialog>
                                 </Fragment>
                               )}
