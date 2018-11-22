@@ -88,7 +88,7 @@ export const orderItem = css`
 
   & > svg:hover {
     cursor: pointer;
-    transform: scale(1.2);
+    // transform: scale(1.2);
   }
 `;
 
