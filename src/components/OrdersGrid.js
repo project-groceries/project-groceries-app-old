@@ -80,7 +80,7 @@ class OrdersGrid extends Component {
                 `}
               >
                 {this._groupByOrderSession(orders).map(
-                  ({ id, dateCreated, madeBy, orders }) => (
+                  ({ id, dateCreated, madeBy, orderClass, orders }) => (
                     <div
                       key={id}
                       className={css`
@@ -95,7 +95,9 @@ class OrdersGrid extends Component {
                           addSuffix: true
                         })}
                       </h2>
-                      <h4>{madeBy.name}</h4>
+                      <h4>
+                        Made by {madeBy.name} in {orderClass.name}
+                      </h4>
                       {orders.map(({ id, amount, ingredient }) => (
                         <div key={id} className={orderItem}>
                           <small>{ingredient.name}</small>
@@ -216,7 +218,8 @@ class OrdersGrid extends Component {
         amount,
         ingredient,
         orderSession: { id: orderSessionId },
-        madeBy
+        madeBy,
+        class: orderClass
       } = order;
 
       if (
@@ -231,6 +234,7 @@ class OrdersGrid extends Component {
           ...order.orderSession,
           dateCreated: new Date(order.orderSession.createdAt),
           madeBy,
+          orderClass,
           orders: [{ id, amount, ingredient }]
         });
       }

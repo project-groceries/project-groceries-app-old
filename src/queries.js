@@ -546,6 +546,10 @@ export const ORDERS_QUERY = gql`
         id
         name
       }
+      class {
+        id
+        name
+      }
     }
   }
 `;
