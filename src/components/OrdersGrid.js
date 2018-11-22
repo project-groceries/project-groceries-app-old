@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { formatDistance } from "date-fns";
 import { FlagContext } from "../flag-context";
 import { changesNotice } from "../utils";
+import Button from "@atlaskit/button";
 
 const bold = css`
   font-weight: bolder;
@@ -101,7 +102,12 @@ class OrdersGrid extends Component {
                       </h2>
                       <h4>
                         Made by <span className={bold}>{madeBy.name}</span> in{" "}
-                        <span className={bold}>{orderClass.name}</span>
+                        <Link to={`/classes/${orderClass.id}`}>
+                          <Button appearance="subtle-link">
+                            {orderClass.name}
+                          </Button>
+                        </Link>
+                        {/* <span className={bold}>{orderClass.name}</span> */}
                       </h4>
                       {orders.map(({ id, amount, ingredient }) => (
                         <div key={id} className={orderItem}>

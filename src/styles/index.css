@@ -462,9 +462,6 @@ input:not(:checked) + .must-check {
  * They are NOT to be used for purely aesthetic reasons.
 */
 
-button,
-[type="button"],
-[type="submit"],
 .btn {
   display: inline-block;
   padding: 5px 11px;
@@ -478,19 +475,8 @@ button,
   /* @extend .default; */
   /* background-color: var(--color-default, white); */
 }
-button.btn-thin,
-[type="button"].btn-thin,
-[type="submit"].btn-thin,
-.btn.btn-thin {
-  padding: 1px 2px;
-  margin: 0;
-}
 
-button:hover,
-[type="button"]:hover,
-[type="submit"]:hover,
-.btn:hover,
-a:hover {
+.btn:hover {
   cursor: pointer;
 }
 
