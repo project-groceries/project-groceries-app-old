@@ -13,6 +13,10 @@ import { formatDistance } from "date-fns";
 import { FlagContext } from "../flag-context";
 import { changesNotice } from "../utils";
 
+const bold = css`
+  font-weight: bolder;
+`;
+
 class OrdersGrid extends Component {
   state = {
     editMap: new Map(),
@@ -96,7 +100,8 @@ class OrdersGrid extends Component {
                         })}
                       </h2>
                       <h4>
-                        Made by {madeBy.name} in {orderClass.name}
+                        Made by <span className={bold}>{madeBy.name}</span> in{" "}
+                        <span className={bold}>{orderClass.name}</span>
                       </h4>
                       {orders.map(({ id, amount, ingredient }) => (
                         <div key={id} className={orderItem}>
