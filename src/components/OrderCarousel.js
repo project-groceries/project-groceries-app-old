@@ -153,6 +153,7 @@ class OrderCarousel extends Component {
                           value=""
                           placeholder="Select an ingredient to add to the order"
                           maxMenuHeight={200}
+                          defaultOptions
                           loadOptions={(inputValue, callback) => {
                             callback(
                               this.filterIngredients(inputValue, ingredients)
@@ -228,48 +229,48 @@ class OrderCarousel extends Component {
                             )}
                             <FlagContext.Consumer>
                               {({ addFlag }) =>
-                            <Mutation
-                              mutation={CREATE_ORDERS_MUTATION}
-                              onCompleted={() => this.onCompleted(addFlag)}
-                            >
-                              {(mutation, { loading, error }) => {
-                                if (error) return <div>Error</div>;
+                                <Mutation
+                                  mutation={CREATE_ORDERS_MUTATION}
+                                  onCompleted={() => this.onCompleted(addFlag)}
+                                >
+                                  {(mutation, { loading, error }) => {
+                                    if (error) return <div>Error</div>;
 
-                                return (
-                                  <Button
-                                    appearance="primary"
-                                    onClick={() => {
-                                      const orders = [...selectedIngredients]
-                                        .map(([id, ingredient]) => ({
-                                          amount: ingredient.amount,
-                                          ingredient: {
-                                            connect: {
-                                              id
-                                            }
-                                          },
-                                          madeBy: {
-                                            connect: {
-                                              id: user.id
-                                            }
-                                          },
-                                          class: {
-                                            connect: {
-                                              id: currentClass.value
-                                            }
-                                          }
-                                        }))
-                                        .filter(({ amount }) => amount);
+                                    return (
+                                      <Button
+                                        appearance="primary"
+                                        onClick={() => {
+                                          const orders = [...selectedIngredients]
+                                            .map(([id, ingredient]) => ({
+                                              amount: ingredient.amount,
+                                              ingredient: {
+                                                connect: {
+                                                  id
+                                                }
+                                              },
+                                              madeBy: {
+                                                connect: {
+                                                  id: user.id
+                                                }
+                                              },
+                                              class: {
+                                                connect: {
+                                                  id: currentClass.value
+                                                }
+                                              }
+                                            }))
+                                            .filter(({ amount }) => amount);
 
-                                      mutation({ variables: { orders } });
-                                    }}
-                                    isLoading={loading}
-                                  >
-                                    Submit Order
-                                  </Button>
-                                );
-                              }}
-                            </Mutation>
-                            }
+                                          mutation({ variables: { orders } });
+                                        }}
+                                        isLoading={loading}
+                                      >
+                                        Submit Order
+                                      </Button>
+                                    );
+                                  }}
+                                </Mutation>
+                              }
                             </FlagContext.Consumer>
                           </Fragment>
                         )}
@@ -439,50 +440,50 @@ class OrderCarousel extends Component {
                                 )}
                                 <FlagContext.Consumer>
                                   {({ addFlag }) =>
-                                <Mutation
-                                  mutation={CREATE_ORDERS_MUTATION}
-                                  onCompleted={() => this.onCompleted(addFlag)}
-                                >
-                                  {(mutation, { loading, error }) => {
-                                    if (error) return <div>Error</div>;
+                                    <Mutation
+                                      mutation={CREATE_ORDERS_MUTATION}
+                                      onCompleted={() => this.onCompleted(addFlag)}
+                                    >
+                                      {(mutation, { loading, error }) => {
+                                        if (error) return <div>Error</div>;
 
-                                    return (
-                                      <Button
-                                        appearance="primary"
-                                        onClick={() => {
-                                          const orders = currentRecipe.ingredients.map(
-                                            recipeIngredient => ({
-                                              amount:
-                                                servings *
-                                                recipeIngredient.amount,
-                                              ingredient: {
-                                                connect: {
-                                                  id:
-                                                    recipeIngredient.ingredient
-                                                      .id
-                                                }
-                                              },
-                                              madeBy: {
-                                                connect: { id: user.id }
-                                              },
-                                              class: {
-                                                connect: {
-                                                  id: currentClass.value
-                                                }
-                                              }
-                                            })
-                                          );
+                                        return (
+                                          <Button
+                                            appearance="primary"
+                                            onClick={() => {
+                                              const orders = currentRecipe.ingredients.map(
+                                                recipeIngredient => ({
+                                                  amount:
+                                                    servings *
+                                                    recipeIngredient.amount,
+                                                  ingredient: {
+                                                    connect: {
+                                                      id:
+                                                        recipeIngredient.ingredient
+                                                          .id
+                                                    }
+                                                  },
+                                                  madeBy: {
+                                                    connect: { id: user.id }
+                                                  },
+                                                  class: {
+                                                    connect: {
+                                                      id: currentClass.value
+                                                    }
+                                                  }
+                                                })
+                                              );
 
-                                          mutation({ variables: { orders } });
-                                        }}
-                                        isLoading={loading}
-                                      >
-                                        Order Recipe
-                                      </Button>
-                                    );
-                                  }}
-                                </Mutation>
-                                }
+                                              mutation({ variables: { orders } });
+                                            }}
+                                            isLoading={loading}
+                                          >
+                                            Order Recipe
+                                          </Button>
+                                        );
+                                      }}
+                                    </Mutation>
+                                  }
                                 </FlagContext.Consumer>
                               </Fragment>
                             )}

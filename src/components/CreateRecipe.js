@@ -66,6 +66,7 @@ class CreateRecipe extends Component {
                     value=""
                     placeholder="Select an ingredient to add to the recipe"
                     maxMenuHeight={200}
+                    defaultOptions
                     loadOptions={(inputValue, callback) => {
                       callback(this.filterIngredients(inputValue, ingredients));
                     }}

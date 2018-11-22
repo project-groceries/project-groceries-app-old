@@ -17,7 +17,6 @@ import { BrowserRouter } from "react-router-dom";
 import { setContext } from "apollo-link-context";
 import { CookiesProvider } from "react-cookie";
 import Cookies from "universal-cookie";
-import { ToastProvider } from "react-toast-notifications";
 
 import LogRocket from "logrocket";
 import setupLogRocketReact from "logrocket-react";
@@ -109,9 +108,7 @@ ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={client}>
       <CookiesProvider>
-        <ToastProvider>
-          <App />
-        </ToastProvider>
+        <App />
       </CookiesProvider>
     </ApolloProvider>
   </BrowserRouter>,
