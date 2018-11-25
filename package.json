@@ -51,6 +51,7 @@
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
     "lodash.sortby": "^4.7.0",
+    "lodash.uniqby": "^4.7.0",
     "logrocket": "^0.6.16",
     "logrocket-react": "2",
     "object-assign": "4.1.1",

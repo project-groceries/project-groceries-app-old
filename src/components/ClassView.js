@@ -13,6 +13,7 @@ import Toggle from "./Toggle";
 import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
 import DeleteClass from "./DeleteClass";
 import Unenrol from "./Unenrol";
+import uniqby from "lodash.uniqby";
 
 class ClassView extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class ClassView extends Component {
       inputValue: "",
       filterValues: [],
       filterTimeoutID: null,
+      filterClassDialogOpen: false,
       filterDialogOpen: false,
       filteredUsers: null,
       orderBy: "createdAt_DESC",
@@ -39,7 +41,9 @@ class ClassView extends Component {
       inputValue,
       filterValues,
       filterTimeoutID,
+      filterClassDialogOpen,
       filterDialogOpen,
+      filteredClasses,
       filteredUsers,
       orderBy,
       isSummary,
@@ -74,10 +78,23 @@ class ClassView extends Component {
             } = data;
 
             // I don't think 'class' is a valid variable name ... so 'appropriateClass'
-            const appropriateClass = classes.find(c => c.id == id);
+            const appropriateClass = id
+              ? classes.find(c => c.id == id)
+              : {
+                  name: "Summary",
+                  users: uniqby(
+                    classes.reduce(
+                      (acc, cur) => [cur.teacher, ...cur.students, ...acc],
+                      []
+                    ),
+                    "id"
+                  )
+                };
             // console.log("class", appropriateClass);
             const users = appropriateClass
-              ? [appropriateClass.teacher, ...appropriateClass.students]
+              ? id
+                ? [appropriateClass.teacher, ...appropriateClass.students]
+                : appropriateClass.users
               : undefined;
 
             return appropriateClass ? (
@@ -96,11 +113,11 @@ class ClassView extends Component {
                     <h2>{appropriateClass.name}</h2>
                   </div>
                   <ClassViewGrid
-                    id={id}
+                    ids={id ? [id] : filteredClasses || classes.map(c => c.id)}
                     orderBy={orderBy}
                     filter={filterValues}
                     filteredUsers={filteredUsers || users.map(user => user.id)}
-                    isSummary={isSummary}
+                    isSummary={id ? isSummary : true}
                   />
                 </div>
                 <div
@@ -119,67 +136,73 @@ class ClassView extends Component {
                     }
                   `}
                 >
-                  <div>
-                    <input
-                      id="filter"
-                      type="text"
-                      placeholder="Search..."
-                      value={inputValue}
-                      onChange={event => {
-                        const value = event.target.value;
+                  {id && (
+                    <div>
+                      <input
+                        id="filter"
+                        type="text"
+                        placeholder="Search..."
+                        value={inputValue}
+                        onChange={event => {
+                          const value = event.target.value;
 
-                        window.clearTimeout(filterTimeoutID);
+                          window.clearTimeout(filterTimeoutID);
 
-                        this.setState({
-                          inputValue: value,
-                          filterTimeoutID: window.setTimeout(
-                            () =>
-                              this.setState({ filterValues: value.split(" ") }),
-                            250
-                          )
-                        });
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <h4>
-                      Summary{" "}
-                      <InlineDialog
-                        onClose={() => {
                           this.setState({
-                            summaryDialogOpen: false
+                            inputValue: value,
+                            filterTimeoutID: window.setTimeout(
+                              () =>
+                                this.setState({
+                                  filterValues: value.split(" ")
+                                }),
+                              250
+                            )
                           });
                         }}
-                        content={
-                          <p>
-                            Turning summary on will only show ingredients that
-                            have been ordered
-                          </p>
-                        }
-                        isOpen={summaryDialogOpen}
-                      >
-                        <Button
-                          isSelected={summaryDialogOpen}
-                          onClick={() =>
-                            this.setState(prevProps => ({
-                              summaryDialogOpen: !prevProps.summaryDialogOpen
-                            }))
+                      />
+                    </div>
+                  )}
+                  {id && (
+                    <div>
+                      <h4>
+                        Summary{" "}
+                        <InlineDialog
+                          onClose={() => {
+                            this.setState({
+                              summaryDialogOpen: false
+                            });
+                          }}
+                          content={
+                            <p>
+                              Turning summary on will only show ingredients that
+                              have been ordered
+                            </p>
                           }
+                          isOpen={summaryDialogOpen}
                         >
-                          ?
-                        </Button>
-                      </InlineDialog>
-                    </h4>
-                    <Toggle
-                      id="summaryToggle"
-                      checked={isSummary}
-                      onChange={() =>
-                        this.setState(prevProps => ({
-                          isSummary: !prevProps.isSummary
-                        }))
-                      }
-                    />
-                  </div>
+                          <Button
+                            isSelected={summaryDialogOpen}
+                            onClick={() =>
+                              this.setState(prevProps => ({
+                                summaryDialogOpen: !prevProps.summaryDialogOpen
+                              }))
+                            }
+                          >
+                            ?
+                          </Button>
+                        </InlineDialog>
+                      </h4>
+                      <Toggle
+                        id="summaryToggle"
+                        checked={isSummary}
+                        onChange={() =>
+                          this.setState(prevProps => ({
+                            isSummary: !prevProps.isSummary
+                          }))
+                        }
+                      />
+                    </div>
+                  )}
                   <div>
                     <h4>Sort Ingredients</h4>
                     <RadioSelect
@@ -210,6 +233,53 @@ class ClassView extends Component {
                       onChange={data => this.setState({ orderBy: data.value })}
                     />
                   </div>
+                  {!id && (
+                    <div>
+                      <h4>
+                        Filter Classes{" "}
+                        <InlineDialog
+                          onClose={() => {
+                            this.setState({
+                              filterClassDialogOpen: false
+                            });
+                          }}
+                          content={
+                            <p>Only show orders from the selected classes</p>
+                          }
+                          isOpen={filterClassDialogOpen}
+                        >
+                          <Button
+                            isSelected={filterClassDialogOpen}
+                            onClick={() =>
+                              this.setState(prevProps => ({
+                                filterClassDialogOpen: !prevProps.filterClassDialogOpen
+                              }))
+                            }
+                          >
+                            ?
+                          </Button>
+                        </InlineDialog>
+                      </h4>
+                      <CheckboxSelect
+                        className="checkbox-select"
+                        classNamePrefix="select"
+                        defaultValue={classes.map(c => ({
+                          label: c.name,
+                          value: c.id
+                        }))}
+                        options={classes.map(c => ({
+                          label: c.name,
+                          value: c.id
+                        }))}
+                        placeholder="Choose a City"
+                        onChange={classes =>
+                          this.setState({
+                            filteredClasses: classes.map(c => c.value)
+                          })
+                        }
+                      />
+                    </div>
+                  )}
                   <div>
                     <h4>
                       Filter Users{" "}
@@ -265,7 +335,11 @@ class ClassView extends Component {
                             <Button
                               appearance="warning"
                               onClick={() =>
-                                mutation({ variables: { classId: id } })
+                                mutation({
+                                  variables: {
+                                    classIDs: id ? [id] : classes.map(c => c.id)
+                                  }
+                                })
                               }
                               isLoading={loading}
                             >
@@ -276,49 +350,51 @@ class ClassView extends Component {
                       </Mutation>
                     </div>
                   )}
-                  <div>
-                    <Button
-                      appearance={type === "TEACHER" ? "danger" : "warning"}
-                      onClick={() =>
-                        this.setState({ isDeleteClassModalOpen: true })
-                      }
-                    >
-                      {type == "TEACHER"
-                        ? "Delete Class"
-                        : "Unenroll From Class"}
-                    </Button>
-                    <ModalTransition>
-                      {isDeleteClassModalOpen && (
-                        <Modal
-                          actions={[
-                            {
-                              text: "Close",
-                              onClick: () =>
-                                this.setState({
-                                  isDeleteClassModalOpen: false
-                                })
+                  {id && (
+                    <div>
+                      <Button
+                        appearance={type === "TEACHER" ? "danger" : "warning"}
+                        onClick={() =>
+                          this.setState({ isDeleteClassModalOpen: true })
+                        }
+                      >
+                        {type == "TEACHER"
+                          ? "Delete Class"
+                          : "Unenroll From Class"}
+                      </Button>
+                      <ModalTransition>
+                        {isDeleteClassModalOpen && (
+                          <Modal
+                            actions={[
+                              {
+                                text: "Close",
+                                onClick: () =>
+                                  this.setState({
+                                    isDeleteClassModalOpen: false
+                                  })
+                              }
+                            ]}
+                            onClose={() =>
+                              this.setState({
+                                isDeleteClassModalOpen: false
+                              })
                             }
-                          ]}
-                          onClose={() =>
-                            this.setState({
-                              isDeleteClassModalOpen: false
-                            })
-                          }
-                          heading={
-                            type == "TEACHER"
-                              ? "Delete Class"
-                              : "Unenroll From Class"
-                          }
-                        >
-                          {type === "TEACHER" ? (
-                            <DeleteClass id={id} />
-                          ) : (
-                            <Unenrol id={id} />
-                          )}
-                        </Modal>
-                      )}
-                    </ModalTransition>
-                  </div>
+                            heading={
+                              type == "TEACHER"
+                                ? "Delete Class"
+                                : "Unenroll From Class"
+                            }
+                          >
+                            {type === "TEACHER" ? (
+                              <DeleteClass id={id} />
+                            ) : (
+                              <Unenrol id={id} />
+                            )}
+                          </Modal>
+                        )}
+                      </ModalTransition>
+                    </div>
+                  )}
                 </div>
               </Fragment>
             ) : (

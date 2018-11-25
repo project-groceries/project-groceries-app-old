@@ -92,9 +92,6 @@ export const OVERVIEW_QUERY = gql`
     user {
       id
       type
-      orders {
-        id
-      }
     }
     classes {
       id
@@ -243,7 +240,7 @@ export const CLASS_VIEW_QUERY = gql`
 
 export const CLASS_VIEW_GRID_QUERY = gql`
   query classViewGridQuery(
-    $id: ID!
+    $ids: [ID!]
     $first: Int
     $skip: Int
     $filter: [String]
@@ -257,7 +254,7 @@ export const CLASS_VIEW_GRID_QUERY = gql`
       filter: $filter
       orderBy: $orderBy
       summary: $summary
-      classId: $id
+      classIDs: $ids
       filteredUsers: $filteredUsers
     ) {
       id
@@ -267,7 +264,9 @@ export const CLASS_VIEW_GRID_QUERY = gql`
         id
         name
       }
-      orders(where: { class: { id: $id }, madeBy: { id_in: $filteredUsers } }) {
+      orders(
+        where: { class: { id_in: $ids }, madeBy: { id_in: $filteredUsers } }
+      ) {
         id
         amount
         madeBy {
@@ -633,8 +632,8 @@ export const CREATE_RECIPE_QUERY = gql`
 `;
 
 export const CLEAR_ORDERS_MUTATION = gql`
-  mutation clearOrders($classId: ID!) {
-    clearOrders(classId: $classId) {
+  mutation clearOrders($classIDs: [ID!]) {
+    clearOrders(classIDs: $classIDs) {
       count
     }
   }

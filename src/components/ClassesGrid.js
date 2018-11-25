@@ -35,6 +35,10 @@ const classesGrid = css`
     transition: all 0.1s ease;
   }
 
+  & > a:first-child > div {
+    background-color: #81c770;
+  }
+
   & > a > div:hover {
     transform: scale(1.05);
   }
@@ -97,6 +101,17 @@ class ClassesGrid extends Component {
 
           return (
             <div className={`${classesGrid} ${noPrint}`}>
+              {classes.length > 1 && (
+                <Link to={"/classes/summary"}>
+                  <div>
+                    <h3>Summary</h3>
+                    <div>
+                      <small>All class orders, collated</small>
+                      <small>{classes.length} Classes</small>
+                    </div>
+                  </div>
+                </Link>
+              )}
               {classes.map(c => (
                 <Link to={`/classes/${c.id}`} key={c.id}>
                   <div>

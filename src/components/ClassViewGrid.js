@@ -110,16 +110,16 @@ class ClassViewGrid extends Component {
   }
 
   render() {
-    const { filter, filteredUsers, id, orderBy, isSummary } = this.props;
+    const { filter, filteredUsers, ids, orderBy, isSummary } = this.props;
     const { page, ingredientsPerPage } = this.state;
 
     return (
       <Query
         query={CLASS_VIEW_GRID_QUERY}
         variables={{
-          id,
-          first: ingredientsPerPage,
-          skip: (page - 1) * ingredientsPerPage,
+          ids,
+          first: ids.length === 1 ? ingredientsPerPage : null,
+          skip: ids.length == 1 ? (page - 1) * ingredientsPerPage : null,
           filter,
           filteredUsers,
           orderBy,
@@ -248,18 +248,20 @@ class ClassViewGrid extends Component {
                   );
                 })}
               </div>
-              <div
-                className={css`
-                  ${bar};
-                  height: 60px;
-                `}
-              >
-                <Pagination
-                  value={page}
-                  total={pageCount}
-                  onChange={page => this.setState({ page })}
-                />
-              </div>
+              {ids.length === 1 && (
+                <div
+                  className={css`
+                    ${bar};
+                    height: 60px;
+                  `}
+                >
+                  <Pagination
+                    value={page}
+                    total={pageCount}
+                    onChange={page => this.setState({ page })}
+                  />
+                </div>
+              )}
             </Fragment>
           ) : (
             <div

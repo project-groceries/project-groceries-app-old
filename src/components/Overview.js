@@ -23,8 +23,10 @@ class Overview extends Component {
 
           if (error) return <div>Error</div>;
 
-          const { user, classes } = data;
-          const { orders, type } = user;
+          const {
+            user: { type },
+            classes
+          } = data;
           const noClasses = !classes.length;
 
           return noClasses ? (

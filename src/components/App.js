@@ -265,6 +265,11 @@ class App extends Component {
                                 <Route exact path="/" component={Overview} />
                                 <Route
                                   exact
+                                  path="/classes/summary"
+                                  component={ClassView}
+                                />
+                                <Route
+                                  exact
                                   path="/classes/:id"
                                   component={ClassView}
                                 />
