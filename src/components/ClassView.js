@@ -63,6 +63,14 @@ class ClassView extends Component {
           & > div {
             overflow: auto;
           }
+
+          @media (max-width: 767px) {
+            grid-template-columns: 1fr;
+
+            & > div:last-child {
+              display: none;
+            }
+          }
         `}
       >
         <Query query={CLASS_VIEW_QUERY} pollInterval={5000}>
