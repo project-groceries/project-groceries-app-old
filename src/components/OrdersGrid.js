@@ -1,6 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { Query, Mutation } from "react-apollo";
-import { ORDERS_QUERY, UPDATE_ORDER_MUTATION } from "../queries";
+import {
+  ORDERS_QUERY,
+  UPDATE_ORDER_MUTATION,
+  DELETE_ORDERSESSION_MUTATION
+} from "../queries";
 import Spinner from "./Spinner";
 import Edit from "./svg/Edit";
 import { orderItem } from "../styles";
@@ -95,11 +99,36 @@ class OrdersGrid extends Component {
                         margin: 10px 20px;
                       `}
                     >
-                      <h2>
-                        {formatDistance(dateCreated, new Date(), {
-                          addSuffix: true
-                        })}
-                      </h2>
+                      <div
+                        className={css`
+                          display: flex;
+                          justify-content: space-between;
+                        `}
+                      >
+                        <h2>
+                          {formatDistance(dateCreated, new Date(), {
+                            addSuffix: true
+                          })}
+                        </h2>
+                        <Mutation
+                          mutation={DELETE_ORDERSESSION_MUTATION}
+                          variables={{ id }}
+                        >
+                          {(mutation, { loading, error }) => {
+                            if (error) return <div>Error</div>;
+
+                            return (
+                              <Button
+                                appearance="warning"
+                                isLoading={loading}
+                                onClick={mutation}
+                              >
+                                Delete
+                              </Button>
+                            );
+                          }}
+                        </Mutation>
+                      </div>
                       <h4>
                         Made by <span className={bold}>{madeBy.name}</span> in{" "}
                         <Link to={`/classes/${orderClass.id}`}>

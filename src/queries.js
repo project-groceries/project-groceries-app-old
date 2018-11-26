@@ -638,3 +638,11 @@ export const CLEAR_ORDERS_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_ORDERSESSION_MUTATION = gql`
+  mutation deleteOrderSession($id: ID!) {
+    deleteOrderSession(id: $id) {
+      id
+    }
+  }
+`;
