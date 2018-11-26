@@ -81,17 +81,17 @@ class ClassView extends Component {
             if (error) return <div>Error</div>;
 
             const {
-              classes,
+              allClasses,
               user: { type }
             } = data;
 
             // I don't think 'class' is a valid variable name ... so 'appropriateClass'
             const appropriateClass = id
-              ? classes.find(c => c.id == id)
+              ? allClasses.find(c => c.id == id)
               : {
                   name: "Summary",
                   users: uniqby(
-                    classes.reduce(
+                    allClasses.reduce(
                       (acc, cur) => [cur.teacher, ...cur.students, ...acc],
                       []
                     ),
@@ -121,7 +121,9 @@ class ClassView extends Component {
                     <h2>{appropriateClass.name}</h2>
                   </div>
                   <ClassViewGrid
-                    ids={id ? [id] : filteredClasses || classes.map(c => c.id)}
+                    ids={
+                      id ? [id] : filteredClasses || allClasses.map(c => c.id)
+                    }
                     orderBy={orderBy}
                     filter={filterValues}
                     filteredUsers={filteredUsers || users.map(user => user.id)}
@@ -271,11 +273,11 @@ class ClassView extends Component {
                       <CheckboxSelect
                         className="checkbox-select"
                         classNamePrefix="select"
-                        defaultValue={classes.map(c => ({
+                        defaultValue={allClasses.map(c => ({
                           label: c.name,
                           value: c.id
                         }))}
-                        options={classes.map(c => ({
+                        options={allClasses.map(c => ({
                           label: c.name,
                           value: c.id
                         }))}
@@ -345,7 +347,9 @@ class ClassView extends Component {
                               onClick={() =>
                                 mutation({
                                   variables: {
-                                    classIDs: id ? [id] : classes.map(c => c.id)
+                                    classIDs: id
+                                      ? [id]
+                                      : allClasses.map(c => c.id)
                                   }
                                 })
                               }
