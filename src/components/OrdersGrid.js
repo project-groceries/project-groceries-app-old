@@ -163,6 +163,36 @@ class OrdersGrid extends Component {
                       {orders.map(({ id, amount, ingredient }) => (
                         <div key={id} className={orderItem}>
                           <div>
+                            <small>{ingredient.name}</small>
+                            {editMap.get(id) ? (
+                              <small>
+                                <input
+                                  id="name"
+                                  placeholder={amount}
+                                  value={amountMap.get(id)}
+                                  onChange={e => {
+                                    const newAmount = e.target.value;
+
+                                    this.setState(prevState => {
+                                      prevState.amountMap.set(id, newAmount);
+
+                                      return {
+                                        amountMap: prevState.amountMap
+                                      };
+                                    });
+                                  }}
+                                  type="number"
+                                  required={true}
+                                />
+                                {ingredient.unit}
+                              </small>
+                            ) : (
+                              <small>
+                                {amount} {ingredient.unit}
+                              </small>
+                            )}
+                          </div>
+                          <div>
                             <div>
                               <Mutation
                                 mutation={DELETE_ORDER_MUTATION}
@@ -258,36 +288,6 @@ class OrdersGrid extends Component {
                                 </Button>
                               )}
                             </div>
-                          </div>
-                          <div>
-                            <small>{ingredient.name}</small>
-                            {editMap.get(id) ? (
-                              <small>
-                                <input
-                                  id="name"
-                                  placeholder={amount}
-                                  value={amountMap.get(id)}
-                                  onChange={e => {
-                                    const newAmount = e.target.value;
-
-                                    this.setState(prevState => {
-                                      prevState.amountMap.set(id, newAmount);
-
-                                      return {
-                                        amountMap: prevState.amountMap
-                                      };
-                                    });
-                                  }}
-                                  type="number"
-                                  required={true}
-                                />
-                                {ingredient.unit}
-                              </small>
-                            ) : (
-                              <small>
-                                {amount} {ingredient.unit}
-                              </small>
-                            )}
                           </div>
                         </div>
                       ))}
