@@ -15,7 +15,15 @@ import { formatDistance } from "date-fns";
 import { FlagContext } from "../flag-context";
 import { changesNotice } from "../utils";
 import Button from "@atlaskit/button";
-import { Delete, Edit, Close, Done } from "styled-icons/material";
+import {
+  Delete,
+  Edit,
+  Close,
+  Done,
+  AccessTime,
+  Person,
+  Class
+} from "styled-icons/material";
 import styled from "styled-components";
 
 const DeleteIcon = styled(Delete)`
@@ -29,6 +37,20 @@ const CloseIcon = styled(Close)`
 `;
 const DoneIcon = styled(Done)`
   width: 24px;
+`;
+const AccessTimeIcon = styled(AccessTime)`
+  width: 24px;
+  color: #6b778c;
+  margin: 0px 5px;
+`;
+const PersonIcon = styled(Person)`
+  width: 18px;
+  color: #6b778c;
+  margin: 0px 5px;
+`;
+const ClassIcon = styled(Class)`
+  width: 18px;
+  margin: 0px 5px;
 `;
 
 class OrdersGrid extends Component {
@@ -128,6 +150,7 @@ class OrdersGrid extends Component {
                           `}
                         >
                           <h2>
+                            <AccessTimeIcon />
                             {formatDistance(dateCreated, new Date(), {
                               addSuffix: true
                             })}
@@ -152,10 +175,15 @@ class OrdersGrid extends Component {
                           </Mutation>
                         </div>
                         <h4>
-                          {madeBy.name} -
+                          <PersonIcon /> {madeBy.name}
                           <Link to={`/classes/${orderClass.id}`}>
-                            <Button appearance="subtle-link">
-                              {orderClass.name}
+                            <Button
+                              appearance="subtle-link"
+                              className={css`
+                                margin-left: 10px;
+                              `}
+                            >
+                              <ClassIcon /> {orderClass.name}
                             </Button>
                           </Link>
                         </h4>
@@ -258,33 +286,34 @@ class OrdersGrid extends Component {
                                       </Mutation>
                                     )}
                                   </FlagContext.Consumer>
-                                  <Button appearance="subtle">
-                                    <CloseIcon
-                                      fill="red"
-                                      onClick={() =>
-                                        this.setState(prevState => {
-                                          prevState.editMap.set(id, false);
-                                          prevState.amountMap.delete(id);
-                                          return {
-                                            editMap: prevState.editMap
-                                          };
-                                        })
-                                      }
-                                    />
-                                  </Button>
-                                </Fragment>
-                              ) : (
-                                <Button appearance="subtle">
-                                  <EditIcon
+                                  <Button
+                                    appearance="subtle"
                                     onClick={() =>
                                       this.setState(prevState => {
-                                        prevState.editMap.set(id, true);
+                                        prevState.editMap.set(id, false);
+                                        prevState.amountMap.delete(id);
                                         return {
                                           editMap: prevState.editMap
                                         };
                                       })
                                     }
-                                  />
+                                  >
+                                    <CloseIcon fill="red" />
+                                  </Button>
+                                </Fragment>
+                              ) : (
+                                <Button
+                                  appearance="subtle"
+                                  onClick={() =>
+                                    this.setState(prevState => {
+                                      prevState.editMap.set(id, true);
+                                      return {
+                                        editMap: prevState.editMap
+                                      };
+                                    })
+                                  }
+                                >
+                                  <EditIcon />
                                 </Button>
                               )}
                             </div>

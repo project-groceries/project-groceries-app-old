@@ -10,11 +10,15 @@ import { noPrint } from "../styles";
 import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
 
 import styled from "styled-components";
-import { Add } from "styled-icons/material";
+import { Add, Class } from "styled-icons/material";
 
 const AddIcon = styled(Add)`
   height: 60px;
   fill: #d9d9d9;
+`;
+const ClassIcon = styled(Class)`
+  width: 24px;
+  margin: 0px 5px;
 `;
 
 const classesGrid = css`
@@ -120,7 +124,9 @@ class ClassesGrid extends Component {
               {classes.map(c => (
                 <Link to={`/classes/${c.id}`} key={c.id}>
                   <div>
-                    <h3>{c.name}</h3>
+                    <h3>
+                      <ClassIcon /> {c.name}
+                    </h3>
                     <div>
                       <small>{c.teacher.name}</small>
                       <small>{c.students.length} Students</small>
