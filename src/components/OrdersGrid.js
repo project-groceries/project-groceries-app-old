@@ -3,7 +3,8 @@ import { Query, Mutation } from "react-apollo";
 import {
   ORDERS_QUERY,
   UPDATE_ORDER_MUTATION,
-  DELETE_ORDERSESSION_MUTATION
+  DELETE_ORDERSESSION_MUTATION,
+  DELETE_ORDER_MUTATION
 } from "../queries";
 import Spinner from "./Spinner";
 import { orderItem } from "../styles";
@@ -163,9 +164,24 @@ class OrdersGrid extends Component {
                         <div key={id} className={orderItem}>
                           <div>
                             <div>
-                              <Button appearance="subtle">
-                                <DeleteIcon />
-                              </Button>
+                              <Mutation
+                                mutation={DELETE_ORDER_MUTATION}
+                                variables={{ id }}
+                              >
+                                {(mutation, { loading, error }) => {
+                                  if (error) return <div>Error</div>;
+
+                                  return (
+                                    <Button
+                                      appearance="subtle"
+                                      isLoading={loading}
+                                      onClick={mutation}
+                                    >
+                                      <DeleteIcon />
+                                    </Button>
+                                  );
+                                }}
+                              </Mutation>
                             </div>
                             <div>
                               {editMap.get(id) ? (

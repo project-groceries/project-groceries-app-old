@@ -646,3 +646,11 @@ export const DELETE_ORDERSESSION_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_ORDER_MUTATION = gql`
+  mutation deleteOrder($id: ID!) {
+    deleteOrder(id: $id) {
+      id
+    }
+  }
+`;
