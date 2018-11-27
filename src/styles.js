@@ -60,12 +60,21 @@ export const orderItem = css`
   height: 80px;
   margin: 20px 5px 0px 5px;
 
-  & div {
+  & > div {
     height: 40px;
     display: flex;
     // flex-direction: column;
     justify-content: space-around;
     align-items: center;
+  }
+
+  & > div:last-child {
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  &:hover > div:last-child {
+    opacity: 1;
   }
 
   & input {
