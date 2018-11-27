@@ -23,7 +23,6 @@ import Orders from "./Orders";
 import { Offline } from "react-detect-offline";
 import { circleIcon, noPrint } from "../styles";
 import Signup from "./Signup";
-import Power from "./svg/Power";
 
 import Tooltip from "@atlaskit/tooltip";
 import InlineDialog from "@atlaskit/inline-dialog";
@@ -31,6 +30,7 @@ import Flag, { FlagGroup } from "@atlaskit/flag";
 
 import styled from "styled-components";
 import { AddShoppingCart, Close, Home } from "styled-icons/material";
+import { SignOut } from "styled-icons/octicons";
 import OrderCarousel from "./OrderCarousel";
 import JoinSchool from "./JoinSchool";
 
@@ -49,20 +49,21 @@ const fabStyles = css`
   bottom: 20px;
   right: calc(20px + 60px + 20px + 20px);
 `;
-
 const WhiteAddShoppingCart = styled(AddShoppingCart)`
   color: white;
   width: 28px;
   height: 32px;
 `;
-
 const WhiteClose = styled(Close)`
   color: white;
   width: 28px;
   height: 32px;
 `;
-
 const BlackHome = styled(Home)`
+  color: black;
+  width: 24px;
+`;
+const BlackSignOut = styled(SignOut)`
   color: black;
   width: 24px;
 `;
@@ -242,7 +243,7 @@ class App extends Component {
                             left: 10px;
                           `}
                         >
-                          <Power />
+                          <BlackSignOut />
                         </div>
                       </Tooltip>
                     </div>

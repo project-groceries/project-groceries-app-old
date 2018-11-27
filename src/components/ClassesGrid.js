@@ -4,11 +4,18 @@ import { Link } from "react-router-dom";
 import { CLASSES_GRID_QUERY } from "../queries";
 import Spinner from "./Spinner";
 import { css } from "emotion";
-import Add from "./svg/Add";
 import CreateClass from "./CreateClass";
 import Enrol from "./Enrol";
 import { noPrint } from "../styles";
 import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
+
+import styled from "styled-components";
+import { Add } from "styled-icons/material";
+
+const AddIcon = styled(Add)`
+  height: 60px;
+  fill: #d9d9d9;
+`;
 
 const classesGrid = css`
   padding: 5px;
@@ -65,8 +72,6 @@ const classesGrid = css`
   }
 
   & svg {
-    height: 60px;
-    fill: #d9d9d9;
     transition: all 0.1s ease;
   }
 
@@ -124,7 +129,7 @@ class ClassesGrid extends Component {
                 </Link>
               ))}
               <span onClick={() => this.setState({ isOpen: true })}>
-                <Add />
+                <AddIcon />
               </span>
               <ModalTransition>
                 {isOpen && (

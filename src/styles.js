@@ -57,24 +57,28 @@ export const orderItem = css`
   background-color: #f1f1f1;
   box-shadow: rgba(0, 0, 0, 0.14) 0 2px 2px 0;
 
-  display: flex;
-  // flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  height: 100px;
+  height: 80px;
   margin: 20px 5px 0px 5px;
 
+  & div {
+    height: 40px;
+    display: flex;
+    // flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
   & input {
-    width: 40px;
+    width: 60px;
     margin: 5px;
   }
 
-  & > *:not(svg) {
+  & > div > *:not(svg) {
     flex: 1;
     text-align: center;
   }
 
-  & > svg {
+  & > div > svg {
     fill: #c9c9c9;
 
     margin: 5px;
@@ -86,7 +90,7 @@ export const orderItem = css`
     transition: all 0.1s ease;
   }
 
-  & > svg:hover {
+  & > div > svg:hover {
     cursor: pointer;
     // transform: scale(1.2);
   }

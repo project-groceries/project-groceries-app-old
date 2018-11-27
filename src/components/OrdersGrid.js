@@ -6,17 +6,29 @@ import {
   DELETE_ORDERSESSION_MUTATION
 } from "../queries";
 import Spinner from "./Spinner";
-import Edit from "./svg/Edit";
 import { orderItem } from "../styles";
 import { css } from "emotion";
-import Close from "./svg/Close";
-import Done from "./svg/Done";
 import UndrawNoData from "./svg/UndrawNoData";
 import { Link } from "react-router-dom";
 import { formatDistance } from "date-fns";
 import { FlagContext } from "../flag-context";
 import { changesNotice } from "../utils";
 import Button from "@atlaskit/button";
+import { Delete, Edit, Close, Done } from "styled-icons/material";
+import styled from "styled-components";
+
+const DeleteIcon = styled(Delete)`
+  width: 24px;
+`;
+const EditIcon = styled(Edit)`
+  width: 24px;
+`;
+const CloseIcon = styled(Close)`
+  width: 24px;
+`;
+const DoneIcon = styled(Done)`
+  width: 24px;
+`;
 
 class OrdersGrid extends Component {
   state = {
@@ -75,7 +87,7 @@ class OrdersGrid extends Component {
                   display: grid;
                   grid-gap: 20px;
                   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-                  grid-auto-rows: 100px;
+                  grid-auto-rows: 80px;
                   grid-auto-flow: dense;
 
                   // & > div {
@@ -105,7 +117,7 @@ class OrdersGrid extends Component {
                     >
                       <div
                         className={css`
-                          height: 80px;
+                          height: 60px;
                         `}
                       >
                         <div
@@ -149,93 +161,118 @@ class OrdersGrid extends Component {
                       </div>
                       {orders.map(({ id, amount, ingredient }) => (
                         <div key={id} className={orderItem}>
-                          <small>{ingredient.name}</small>
-                          {editMap.get(id) ? (
-                            <Fragment>
-                              <input
-                                id="name"
-                                placeholder={amount}
-                                value={amountMap.get(id)}
-                                onChange={e => {
-                                  const newAmount = e.target.value;
+                          <div>
+                            <div>
+                              <Button appearance="subtle">
+                                <DeleteIcon />
+                              </Button>
+                            </div>
+                            <div>
+                              {editMap.get(id) ? (
+                                <Fragment>
+                                  <FlagContext.Consumer>
+                                    {({ addFlag }) => (
+                                      <Mutation
+                                        mutation={UPDATE_ORDER_MUTATION}
+                                        onCompleted={() =>
+                                          this._editOrderSuccess(addFlag)
+                                        }
+                                        // update={this._editOrderSuccess}
+                                      >
+                                        {mutation => {
+                                          return (
+                                            <Button appearance="subtle">
+                                              <DoneIcon
+                                                fill="green"
+                                                onClick={() => {
+                                                  this.setState(prevState => {
+                                                    prevState.editMap.set(
+                                                      id,
+                                                      false
+                                                    );
+                                                    prevState.amountMap.delete(
+                                                      id
+                                                    );
+                                                    return {
+                                                      editMap: prevState.editMap
+                                                    };
+                                                  });
 
-                                  this.setState(prevState => {
-                                    prevState.amountMap.set(id, newAmount);
-
-                                    return {
-                                      amountMap: prevState.amountMap
-                                    };
-                                  });
-                                }}
-                                type="number"
-                                required={true}
-                              />
-                              <small> {ingredient.unit}</small>
-                              <FlagContext.Consumer>
-                                {({ addFlag }) => (
-                                  <Mutation
-                                    mutation={UPDATE_ORDER_MUTATION}
-                                    onCompleted={() =>
-                                      this._editOrderSuccess(addFlag)
+                                                  mutation({
+                                                    variables: {
+                                                      id,
+                                                      amount: amountMap.get(id)
+                                                    }
+                                                  });
+                                                }}
+                                              />
+                                            </Button>
+                                          );
+                                        }}
+                                      </Mutation>
+                                    )}
+                                  </FlagContext.Consumer>
+                                  <Button appearance="subtle">
+                                    <CloseIcon
+                                      fill="red"
+                                      onClick={() =>
+                                        this.setState(prevState => {
+                                          prevState.editMap.set(id, false);
+                                          prevState.amountMap.delete(id);
+                                          return {
+                                            editMap: prevState.editMap
+                                          };
+                                        })
+                                      }
+                                    />
+                                  </Button>
+                                </Fragment>
+                              ) : (
+                                <Button appearance="subtle">
+                                  <EditIcon
+                                    onClick={() =>
+                                      this.setState(prevState => {
+                                        prevState.editMap.set(id, true);
+                                        return {
+                                          editMap: prevState.editMap
+                                        };
+                                      })
                                     }
-                                    // update={this._editOrderSuccess}
-                                  >
-                                    {mutation => {
-                                      return (
-                                        <Done
-                                          fill="green"
-                                          onClick={() => {
-                                            this.setState(prevState => {
-                                              prevState.editMap.set(id, false);
-                                              prevState.amountMap.delete(id);
-                                              return {
-                                                editMap: prevState.editMap
-                                              };
-                                            });
+                                  />
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                          <div>
+                            <small>{ingredient.name}</small>
+                            {editMap.get(id) ? (
+                              <small>
+                                <input
+                                  id="name"
+                                  placeholder={amount}
+                                  value={amountMap.get(id)}
+                                  onChange={e => {
+                                    const newAmount = e.target.value;
 
-                                            mutation({
-                                              variables: {
-                                                id,
-                                                amount: amountMap.get(id)
-                                              }
-                                            });
-                                          }}
-                                        />
-                                      );
-                                    }}
-                                  </Mutation>
-                                )}
-                              </FlagContext.Consumer>
-                              <Close
-                                fill="red"
-                                onClick={() =>
-                                  this.setState(prevState => {
-                                    prevState.editMap.set(id, false);
-                                    prevState.amountMap.delete(id);
-                                    return {
-                                      editMap: prevState.editMap
-                                    };
-                                  })
-                                }
-                              />
-                            </Fragment>
-                          ) : (
-                            <Fragment>
+                                    this.setState(prevState => {
+                                      prevState.amountMap.set(id, newAmount);
+
+                                      return {
+                                        amountMap: prevState.amountMap
+                                      };
+                                    });
+                                  }}
+                                  type="number"
+                                  required={true}
+                                />
+                                {ingredient.unit}
+                              </small>
+                            ) : (
                               <small>
                                 {amount} {ingredient.unit}
                               </small>
-                              <Edit
-                                onClick={() =>
-                                  this.setState(prevState => {
-                                    prevState.editMap.set(id, true);
-                                    return {
-                                      editMap: prevState.editMap
-                                    };
-                                  })
-                                }
-                              />
-                            </Fragment>
-                          )}
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
