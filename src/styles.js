@@ -61,8 +61,8 @@ export const orderItem = css`
   // flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  height: 60px;
-  margin: 20px 5px;
+  height: 100px;
+  margin: 20px 5px 0px 5px;
 
   & input {
     width: 40px;

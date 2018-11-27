@@ -18,10 +18,6 @@ import { FlagContext } from "../flag-context";
 import { changesNotice } from "../utils";
 import Button from "@atlaskit/button";
 
-const bold = css`
-  font-weight: bolder;
-`;
-
 class OrdersGrid extends Component {
   state = {
     editMap: new Map(),
@@ -54,38 +50,44 @@ class OrdersGrid extends Component {
               )}
               <div
                 className={css`
-                  // column-count: 3;
-                  // column-gap: 1em;
+                  // // column-count: 3;
+                  // // column-gap: 1em;
 
-                  margin: 1.5em auto;
-                  // max-width: 768px;
-                  column-gap: 1.5em;
+                  // margin: 1.5em auto;
+                  // // max-width: 768px;
+                  // column-gap: 1.5em;
 
-                  /* Masonry on large screens */
-                  @media only screen and (min-width: 1024px) {
-                    column-count: 3;
-                  }
+                  // /* Masonry on large screens */
+                  // @media only screen and (min-width: 1024px) {
+                  //   column-count: 3;
+                  // }
 
-                  /* Masonry on medium-sized screens */
-                  @media only screen and (max-width: 1023px) and (min-width: 768px) {
-                    column-count: 2;
-                  }
+                  // /* Masonry on medium-sized screens */
+                  // @media only screen and (max-width: 1023px) and (min-width: 768px) {
+                  //   column-count: 2;
+                  // }
 
-                  /* Masonry on small screens */
-                  @media only screen and (max-width: 767px) and (min-width: 540px) {
-                    column-count: 1;
-                  }
+                  // /* Masonry on small screens */
+                  // @media only screen and (max-width: 767px) and (min-width: 540px) {
+                  //   column-count: 1;
+                  // }
 
-                  & > div {
-                    background-color: #eee;
-                    display: inline-block;
-                    margin: 0 0 1em;
-                    width: 100%;
+                  display: grid;
+                  grid-gap: 20px;
+                  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+                  grid-auto-rows: 100px;
+                  grid-auto-flow: dense;
 
-                    background: #fff;
-                    padding: 1em;
-                    margin: 0 0 1.5em;
-                  }
+                  // & > div {
+                  //   background-color: #eee;
+                  //   display: inline-block;
+                  //   margin: 0 0 1em;
+                  //   width: 100%;
+
+                  //   background: #fff;
+                  //   padding: 1em;
+                  //   margin: 0 0 1.5em;
+                  // }
                 `}
               >
                 {this._groupByOrderSession(orders).map(
@@ -93,51 +95,58 @@ class OrdersGrid extends Component {
                     <div
                       key={id}
                       className={css`
-                        border-left: 5px solid rgb(201, 201, 201);
+                        // border-left: 5px solid rgb(201, 201, 201);
                         padding: 10px;
-                        // width: 450px;
-                        margin: 10px 20px;
+                        // width: 350px;
+                        // margin: 5px;
+                        grid-row: span ${orders.length + 1};
+                        box-shadow: rgba(0, 0, 0, 0.14) 0px 0px 2px 0;
                       `}
                     >
                       <div
                         className={css`
-                          display: flex;
-                          justify-content: space-between;
+                          height: 80px;
                         `}
                       >
-                        <h2>
-                          {formatDistance(dateCreated, new Date(), {
-                            addSuffix: true
-                          })}
-                        </h2>
-                        <Mutation
-                          mutation={DELETE_ORDERSESSION_MUTATION}
-                          variables={{ id }}
+                        <div
+                          className={css`
+                            display: flex;
+                            justify-content: space-between;
+                          `}
                         >
-                          {(mutation, { loading, error }) => {
-                            if (error) return <div>Error</div>;
+                          <h2>
+                            {formatDistance(dateCreated, new Date(), {
+                              addSuffix: true
+                            })}
+                          </h2>
+                          <Mutation
+                            mutation={DELETE_ORDERSESSION_MUTATION}
+                            variables={{ id }}
+                          >
+                            {(mutation, { loading, error }) => {
+                              if (error) return <div>Error</div>;
 
-                            return (
-                              <Button
-                                appearance="warning"
-                                isLoading={loading}
-                                onClick={mutation}
-                              >
-                                Delete
-                              </Button>
-                            );
-                          }}
-                        </Mutation>
+                              return (
+                                <Button
+                                  appearance="warning"
+                                  isLoading={loading}
+                                  onClick={mutation}
+                                >
+                                  Delete
+                                </Button>
+                              );
+                            }}
+                          </Mutation>
+                        </div>
+                        <h4>
+                          {madeBy.name} -
+                          <Link to={`/classes/${orderClass.id}`}>
+                            <Button appearance="subtle-link">
+                              {orderClass.name}
+                            </Button>
+                          </Link>
+                        </h4>
                       </div>
-                      <h4>
-                        Made by <span className={bold}>{madeBy.name}</span> in{" "}
-                        <Link to={`/classes/${orderClass.id}`}>
-                          <Button appearance="subtle-link">
-                            {orderClass.name}
-                          </Button>
-                        </Link>
-                        {/* <span className={bold}>{orderClass.name}</span> */}
-                      </h4>
                       {orders.map(({ id, amount, ingredient }) => (
                         <div key={id} className={orderItem}>
                           <small>{ingredient.name}</small>
