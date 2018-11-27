@@ -4,9 +4,6 @@ import React, { Component, Fragment } from "react";
 import logo from "../logo.svg";
 import "@material/fab/dist/mdc.fab.css";
 // import "../styles/App.css"
-// import LinkList from "./LinkList";
-// import CreateLink from "./CreateLink";
-// import Header from "./Header";
 import { Switch, Route, Redirect, Link } from "react-router-dom";
 import LogRocket from "logrocket";
 import Login from "./Login";
