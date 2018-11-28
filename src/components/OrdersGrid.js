@@ -131,7 +131,7 @@ class OrdersGrid extends Component {
                       key={id}
                       className={css`
                         // border-left: 5px solid rgb(201, 201, 201);
-                        padding: 10px;
+                        padding: 5px 10px;
                         // width: 350px;
                         // margin: 5px;
                         grid-row: span ${orders.length + 1};
@@ -140,7 +140,7 @@ class OrdersGrid extends Component {
                     >
                       <div
                         className={css`
-                          height: 60px;
+                          height: 70px;
                         `}
                       >
                         <div

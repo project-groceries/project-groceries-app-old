@@ -60,6 +60,18 @@ export const orderItem = css`
   height: 80px;
   margin: 20px 5px 0px 5px;
 
+  &:nth-child(2) {
+    margin: 10px 5px 0px 5px;
+  }
+
+  &:last-child {
+    margin: 20px 5px 10px 5px;
+  }
+
+  &:nth-child(2):last-child {
+    margin: 10px 5px;
+  }
+
   & > div {
     height: 40px;
     display: flex;
