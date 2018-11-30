@@ -58,6 +58,10 @@ const classViewGrid = css`
         overflow: hidden;
         text-align: center;
       }
+
+      @media print {
+        page-break-inside: avoid;
+      }
     }
 
     & > div:first-child:hover {

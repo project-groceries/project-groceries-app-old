@@ -41,6 +41,7 @@ import Warning from "@atlaskit/icon/glyph/warning";
 import { Fab } from "@rmwc/fab";
 
 const fabStyles = css`
+  ${noPrint};
   background: #83c674;
   position: fixed;
   bottom: 20px;
