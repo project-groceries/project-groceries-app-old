@@ -564,42 +564,43 @@ export const UPDATE_ORDER_MUTATION = gql`
   }
 `;
 
-export const ORDER_RECIPE_QUERY = gql`
-  query orderRecipeQuery {
-    user {
+export const ORDER_CAROUSEL_QUERY = gql`
+  query orderCarouselQuery {
+    classes {
       id
-      school {
+      name
+    }
+    recipes {
+      id
+      name
+      ingredients {
         id
-        recipes {
+        amount
+        ingredient {
           id
           name
-          ingredients {
-            id
-            amount
-            ingredient {
-              id
-              name
-              unit
-            }
-          }
         }
       }
     }
   }
 `;
 
-export const ORDER_CAROUSEL_QUERY = gql`
-  query orderCarouselQuery {
+export const ORDER_INGREDIENT_QUERY = gql`
+  query orderIngredientQuery {
     user {
       id
-    }
-    classes {
-      id
-      name
     }
     ingredients {
       id
       name
+    }
+  }
+`;
+
+export const ORDER_RECIPE_QUERY = gql`
+  query orderRecipeQuery {
+    user {
+      id
     }
     recipes {
       id
