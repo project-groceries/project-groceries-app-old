@@ -85,44 +85,11 @@ class OrdersGrid extends Component {
               )}
               <div
                 className={css`
-                  // // column-count: 3;
-                  // // column-gap: 1em;
-
-                  // margin: 1.5em auto;
-                  // // max-width: 768px;
-                  // column-gap: 1.5em;
-
-                  // /* Masonry on large screens */
-                  // @media only screen and (min-width: 1024px) {
-                  //   column-count: 3;
-                  // }
-
-                  // /* Masonry on medium-sized screens */
-                  // @media only screen and (max-width: 1023px) and (min-width: 768px) {
-                  //   column-count: 2;
-                  // }
-
-                  // /* Masonry on small screens */
-                  // @media only screen and (max-width: 767px) and (min-width: 540px) {
-                  //   column-count: 1;
-                  // }
-
                   display: grid;
                   grid-gap: 20px;
                   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
                   grid-auto-rows: 80px;
                   grid-auto-flow: dense;
-
-                  // & > div {
-                  //   background-color: #eee;
-                  //   display: inline-block;
-                  //   margin: 0 0 1em;
-                  //   width: 100%;
-
-                  //   background: #fff;
-                  //   padding: 1em;
-                  //   margin: 0 0 1.5em;
-                  // }
                 `}
               >
                 {this._groupByOrderSession(orders).map(

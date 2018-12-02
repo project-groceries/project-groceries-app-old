@@ -11,6 +11,7 @@ import UndrawChef from "./svg/UndrawChef";
 import CreateRecipe from "./CreateRecipe";
 import OrderIngredient from "./OrderIngredient";
 import OrderRecipe from "./OrderRecipe";
+import CreateIngredients from "./CreateIngredients";
 
 class OrderCarousel extends Component {
   constructor(props) {
@@ -19,14 +20,20 @@ class OrderCarousel extends Component {
     this.state = {
       isRecipe: true,
       currentClass: null,
-      isCreateRecipeModalOpen: false
+      isCreateRecipeModalOpen: false,
+      isCreateIngredientModalOpen: false
     };
   }
 
   render() {
     const { onCompleted } = this.props;
 
-    const { isRecipe, currentClass, isCreateRecipeModalOpen } = this.state;
+    const {
+      isRecipe,
+      currentClass,
+      isCreateRecipeModalOpen,
+      isCreateIngredientModalOpen
+    } = this.state;
 
     return (
       <div
@@ -105,6 +112,35 @@ class OrderCarousel extends Component {
               return (
                 <Fragment>
                   <div>
+                    <ModalTransition>
+                      {isCreateIngredientModalOpen && (
+                        <Modal
+                          actions={[
+                            {
+                              text: "Close",
+                              onClick: () =>
+                                this.setState({
+                                  isCreateIngredientModalOpen: false
+                                })
+                            }
+                          ]}
+                          onClose={() =>
+                            this.setState({
+                              isCreateIngredientModalOpen: false
+                            })
+                          }
+                          heading="Create Ingredients"
+                        >
+                          <CreateIngredients
+                            onCompleted={() =>
+                              this.setState({
+                                isCreateIngredientModalOpen: false
+                              })
+                            }
+                          />
+                        </Modal>
+                      )}
+                    </ModalTransition>
                     <RadioSelect
                       className="radio-select"
                       classNamePrefix="react-select"
@@ -159,7 +195,7 @@ class OrderCarousel extends Component {
                               isCreateRecipeModalOpen: false
                             })
                           }
-                          heading="Create Recipe"
+                          heading="Create A Recipe"
                         >
                           <CreateRecipe
                             onCompleted={() =>
