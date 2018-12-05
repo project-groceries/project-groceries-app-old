@@ -171,3 +171,57 @@ export const fullCheck = css`
     }
   }
 `;
+
+export const createIngredientsGrid = css`
+  // width: 100%;
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  // grid-auto-flow: column;
+  // grid-auto-columns: 80%;
+
+  transition: all 0.3s ease;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.14) 0px 0px 2px 0;
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 10px;
+
+      & > div,
+      & > input {
+        width: 200px;
+      }
+    }
+  }
+
+  & > div[data-correct="true"] {
+    box-shadow: rgba(0, 250, 0, 1) 0px 0px 2px 0;
+  }
+
+  & > div:last-child {
+    transition: all 0.1s ease;
+  }
+
+  & > div:last-child:hover {
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.14) 0px 0px 10px 0;
+  }
+
+  & svg {
+    transition: all 0.1s ease;
+  }
+
+  & div:last-child:hover svg {
+    transform: scale(1.4);
+  }
+`;

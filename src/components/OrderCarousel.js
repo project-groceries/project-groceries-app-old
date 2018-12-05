@@ -9,9 +9,9 @@ import Button from "@atlaskit/button";
 import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
 import UndrawChef from "./svg/UndrawChef";
 import CreateRecipe from "./CreateRecipe";
+import CreateIngredients from "./CreateIngredients";
 import OrderIngredient from "./OrderIngredient";
 import OrderRecipe from "./OrderRecipe";
-import CreateIngredients from "./CreateIngredients";
 
 class OrderCarousel extends Component {
   constructor(props) {

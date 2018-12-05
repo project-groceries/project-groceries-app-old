@@ -1,46 +1,125 @@
 import React, { Component } from "react";
 import CreateIngredientsForm from "./CreateIngredientsForm";
-import { css } from "emotion";
+import { createIngredientsGrid } from "../styles";
+import Button from "@atlaskit/button";
+
+import styled from "styled-components";
+import { Add } from "styled-icons/material";
+import { Mutation } from "react-apollo";
+import { CREATE_INGREDIENTS_MUTATION } from "../queries";
+
+const AddIcon = styled(Add)`
+  height: 60px;
+  fill: #d9d9d9;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  margin-top: 30px;
+`;
 
 class CreateIngredients extends Component {
-  // state = {
-  //   ingredients: [{
-  //     Name: ""
-  //   }]
-  // };
+  state = {
+    ingredients: [
+      {
+        name: "",
+        measurement: "cjos1hvuf3bog0a16wrjjbshx"
+      }
+    ]
+  };
 
   render() {
+    const { onCompleted } = this.props;
+    const { ingredients } = this.state;
+
     return (
       <div>
-        <div
-          className={css`
-            // width: 100%;
-            display: grid;
-            grid-gap: 20px;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            // grid-auto-flow: column;
-            // grid-auto-columns: 80%;
-
-            transition: all 0.3s ease;
-          `}
-        >
-          <CreateIngredientsForm />
-          <CreateIngredientsForm />
-          <CreateIngredientsForm />
-          <CreateIngredientsForm />
-          <CreateIngredientsForm />
-          <CreateIngredientsForm />
-          <CreateIngredientsForm />
-          <CreateIngredientsForm />
-          <CreateIngredientsForm />
-          <CreateIngredientsForm />
-          <CreateIngredientsForm />
-          <CreateIngredientsForm />
+        <div className={createIngredientsGrid}>
+          {ingredients.map((ingredient, index) => (
+            <CreateIngredientsForm
+              key={index}
+              index={index}
+              ingredient={ingredient}
+              updateValue={this.updateValue}
+              setMeasurement={this.setMeasurement}
+            />
+          ))}
+          <div onClick={this.addIngredient}>
+            <AddIcon />
+          </div>
         </div>
-        <small>yolo</small>
+        <ButtonContainer>
+          <Mutation
+            mutation={CREATE_INGREDIENTS_MUTATION}
+            onCompleted={() => {
+              if (onCompleted) onCompleted();
+            }}
+          >
+            {(mutation, { loading, error }) => {
+              if (error) return <div>Error</div>;
+
+              return (
+                <Button
+                  appearance="primary"
+                  isLoading={loading}
+                  onClick={() => {
+                    const properIngredients = ingredients.map(ingredient => ({
+                      name: ingredient.name,
+                      measurement: { connect: { id: ingredient.measurement } }
+                    }));
+
+                    mutation({
+                      variables: { ingredients: properIngredients }
+                    });
+                  }}
+                >
+                  Create Ingredients
+                </Button>
+              );
+            }}
+          </Mutation>
+        </ButtonContainer>
       </div>
     );
   }
+
+  updateValue = event => {
+    const {
+      value,
+      dataset: { index, name }
+    } = event.target;
+
+    this.setState(prevState => {
+      const { ingredients } = prevState;
+      ingredients[index][name] = value;
+      // this.setState({ name: e.target.value })
+
+      return prevState;
+    });
+  };
+
+  setMeasurement = (index, value) => {
+    this.setState(prevState => {
+      const { ingredients } = prevState;
+      ingredients[index].measurement = value;
+
+      return prevState;
+    });
+  };
+
+  addIngredient = () => {
+    this.setState(prevState => {
+      prevState.ingredients.push({
+        name: "",
+        measurement: "cjos1hvuf3bog0a16wrjjbshx"
+      });
+
+      return prevState;
+    });
+  };
 }
 
 export default CreateIngredients;

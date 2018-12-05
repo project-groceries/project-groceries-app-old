@@ -312,26 +312,36 @@ export const CREATE_INGREDIENTS_QUERY = gql`
   }
 `;
 
+// export const CREATE_INGREDIENTS_MUTATION = gql`
+//   mutation createIngredientsMutation(
+//     $schoolId: String!
+//     $ingredients: [IngredientCreateWithoutSchoolInput!]!
+//   ) {
+//     createIngredients(schoolId: $schoolId, ingredients: $ingredients) {
+//       id
+//       name
+//       ingredients {
+//         id
+//         name
+//         unit
+//         tags {
+//           id
+//           name
+//         }
+//         orders {
+//           id
+//         }
+//       }
+//     }
+//   }
+// `;
+
 export const CREATE_INGREDIENTS_MUTATION = gql`
   mutation createIngredientsMutation(
-    $schoolId: String!
     $ingredients: [IngredientCreateWithoutSchoolInput!]!
   ) {
-    createIngredients(schoolId: $schoolId, ingredients: $ingredients) {
+    createIngredients(ingredients: $ingredients) {
       id
-      name
-      ingredients {
-        id
-        name
-        unit
-        tags {
-          id
-          name
-        }
-        orders {
-          id
-        }
-      }
     }
   }
 `;
