@@ -197,6 +197,7 @@ class ClassView extends Component {
                                 summaryDialogOpen: !prevProps.summaryDialogOpen
                               }))
                             }
+                            appearance="help"
                           >
                             ?
                           </Button>
@@ -263,6 +264,7 @@ class ClassView extends Component {
                                 filterClassDialogOpen: !prevProps.filterClassDialogOpen
                               }))
                             }
+                            appearance="help"
                           >
                             ?
                           </Button>
@@ -279,7 +281,7 @@ class ClassView extends Component {
                           label: c.name,
                           value: c.id
                         }))}
-                        placeholder="Choose a City"
+                        placeholder="Choose a Class"
                         onChange={classes =>
                           this.setState({
                             filteredClasses: classes.map(c => c.value)
@@ -309,6 +311,7 @@ class ClassView extends Component {
                               filterDialogOpen: !prevProps.filterDialogOpen
                             }))
                           }
+                          appearance="help"
                         >
                           ?
                         </Button>
