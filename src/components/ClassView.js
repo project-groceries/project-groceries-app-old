@@ -219,24 +219,22 @@ class ClassView extends Component {
                       className="radio-select"
                       classNamePrefix="react-select"
                       defaultValue={{
-                        label: "Newest (ascending)",
+                        label: "Newest",
                         value: "createdAt_DESC"
                       }}
                       options={[
                         {
-                          label: "Alphabetical (ascending)",
+                          label: "Newest",
+                          value: "createdAt_DESC"
+                        },
+                        { label: "Oldest", value: "createdAt_ASC" },
+                        {
+                          label: "Alphabetical",
                           value: "name_ASC"
                         },
                         {
                           label: "Alphabetical (descending)",
                           value: "name_DESC"
-                        },
-                        { label: "Unit (ascending)", value: "unit_ASC" },
-                        { label: "Unit (descending)", value: "unit_DESC" },
-                        { label: "Oldest (ascending)", value: "createdAt_ASC" },
-                        {
-                          label: "Newest (descending)",
-                          value: "createdAt_DESC"
                         }
                       ]}
                       placeholder="Sort by..."
