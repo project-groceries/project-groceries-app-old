@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { RadioSelect } from "@atlaskit/select";
 import styled from "styled-components";
-import { X } from "styled-icons/feather";
+import { Close } from "styled-icons/material";
 import Button from "@atlaskit/button";
 
-const XIcon = styled(X)`
+const CloseIcon = styled(Close)`
   width: 24px;
 `;
 
@@ -35,7 +35,7 @@ class CreateIngredients extends Component {
               spacing="compact"
               onClick={() => removeIngredient(index)}
             >
-              <XIcon />
+              <CloseIcon />
             </Button>
           </span>
         )}
