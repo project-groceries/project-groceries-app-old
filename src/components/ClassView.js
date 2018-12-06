@@ -4,7 +4,7 @@ import { css } from "emotion";
 import { CLASS_VIEW_QUERY, CLEAR_ORDERS_MUTATION } from "../queries";
 import ClassViewGrid from "./ClassViewGrid";
 import Spinner from "./Spinner";
-import { fullPage, bar, noPrint } from "../styles";
+import { fullPage, noPrint } from "../styles";
 import UndrawFileSearching from "./svg/UndrawFileSearching";
 import Button from "@atlaskit/button";
 import { CheckboxSelect, RadioSelect } from "@atlaskit/select";
@@ -110,7 +110,11 @@ class ClassView extends Component {
                 <div>
                   <div
                     className={css`
-                      ${bar};
+                      display: flex;
+                      justify-content: space-around;
+                      align-items: center;
+                      height: 40px;
+
                       background-color: white;
                       position: sticky;
                       top: 0;

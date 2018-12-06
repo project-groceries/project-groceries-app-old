@@ -23,13 +23,6 @@ export const loaderContainer = css`
   align-items: center;
 `;
 
-export const bar = css`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 40px;
-`;
-
 export const circleIcon = css`
   height: 40px;
   width: 40px;

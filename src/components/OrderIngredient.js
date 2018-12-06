@@ -30,8 +30,7 @@ const OrderItem = styled.div`
     top: -8px;
     left: -8px;
     background-color: orange;
-    border-radius: 50%;
-    padding: 5px;
+    border-radius: 5px;
 
     transition: all 0.3s ease;
 

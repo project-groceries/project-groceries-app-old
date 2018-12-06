@@ -1,37 +1,18 @@
 import React, { Component, Fragment } from "react";
 import { Query } from "react-apollo";
-import { css } from "emotion";
 import Pagination from "@atlaskit/pagination";
 import { CLASS_VIEW_GRID_QUERY } from "../queries";
-// import OGSpinner from "./Spinner";
-import { bar } from "../styles";
 import Spinner from "@atlaskit/spinner";
 import UndrawNoData from "./svg/UndrawNoData";
+import styled from "styled-components";
 
-const classViewGrid = css`
+const ClassViewGridContainer = styled.div`
   display: grid;
-  grid-template-columns: 300px 300px;
-  grid-auto-rows: 80px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 20px;
-  max-width: 1000px;
-  width: fit-content;
-  margin: 10px auto;
+  margin: 10px 30px;
 
   min-height: calc(100vh - 120px);
-
-  // position: relative;
-
-  @media (max-width: 1000px) {
-    grid-template-columns: 300px;
-  }
-
-  @media (min-width: 1300px) {
-    grid-template-columns: 300px 300px 300px;
-  }
-
-  @media print {
-    grid-template-columns: 300px 300px;
-  }
 
   & > div {
     background-color: #f1f1f1;
@@ -45,13 +26,8 @@ const classViewGrid = css`
 
     & > div:first-child {
       display: flex;
-      // flex-direction: column;
       justify-content: space-around;
       align-items: center;
-
-      position: sticky;
-      top: 0;
-      background-color: #f1f1f1;
 
       h4 {
         max-width: 70%;
@@ -64,18 +40,9 @@ const classViewGrid = css`
       }
     }
 
-    & > div:first-child:hover {
-      cursor: pointer;
-    }
-
     & > div:nth-child(2) {
       display: flex;
-      // justify-content:
       align-items: center;
-
-      position: sticky;
-      top: 50px;
-      background-color: #f1f1f1;
 
       & > small {
         padding: 2px 5px;
@@ -86,14 +53,34 @@ const classViewGrid = css`
       }
     }
   }
+`;
 
-  & > div.active {
-    overflow: auto;
-  }
+const MainSpinner = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
 
-  & > div[data-active="true"] {
-    grid-row-end: span 3;
-  }
+const ClassViewGridSpinner = styled.span`
+  position: fixed;
+  top: 60px;
+  left: 70px;
+`;
+
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 60px;
+`;
+
+const NoIngredientsContainer = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 class ClassViewGrid extends Component {
@@ -135,16 +122,9 @@ class ClassViewGrid extends Component {
           const hasData = data ? Object.keys(data).length === 2 : undefined;
           if (!hasData && loading)
             return (
-              <div
-                className={css`
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  height: 100%;
-                `}
-              >
+              <MainSpinner>
                 <Spinner size="xlarge" />
-              </div>
+              </MainSpinner>
             );
 
           if (error) return <div>Error</div>;
@@ -160,49 +140,19 @@ class ClassViewGrid extends Component {
 
           return ingredients.length ? (
             <Fragment>
-              <div className={classViewGrid}>
+              <ClassViewGridContainer>
                 {loading && (
-                  <span
-                    className={css`
-                      position: fixed;
-                      top: 60px;
-                      left: 70px;
-                    `}
-                  >
+                  <ClassViewGridSpinner>
                     <Spinner size="large" />
-                  </span>
+                  </ClassViewGridSpinner>
                 )}
                 {ingredients.map(ingredient => {
                   return (
-                    <div
-                      key={ingredient.id}
-                      // data-active={activeIngredients.get(ingredient.id)}
-                      // className={activeIngredients.get(ingredient.id) ? "active" : ""}
-                    >
-                      <div
-                        onClick={e => {
-                          e.preventDefault();
-
-                          // if (activeIngredients.get(ingredient.id)) {
-                          //   this.setState(prevState => {
-                          //     prevState.activeIngredients.set(ingredient.id, false);
-                          //     return {
-                          //       activeIngredient: prevState.activeIngredients
-                          //     };
-                          //   });
-                          // } else {
-                          //   this.setState(prevState => {
-                          //     prevState.activeIngredients.set(ingredient.id, true);
-                          //     return {
-                          //       activeIngredient: prevState.activeIngredients
-                          //     };
-                          //   });
-                          // }
-                        }}
-                      >
-                        {ingredient.name.length > 40 ? (
+                    <div key={ingredient.id}>
+                      <div>
+                        {ingredient.name.length > 50 ? (
                           <h4 title={ingredient.name}>
-                            {ingredient.name.substring(0, 40)}
+                            {ingredient.name.substring(0, 50)}
                             ...
                           </h4>
                         ) : (
@@ -221,62 +171,22 @@ class ClassViewGrid extends Component {
                           <small key={tag.id}>{tag.name}</small>
                         ))}
                       </div>
-                      <div
-                        className={css`
-                          display: flex;
-                          flex-direction: column;
-
-                          & > div {
-                            display: flex;
-                            justify-content: space-around;
-                            align-items: center;
-                            background-color: white;
-                            margin: 5px;
-                            padding: 5px;
-                            box-shadow: 0px 0px 2px 0px #b9b9b9;
-                          }
-                        `}
-                      >
-                        {ingredient.orders
-                          // .filter(order => order.class.id === id)
-                          .map(order => (
-                            <div key={order.id}>
-                              <p>{order.madeBy.name}</p>
-                              <p>
-                                {order.amount} {ingredient.unit}
-                              </p>
-                            </div>
-                          ))}
-                      </div>
                     </div>
                   );
                 })}
-              </div>
+              </ClassViewGridContainer>
               {ids.length === 1 && (
-                <div
-                  className={css`
-                    ${bar};
-                    height: 60px;
-                  `}
-                >
+                <PaginationContainer>
                   <Pagination
                     value={page}
                     total={pageCount}
                     onChange={page => this.setState({ page })}
                   />
-                </div>
+                </PaginationContainer>
               )}
             </Fragment>
           ) : (
-            <div
-              className={css`
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-              `}
-            >
+            <NoIngredientsContainer>
               <UndrawNoData height="200px" />
               <h3>No Ingredients match the criteria</h3>
               {isSummary && (
@@ -285,7 +195,7 @@ class ClassViewGrid extends Component {
                   yet
                 </small>
               )}
-            </div>
+            </NoIngredientsContainer>
           );
         }}
       </Query>
