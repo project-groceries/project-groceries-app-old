@@ -45,6 +45,8 @@ class CreateIngredients extends Component {
               ingredient={ingredient}
               updateValue={this.updateValue}
               setMeasurement={this.setMeasurement}
+              onlyIngredient={ingredients.length === 1}
+              removeIngredient={this.removeIngredient}
             />
           ))}
           <div onClick={this.addIngredient}>
@@ -66,10 +68,12 @@ class CreateIngredients extends Component {
                   appearance="primary"
                   isLoading={loading}
                   onClick={() => {
-                    const properIngredients = ingredients.map(ingredient => ({
-                      name: ingredient.name,
-                      measurement: { connect: { id: ingredient.measurement } }
-                    }));
+                    const properIngredients = ingredients
+                      .filter(i => i.name.length > 0)
+                      .map(ingredient => ({
+                        name: ingredient.name,
+                        measurement: { connect: { id: ingredient.measurement } }
+                      }));
 
                     mutation({
                       variables: { ingredients: properIngredients }
@@ -117,6 +121,13 @@ class CreateIngredients extends Component {
         measurement: "cjos1hvuf3bog0a16wrjjbshx"
       });
 
+      return prevState;
+    });
+  };
+
+  removeIngredient = index => {
+    this.setState(prevState => {
+      prevState.ingredients.splice(index, 1);
       return prevState;
     });
   };

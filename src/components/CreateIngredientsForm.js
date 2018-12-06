@@ -1,5 +1,12 @@
 import React, { Component } from "react";
 import { RadioSelect } from "@atlaskit/select";
+import styled from "styled-components";
+import { X } from "styled-icons/feather";
+import Button from "@atlaskit/button";
+
+const XIcon = styled(X)`
+  width: 24px;
+`;
 
 class CreateIngredients extends Component {
   state = {
@@ -10,18 +17,34 @@ class CreateIngredients extends Component {
   };
 
   render() {
-    const { index, ingredient, updateValue, setMeasurement } = this.props;
+    const {
+      index,
+      ingredient,
+      updateValue,
+      setMeasurement,
+      onlyIngredient,
+      removeIngredient
+    } = this.props;
 
     return (
       <div data-correct={Boolean(ingredient.name)}>
+        {!onlyIngredient && (
+          <span>
+            <Button
+              appearance="warning"
+              spacing="compact"
+              onClick={() => removeIngredient(index)}
+            >
+              <XIcon />
+            </Button>
+          </span>
+        )}
         <div>
           <h4>Name</h4>
           <input
             type="text"
-            // name={`name${index}`}
             data-name="name"
             data-index={index}
-            // maxLength="45"
             style={{ height: "50px" }}
             placeholder="Apples"
             value={ingredient.name}

@@ -189,6 +189,13 @@ export const createIngredientsGrid = css`
     align-items: center;
     padding: 10px;
     box-shadow: rgba(0, 0, 0, 0.14) 0px 0px 2px 0;
+    position: relative; // for the remove icon
+
+    & > span {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
 
     & > div {
       display: flex;
