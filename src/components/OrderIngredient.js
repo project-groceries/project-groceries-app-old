@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import { css } from "emotion";
 import { Query, Mutation } from "react-apollo";
 import { ORDER_INGREDIENT_QUERY, CREATE_ORDERS_MUTATION } from "../queries";
 import Spinner from "./Spinner";
@@ -9,16 +8,51 @@ import styled from "styled-components";
 import { Close } from "styled-icons/material";
 import { FlagContext } from "../flag-context";
 import { changesNotice } from "../utils";
+import { RadioSelect } from "@atlaskit/select";
 
 const BlackClose = styled(Close)`
   color: black;
   width: 20px;
-  margin: 5px;
-  transition: all 0.3s ease;
+`;
 
-  &:hover {
-    cursor: pointer;
-    transform: scale(2);
+const OrderItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: whitesmoke;
+  padding: 10px;
+
+  position: relative;
+
+  & > svg {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    background-color: orange;
+    border-radius: 50%;
+    padding: 5px;
+
+    transition: all 0.3s ease;
+
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.2);
+    }
+  }
+
+  & > div {
+    display: flex;
+
+    & > div {
+      width: 150px;
+    }
+
+    & > input {
+      height: auto;
+      width: 50px;
+      margin: 0 5px;
+    }
   }
 `;
 
@@ -32,11 +66,7 @@ class OrderIngredient extends Component {
   }
 
   render() {
-    const { currentClass } = this.props;
-    
-    const {
-      selectedIngredients
-    } = this.state;
+    const { selectedIngredients } = this.state;
 
     return (
       <Query query={ORDER_INGREDIENT_QUERY} pollInterval={5000}>
@@ -52,84 +82,49 @@ class OrderIngredient extends Component {
             <Fragment>
               <AsyncSelect
                 value=""
-                placeholder="Select an ingredient to add to the order"
+                placeholder="Search for an ingredient to add to the order"
                 maxMenuHeight={200}
+                autoFocus
                 defaultOptions
                 loadOptions={(inputValue, callback) => {
-                  callback(
-                    this.filterIngredients(inputValue, ingredients)
-                  );
+                  callback(this.filterIngredients(inputValue, ingredients));
                 }}
-                onChange={data => {
-                  if (data.value) {
-                    this.setState(prev => ({
-                      selectedIngredients: prev.selectedIngredients.set(
-                        data.value,
-                        {
-                          ...data,
-                          amount: 1
-                        }
-                      )
-                    }));
-                  }
-                }}
+                onChange={this.onSelectChange}
               />
               {selectedIngredients.size > 0 && (
                 <Fragment>
                   {[...selectedIngredients].map(
-                    ([, { label, value, amount }]) => (
-                      <div
-                        key={value}
-                        className={css`
-                          display: flex;
-                          justify-content: space-between;
-                          align-items: center;
-
-                          background-color: whitesmoke;
-                          padding: 10px;
-
-                          & > input {
-                            width: 50px;
-                          }
-                        `}
-                      >
-                        <BlackClose
-                          onClick={() =>
-                            this.setState(prev => {
-                              prev.selectedIngredients.delete(value);
-                              return {
-                                selectedIngredients:
-                                  prev.selectedIngredients
-                              };
-                            })
-                          }
-                        />
-                        <small>{label}</small>
-                        <input
-                          type="number"
-                          min={0}
-                          onChange={e => {
-                            const { value: newAmount } = e.target;
-
-                            this.setState(ps => ({
-                              selectedIngredients: ps.selectedIngredients.set(
-                                value,
-                                {
-                                  label,
-                                  value,
-                                  amount: Number(newAmount) || ""
-                                }
-                              )
-                            }));
-                          }}
-                          value={amount}
-                          required={true}
-                        />
-                      </div>
+                    ([, { name, id, amount, unit, measurement }]) => (
+                      <OrderItem key={id}>
+                        <BlackClose onClick={() => this.closeOrderItem(id)} />
+                        <small>{name}</small>
+                        <div>
+                          <input
+                            type="number"
+                            min={0}
+                            onChange={e => this.editAmount(e, id)}
+                            value={amount}
+                            required={true}
+                          />
+                          {unit && <small>{unit}</small>}
+                          {measurement && (
+                            <RadioSelect
+                              className="radio-select"
+                              classNamePrefix="react-select"
+                              maxMenuHeight={100}
+                              defaultValue={this.getUnitScale(measurement)}
+                              options={this.getScaleOptions(measurement)}
+                              onChange={data =>
+                                this.setMultiplier(id, data.value)
+                              }
+                            />
+                          )}
+                        </div>
+                      </OrderItem>
                     )
                   )}
                   <FlagContext.Consumer>
-                    {({ addFlag }) =>
+                    {({ addFlag }) => (
                       <Mutation
                         mutation={CREATE_ORDERS_MUTATION}
                         onCompleted={() => this.onCompleted(addFlag)}
@@ -140,30 +135,7 @@ class OrderIngredient extends Component {
                           return (
                             <Button
                               appearance="primary"
-                              onClick={() => {
-                                const orders = [...selectedIngredients]
-                                  .map(([id, ingredient]) => ({
-                                    amount: ingredient.amount,
-                                    ingredient: {
-                                      connect: {
-                                        id
-                                      }
-                                    },
-                                    madeBy: {
-                                      connect: {
-                                        id: user.id
-                                      }
-                                    },
-                                    class: {
-                                      connect: {
-                                        id: currentClass.value
-                                      }
-                                    }
-                                  }))
-                                  .filter(({ amount }) => amount);
-
-                                mutation({ variables: { orders } });
-                              }}
+                              onClick={() => this.submitOrder(mutation, user)}
                               isLoading={loading}
                             >
                               Submit Order
@@ -171,7 +143,7 @@ class OrderIngredient extends Component {
                           );
                         }}
                       </Mutation>
-                    }
+                    )}
                   </FlagContext.Consumer>
                 </Fragment>
               )}
@@ -188,8 +160,92 @@ class OrderIngredient extends Component {
     return ingredients
       .filter(i => i.name.toLowerCase().includes(inputValue.toLowerCase()))
       .filter(i => !selectedIngredients.has(i.id))
-      .map(i => ({ value: i.id, label: i.name }))
+      .map(i => ({ value: i, label: i.name }))
       .slice(0, inputValue.length > 2 ? undefined : 40); // reduce results for faster loading
+  };
+
+  onSelectChange = data => {
+    if (data.value) {
+      this.setState(prev => ({
+        selectedIngredients: prev.selectedIngredients.set(data.value.id, {
+          ...data.value,
+          amount: 1,
+          multiplier: 1
+        })
+      }));
+    }
+  };
+
+  closeOrderItem = id => {
+    this.setState(prev => {
+      prev.selectedIngredients.delete(id);
+      return {
+        selectedIngredients: prev.selectedIngredients
+      };
+    });
+  };
+
+  editAmount = (event, id) => {
+    const { value: newAmount } = event.target;
+
+    this.setState(prevState => {
+      const mapFiller = prevState.selectedIngredients.get(id);
+
+      return {
+        selectedIngredients: prevState.selectedIngredients.set(id, {
+          ...mapFiller,
+          amount: Number(newAmount) || ""
+        })
+      };
+    });
+  };
+
+  getScaleOptions = measurement =>
+    measurement.scales.map(s => ({ label: s.name, value: s.amount }));
+
+  getUnitScale = measurement =>
+    this.getScaleOptions(measurement).find(s => s.value === 1);
+
+  setMultiplier = (id, multiplier) => {
+    this.setState(prevState => {
+      const mapFiller = prevState.selectedIngredients.get(id);
+
+      return {
+        selectedIngredients: prevState.selectedIngredients.set(id, {
+          ...mapFiller,
+          multiplier
+        })
+      };
+    });
+  };
+
+  submitOrder = (mutation, user) => {
+    const { currentClass } = this.props;
+    const { selectedIngredients } = this.state;
+
+    const orders = [...selectedIngredients]
+      .filter(([, { amount }]) => Boolean(amount)) // avoid empty ingredients
+      .map(([id, { amount, multiplier }]) => ({
+        amount: amount * multiplier,
+        ingredient: {
+          connect: {
+            id
+          }
+        },
+        madeBy: {
+          connect: {
+            id: user.id
+          }
+        },
+        class: {
+          connect: {
+            id: currentClass.value
+          }
+        }
+      }))
+      .filter(({ amount }) => amount);
+
+    mutation({ variables: { orders } });
   };
 
   onCompleted = addFlag => {

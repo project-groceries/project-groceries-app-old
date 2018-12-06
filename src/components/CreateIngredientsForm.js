@@ -70,12 +70,7 @@ class CreateIngredients extends Component {
                 value: "cjos1kt053c310a16c05mt8zy"
               }
             ]}
-            placeholder="Measured by..."
-            // onChange={data => this.setState({ orderBy: data.value })}
             onChange={data => setMeasurement(index, data.value)}
-            styles={{
-              container: provided => ({ ...provided, width: 250 })
-            }}
           />
         </div>
       </div>

@@ -603,6 +603,16 @@ export const ORDER_INGREDIENT_QUERY = gql`
     ingredients {
       id
       name
+      unit
+      measurement {
+        id
+        scales {
+          id
+          name
+          abbreviation
+          amount
+        }
+      }
     }
   }
 `;
