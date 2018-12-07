@@ -5,7 +5,7 @@ import Spinner from "./Spinner";
 import { css } from "emotion";
 import UndrawNoData from "./svg/UndrawNoData";
 import { Link } from "react-router-dom";
-import OrdersGridItem from "./OrdersGridItem";
+import OrdersGridSession from "./OrdersGridSession";
 
 class OrdersGrid extends Component {
   render() {
@@ -41,7 +41,7 @@ class OrdersGrid extends Component {
                 `}
               >
                 {this.groupByOrderSession(orders).map(orderSession => (
-                  <OrdersGridItem
+                  <OrdersGridSession
                     key={orderSession.id}
                     orderSession={orderSession}
                   />
