@@ -235,6 +235,15 @@ export const CLASS_VIEW_QUERY = gql`
         name
       }
     }
+    measurements {
+      id
+      name
+      scales {
+        id
+        name
+        amount
+      }
+    }
   }
 `;
 
@@ -260,6 +269,15 @@ export const CLASS_VIEW_GRID_QUERY = gql`
       id
       name
       unit
+      measurement {
+        id
+        name
+        scales {
+          id
+          name
+          amount
+        }
+      }
       tags {
         id
         name
@@ -609,7 +627,6 @@ export const ORDER_INGREDIENT_QUERY = gql`
         scales {
           id
           name
-          abbreviation
           amount
         }
       }

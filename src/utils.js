@@ -34,3 +34,7 @@ export function timeDifferenceForDate(date) {
 
 export const changesNotice =
   "Changes may take a few seconds to be reflected on the page.";
+
+export const sum = arr => arr.reduce((acc, cur) => acc + cur, 0);
+
+export const sumBy = (arr, fn) => arr.reduce((acc, cur) => acc + fn(cur), 0);

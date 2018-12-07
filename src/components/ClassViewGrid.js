@@ -5,10 +5,12 @@ import { CLASS_VIEW_GRID_QUERY } from "../queries";
 import Spinner from "@atlaskit/spinner";
 import UndrawNoData from "./svg/UndrawNoData";
 import styled from "styled-components";
+import { sumBy } from "../utils";
 
 const ClassViewGridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-auto-rows: 80px;
   grid-gap: 20px;
   margin: 10px 30px;
 
@@ -101,7 +103,14 @@ class ClassViewGrid extends Component {
   }
 
   render() {
-    const { filter, filteredUsers, ids, orderBy, isSummary } = this.props;
+    const {
+      filter,
+      filteredUsers,
+      ids,
+      orderBy,
+      isSummary,
+      scales
+    } = this.props;
     const { page, ingredientsPerPage } = this.state;
 
     return (
@@ -146,34 +155,42 @@ class ClassViewGrid extends Component {
                     <Spinner size="large" />
                   </ClassViewGridSpinner>
                 )}
-                {ingredients.map(ingredient => {
-                  return (
-                    <div key={ingredient.id}>
-                      <div>
-                        {ingredient.name.length > 50 ? (
-                          <h4 title={ingredient.name}>
-                            {ingredient.name.substring(0, 50)}
-                            ...
-                          </h4>
-                        ) : (
-                          <h4>{ingredient.name}</h4>
-                        )}
-                        <small>
-                          {ingredient.orders.reduce(
-                            (acc, cur) => acc + cur.amount,
-                            0
-                          )}{" "}
-                          {ingredient.unit}
-                        </small>
+                {ingredients.map(
+                  ({ id, name, unit, orders, tags, measurement }) => {
+                    const scale =
+                      measurement && scales ? scales.get(measurement.id) : null;
+
+                    return (
+                      <div key={id}>
+                        <div>
+                          {name.length > 50 ? (
+                            <h4 title={name}>
+                              {name.substring(0, 50)}
+                              ...
+                            </h4>
+                          ) : (
+                            <h4>{name}</h4>
+                          )}
+                          {scale ? (
+                            <small>
+                              {sumBy(orders, o => o.amount) / scale.value}{" "}
+                              {scale.label}
+                            </small>
+                          ) : (
+                            <small>
+                              {sumBy(orders, o => o.amount)} {unit}
+                            </small>
+                          )}
+                        </div>
+                        <div>
+                          {tags.map(tag => (
+                            <small key={tag.id}>{tag.name}</small>
+                          ))}
+                        </div>
                       </div>
-                      <div>
-                        {ingredient.tags.map(tag => (
-                          <small key={tag.id}>{tag.name}</small>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  }
+                )}
               </ClassViewGridContainer>
               {ids.length === 1 && (
                 <PaginationContainer>

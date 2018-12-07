@@ -16,22 +16,18 @@ import Unenrol from "./Unenrol";
 import uniqby from "lodash.uniqby";
 
 class ClassView extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      inputValue: "",
-      filterValues: [],
-      filterTimeoutID: null,
-      filterClassDialogOpen: false,
-      filterDialogOpen: false,
-      filteredUsers: null,
-      orderBy: "createdAt_DESC",
-      isSummary: false,
-      summaryDialogOpen: false,
-      isDeleteClassModalOpen: false
-    };
-  }
+  state = {
+    inputValue: "",
+    filterValues: [],
+    filterTimeoutID: null,
+    filterClassDialogOpen: false,
+    filterDialogOpen: false,
+    filteredUsers: null,
+    orderBy: "createdAt_DESC",
+    isSummary: false,
+    summaryDialogOpen: false,
+    isDeleteClassModalOpen: false
+  };
 
   render() {
     const { match } = this.props;
@@ -48,7 +44,8 @@ class ClassView extends Component {
       orderBy,
       isSummary,
       summaryDialogOpen,
-      isDeleteClassModalOpen
+      isDeleteClassModalOpen,
+      currentScales
     } = this.state;
 
     return (
@@ -73,19 +70,44 @@ class ClassView extends Component {
           }
         `}
       >
-        <Query query={CLASS_VIEW_QUERY} pollInterval={5000}>
+        <Query
+          query={CLASS_VIEW_QUERY}
+          notifyOnNetworkStatusChange={true} // this is a workaround so that onCompleted runs everytime
+          onCompleted={({ measurements }) => {
+            const { currentScales } = this.state;
+
+            if (!currentScales) {
+              this.setState(state => {
+                state.currentScales = new Map(
+                  measurements.map(m => [
+                    m.id,
+                    m.scales
+                      .map(s => ({ label: s.name, value: s.amount }))
+                      .find(s => s.value === 1)
+                  ])
+                );
+
+                return {
+                  currentScales: state.currentScales
+                };
+              });
+            }
+          }}
+          pollInterval={5000}
+        >
           {({ loading, error, data }) => {
-            const hasData = data ? Object.keys(data).length === 2 : undefined;
+            const hasData = data ? Object.keys(data).length === 3 : undefined;
             if (!hasData && loading) return <Spinner />;
 
             if (error) return <div>Error</div>;
 
             const {
               allClasses,
-              user: { type }
+              user: { type },
+              measurements
             } = data;
 
-            // I don't think 'class' is a valid variable name ... so 'appropriateClass'
+            // 'class' isn't a valid variable name ... so 'appropriateClass'
             const appropriateClass = id
               ? allClasses.find(c => c.id == id)
               : {
@@ -98,7 +120,6 @@ class ClassView extends Component {
                     "id"
                   )
                 };
-            // console.log("class", appropriateClass);
             const users = appropriateClass
               ? id
                 ? [appropriateClass.teacher, ...appropriateClass.students]
@@ -132,6 +153,7 @@ class ClassView extends Component {
                     filter={filterValues}
                     filteredUsers={filteredUsers || users.map(user => user.id)}
                     isSummary={id ? isSummary : true}
+                    scales={currentScales}
                   />
                 </div>
                 <div
@@ -218,6 +240,18 @@ class ClassView extends Component {
                       />
                     </div>
                   )}
+                  {measurements.map(m => (
+                    <div key={m.id}>
+                      <h4>{m.name} Unit</h4>
+                      <RadioSelect
+                        className="radio-select"
+                        classNamePrefix="react-select"
+                        defaultValue={this.getDefaultScale(m)}
+                        options={this.getScaleOptions(m)}
+                        onChange={data => this.onScaleChange(data, m.id)}
+                      />
+                    </div>
+                  ))}
                   <div>
                     <h4>Sort Ingredients</h4>
                     <RadioSelect
@@ -242,7 +276,6 @@ class ClassView extends Component {
                           value: "name_DESC"
                         }
                       ]}
-                      placeholder="Sort by..."
                       onChange={data => this.setState({ orderBy: data.value })}
                     />
                   </div>
@@ -425,6 +458,22 @@ class ClassView extends Component {
       </div>
     );
   }
+
+  getDefaultScale = measurement =>
+    this.state.currentScales
+      ? this.state.currentScales.get(measurement.id)
+      : this.getScaleOptions(measurement).find(s => s.value === 1);
+
+  getScaleOptions = measurement =>
+    measurement.scales.map(s => ({ label: s.name, value: s.amount }));
+
+  onScaleChange = (data, id) => {
+    if (data.value) {
+      this.setState(prevState => ({
+        currentScales: prevState.currentScales.set(id, data)
+      }));
+    }
+  };
 }
 
 export default ClassView;
