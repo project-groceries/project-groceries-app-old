@@ -38,6 +38,8 @@ class OrdersGrid extends Component {
                   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
                   grid-auto-rows: 80px;
                   grid-auto-flow: dense;
+
+                  margin-bottom: 150px;
                 `}
               >
                 {this.groupByOrderSession(orders).map(orderSession => (

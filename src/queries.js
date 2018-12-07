@@ -563,6 +563,14 @@ export const ORDERS_QUERY = gql`
         id
         name
         unit
+        measurement {
+          id
+          scales {
+            id
+            name
+            amount
+          }
+        }
       }
       orderSession {
         id
