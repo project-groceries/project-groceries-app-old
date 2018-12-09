@@ -12,6 +12,7 @@ import Select from "react-select";
 
 const BlackClose = styled(Close)`
   color: black;
+
   width: 20px;
 `;
 
