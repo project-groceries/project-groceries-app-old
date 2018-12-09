@@ -173,15 +173,17 @@ class App extends Component {
                   );
                 if (error) return <div>Error</div>;
 
-                const { user, classes } = data;
                 const {
-                  email,
-                  name,
-                  type,
-                  hasDeclaredAccountType,
-                  createdAt,
-                  school
-                } = user;
+                  user: {
+                    email,
+                    name,
+                    type,
+                    hasDeclaredAccountType,
+                    createdAt,
+                    school
+                  },
+                  classes
+                } = data;
 
                 LogRocket.identify(email, {
                   name,

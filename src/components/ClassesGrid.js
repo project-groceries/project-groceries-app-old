@@ -46,7 +46,7 @@ const classesGrid = css`
     transition: all 0.1s ease;
   }
 
-  & > a:first-child > div {
+  & > a[data-summary="true"] > div {
     background-color: #81c770;
   }
 
@@ -111,7 +111,7 @@ class ClassesGrid extends Component {
           return (
             <div className={`${classesGrid} ${noPrint}`}>
               {classes.length > 1 && (
-                <Link to={"/classes/summary"}>
+                <Link data-summary={true} to={"/classes/summary"}>
                   <div>
                     <h3>Summary</h3>
                     <div>
