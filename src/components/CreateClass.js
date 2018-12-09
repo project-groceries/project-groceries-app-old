@@ -2,7 +2,11 @@
 import React, { Component } from "react";
 import { Query, Mutation } from "react-apollo";
 import { withRouter } from "react-router";
-import { CREATE_CLASS_QUERY, CREATE_CLASS_MUTATION } from "../queries";
+import {
+  CREATE_CLASS_QUERY,
+  CREATE_CLASS_MUTATION,
+  USER_QUERY
+} from "../queries";
 import { css } from "emotion";
 import Button from "@atlaskit/button";
 import { FieldTextStateless } from "@atlaskit/field-text";
@@ -43,9 +47,9 @@ class CreateClass extends Component {
               {({ addFlag }) => (
                 <Mutation
                   mutation={CREATE_CLASS_MUTATION}
+                  refetchQueries={[{ query: USER_QUERY }]}
                   onCompleted={data => this._success(data, addFlag)}
                   onError={error => this._announceError(error, addFlag)}
-                  // update={this._success}
                 >
                   {(mutation, { loading }) => {
                     return (
