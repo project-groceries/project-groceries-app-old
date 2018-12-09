@@ -4,7 +4,7 @@ import { css } from "emotion";
 import { Query } from "react-apollo";
 import { ORDER_CAROUSEL_QUERY } from "../queries";
 import Spinner from "./Spinner";
-import { RadioSelect } from "@atlaskit/select";
+import Select from "react-select";
 import Button from "@atlaskit/button";
 import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
 import UndrawChef from "./svg/UndrawChef";
@@ -141,9 +141,10 @@ class OrderCarousel extends Component {
                         </Modal>
                       )}
                     </ModalTransition>
-                    <RadioSelect
+                    <Select
                       className="radio-select"
                       classNamePrefix="react-select"
+                      isSearchable={false}
                       value={currentClass}
                       options={classes.map(c => ({
                         label: c.name,
@@ -231,9 +232,10 @@ class OrderCarousel extends Component {
                       </div>
                     ) : (
                       <Fragment>
-                        <RadioSelect
+                        <Select
                           className="radio-select"
                           classNamePrefix="react-select"
+                          isSearchable={false}
                           value={currentClass}
                           options={classes.map(c => ({
                             label: c.name,

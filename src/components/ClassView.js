@@ -7,13 +7,14 @@ import Spinner from "./Spinner";
 import { fullPage, noPrint } from "../styles";
 import UndrawFileSearching from "./svg/UndrawFileSearching";
 import Button from "@atlaskit/button";
-import { CheckboxSelect, RadioSelect } from "@atlaskit/select";
+import { CheckboxSelect } from "@atlaskit/select";
 import InlineDialog from "@atlaskit/inline-dialog";
 import Toggle from "./Toggle";
 import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
 import DeleteClass from "./DeleteClass";
 import Unenrol from "./Unenrol";
 import uniqby from "lodash.uniqby";
+import Select from "react-select";
 
 class ClassView extends Component {
   state = {
@@ -243,9 +244,10 @@ class ClassView extends Component {
                   {measurements.map(m => (
                     <div key={m.id}>
                       <h4>{m.name} Unit</h4>
-                      <RadioSelect
-                        className="radio-select"
-                        classNamePrefix="react-select"
+                      <Select
+                        className="basic-single"
+                        classNamePrefix="select"
+                        isSearchable={false}
                         defaultValue={this.getDefaultScale(m)}
                         options={this.getScaleOptions(m)}
                         onChange={data => this.onScaleChange(data, m.id)}
@@ -254,13 +256,14 @@ class ClassView extends Component {
                   ))}
                   <div>
                     <h4>Sort Ingredients</h4>
-                    <RadioSelect
+                    <Select
                       className="radio-select"
                       classNamePrefix="react-select"
                       defaultValue={{
                         label: "Newest",
                         value: "createdAt_DESC"
                       }}
+                      isSearchable={false}
                       options={[
                         {
                           label: "Newest",

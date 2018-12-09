@@ -3,7 +3,7 @@ import { css } from "emotion";
 import { Query, Mutation } from "react-apollo";
 import { ORDER_RECIPE_QUERY, CREATE_ORDERS_MUTATION } from "../queries";
 import Spinner from "./Spinner";
-import { RadioSelect } from "@atlaskit/select";
+import Select from "react-select";
 import Button from "@atlaskit/button";
 import { FlagContext } from "../flag-context";
 import { changesNotice } from "../utils";
@@ -41,9 +41,10 @@ class OrderRecipe extends Component {
 
           return (
             <Fragment>
-              <RadioSelect
+              <Select
                 className="radio-select"
                 classNamePrefix="react-select"
+                isSearchable={false}
                 value={selectedRecipe}
                 options={recipes.map(r => ({
                   label: r.name,

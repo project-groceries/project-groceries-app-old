@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { RadioSelect } from "@atlaskit/select";
+import Select from "react-select";
 import styled from "styled-components";
 import { Close } from "styled-icons/material";
 import Button from "@atlaskit/button";
@@ -53,9 +53,10 @@ class CreateIngredients extends Component {
         </div>
         <div>
           <h4>Measured by...</h4>
-          <RadioSelect
+          <Select
             className="radio-select"
             classNamePrefix="react-select"
+            isSearchable={false}
             defaultValue={{
               label: "Volume",
               value: "cjos1hvuf3bog0a16wrjjbshx"

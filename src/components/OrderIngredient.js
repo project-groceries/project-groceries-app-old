@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { Close } from "styled-icons/material";
 import { FlagContext } from "../flag-context";
 import { changesNotice } from "../utils";
-import { RadioSelect } from "@atlaskit/select";
+import Select from "react-select";
 
 const BlackClose = styled(Close)`
   color: black;
@@ -107,10 +107,11 @@ class OrderIngredient extends Component {
                           />
                           {unit && <small>{unit}</small>}
                           {measurement && (
-                            <RadioSelect
+                            <Select
                               className="radio-select"
                               classNamePrefix="react-select"
                               maxMenuHeight={100}
+                              isSearchable={false}
                               defaultValue={this.getUnitScale(measurement)}
                               options={this.getScaleOptions(measurement)}
                               onChange={data =>

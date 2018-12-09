@@ -7,7 +7,7 @@ import { changesNotice } from "../utils";
 import Button from "@atlaskit/button";
 import { Delete, Edit, Close, Done } from "styled-icons/material";
 import styled from "styled-components";
-import { RadioSelect } from "@atlaskit/select";
+import Select from "react-select";
 
 const DeleteIcon = styled(Delete)`
   width: 24px;
@@ -30,15 +30,15 @@ const AmountContainer = styled.div`
     margin-left: 8px;
   }
 
-  & > div > div > div:first-child {
-    height: 20px;
-  }
+  // & > div > div > div:first-child {
+  //   height: 20px;
+  // }
 
-  & > div:nth-child(2) > input {
-    margin: 0;
-    padding: 0;
-    height: auto;
-  }
+  // & > div:nth-child(2) > input {
+  //   margin: 0;
+  //   padding: 0;
+  //   height: auto;
+  // }
 `;
 
 class OrdersGridItem extends Component {
@@ -81,12 +81,13 @@ class OrdersGridItem extends Component {
                 required={true}
               />
               {scale ? (
-                <RadioSelect
-                  className="radio-select"
-                  classNamePrefix="react-select"
-                  maxMenuHeight={100}
+                <Select
+                  className="basic-single"
+                  classNamePrefix="select"
                   defaultValue={scale}
+                  isSearchable={false}
                   options={this.getScaleOptions(measurement)}
+                  maxMenuHeight={100}
                   onChange={this.onScaleChange}
                 />
               ) : (
@@ -96,12 +97,13 @@ class OrdersGridItem extends Component {
           ) : scale ? (
             <AmountContainer>
               <small>{amount / scale.value}</small>
-              <RadioSelect
-                className="radio-select"
-                classNamePrefix="react-select"
-                maxMenuHeight={100}
+              <Select
+                className="basic-single"
+                classNamePrefix="select"
                 defaultValue={scale}
+                isSearchable={false}
                 options={this.getScaleOptions(measurement)}
+                maxMenuHeight={100}
                 onChange={this.onScaleChange}
               />
             </AmountContainer>

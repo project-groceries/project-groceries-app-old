@@ -36,10 +36,10 @@ class OrdersGrid extends Component {
                   display: grid;
                   grid-gap: 20px;
                   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-                  grid-auto-rows: 80px;
+                  grid-auto-rows: 100px;
                   grid-auto-flow: dense;
 
-                  margin-bottom: 150px;
+                  margin-bottom: 100px; // space for select menu
                 `}
               >
                 {this.groupByOrderSession(orders).map(orderSession => (

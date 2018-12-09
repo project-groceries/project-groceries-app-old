@@ -50,27 +50,33 @@ export const orderItem = css`
   background-color: #f1f1f1;
   box-shadow: rgba(0, 0, 0, 0.14) 0 2px 2px 0;
 
-  height: 80px;
-  margin: 20px 5px 0px 5px;
+  height: 90px; // missing 10px are added to the top margin
+  margin: 30px 5px 0px 5px; // 30px = 10 left from height + 20 from grid-gap
 
-  &:nth-child(2) {
-    margin: 10px 5px 0px 5px;
-  }
+  // &:nth-child(2) {
+  //   margin: 20px 5px 0px 5px;
+  // }
 
-  &:last-child {
-    margin: 20px 5px 10px 5px;
-  }
+  // &:last-child {
+  //   margin: 30px 5px 10px 5px;
+  // }
 
-  &:nth-child(2):last-child {
-    margin: 10px 5px;
-  }
+  // &:nth-child(2):last-child {
+  //   margin: 20px 5px 10px 5px;
+  // }
 
   & > div {
-    height: 40px;
+    // height: 40px;
     display: flex;
     // flex-direction: column;
     justify-content: space-around;
     align-items: center;
+  }
+  & > div:first-child {
+    height: 50px;
+  }
+  & > div:last-child {
+    height: 40px;
   }
 
   & > div:last-child {

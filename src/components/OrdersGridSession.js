@@ -45,13 +45,19 @@ class OrdersGridSession extends Component {
       <OrdersGridsSessionContainer ordersLength={orders.length}>
         <div
           className={css`
-            height: 70px;
+            height: 80px;
           `}
         >
           <div
             className={css`
               display: flex;
               justify-content: space-between;
+              align-items: center;
+
+              & > h2 {
+                display: flex;
+                align-items: center;
+              }
             `}
           >
             <h2>
@@ -79,7 +85,13 @@ class OrdersGridSession extends Component {
               }}
             </Mutation>
           </div>
-          <h4>
+          <h4
+            className={css`
+              height: 40px;
+              display: flex;
+              align-items: center;
+            `}
+          >
             <PersonIcon /> {madeBy.name}
             <Link to={`/classes/${orderClass.id}`}>
               <Button
