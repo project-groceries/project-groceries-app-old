@@ -25,7 +25,6 @@ class JoinSchool extends Component {
   }
 
   render() {
-    const { toastManager } = this.props;
     const { selectedOption, create } = this.state;
 
     return (
@@ -73,41 +72,39 @@ class JoinSchool extends Component {
                     })
                   }}
                 />
-                <FlagContext.Consumer>
-                  {({ addFlag }) => (
-                    <Mutation
-                      mutation={
-                        create ? CREATE_SCHOOL_MUTATION : JOIN_SCHOOL_MUTATION
-                      }
-                      onCompleted={() => this.onCompleted(addFlag)}
-                    >
-                      {(mutation, { loading }) => {
-                        return (
-                          <Button
-                            appearance="primary"
-                            onClick={() => {
-                              if (selectedOption) {
+                {selectedOption && (
+                  <FlagContext.Consumer>
+                    {({ addFlag }) => (
+                      <Mutation
+                        mutation={
+                          create ? CREATE_SCHOOL_MUTATION : JOIN_SCHOOL_MUTATION
+                        }
+                        onCompleted={() => this.onCompleted(addFlag)}
+                      >
+                        {(mutation, { loading }) => {
+                          return (
+                            <Button
+                              appearance="primary"
+                              onClick={() => {
+                                // No check for selectedOption because
+                                // button wouldn't show otherwise
+
                                 const { value, label } = selectedOption;
                                 const variables = create
                                   ? { name: label }
                                   : { id: value };
                                 mutation({ variables });
-                              } else {
-                                toastManager.add("Please select a school", {
-                                  appearance: "warning",
-                                  autoDismiss: true
-                                });
-                              }
-                            }}
-                            isLoading={loading}
-                          >
-                            {create ? "Create" : "Join"} School
-                          </Button>
-                        );
-                      }}
-                    </Mutation>
-                  )}
-                </FlagContext.Consumer>
+                              }}
+                              isLoading={loading}
+                            >
+                              {create ? "Create" : "Join"} School
+                            </Button>
+                          );
+                        }}
+                      </Mutation>
+                    )}
+                  </FlagContext.Consumer>
+                )}
               </div>
             );
           }}
