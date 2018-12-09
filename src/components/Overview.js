@@ -7,7 +7,6 @@ import CreateClass from "./CreateClass";
 import ClassesGrid from "./ClassesGrid";
 import { fullPage, overviewSection, loaderContainer } from "../styles";
 import OrdersGrid from "./OrdersGrid";
-import { Link } from "react-router-dom";
 
 class Overview extends Component {
   render() {
@@ -27,20 +26,9 @@ class Overview extends Component {
             user: { type },
             classes
           } = data;
-          const noClasses = !classes.length;
+          const hasClasses = Boolean(classes.length);
 
-          return noClasses ? (
-            type === "STUDENT" ? (
-              <div className={fullPage}>
-                <h2>You aren't enrolled in any classes yet!</h2>
-                <Enrol />
-              </div>
-            ) : (
-              <div className={fullPage}>
-                <CreateClass />
-              </div>
-            )
-          ) : (
+          return hasClasses ? (
             <Fragment>
               <div className={overviewSection}>
                 <h1>Classes</h1>
@@ -51,6 +39,15 @@ class Overview extends Component {
                 <OrdersGrid limit={5} />
               </div>
             </Fragment>
+          ) : type === "STUDENT" ? (
+            <div className={fullPage}>
+              <h2>You aren't enrolled in any classes yet!</h2>
+              <Enrol />
+            </div>
+          ) : (
+            <div className={fullPage}>
+              <CreateClass />
+            </div>
           );
         }}
       </Query>

@@ -196,7 +196,7 @@ class App extends Component {
                   name, // Full name
                   email, // Email address
                   "Account Type": type,
-                  "Has Classes": !!classes.length,
+                  "Has Classes": Boolean(classes.length),
                   company: {
                     id: school ? school.id : "",
                     name: school ? school.name : ""
@@ -282,50 +282,48 @@ class App extends Component {
                                 <Route render={() => <Redirect to="/" />} />
                               </Switch>
                               {classes.length && (
-                                <Fragment>
-                                  <InlineDialog
-                                    // onClose={() => {
-                                    //   this.setState({ isOrderDialogOpen: false });
-                                    // }}
-                                    content={
-                                      <div
-                                        className={css`
-                                          height: 400px;
-                                          overflow: auto;
-                                          width: 400px;
-                                        `}
-                                      >
-                                        <OrderCarousel
-                                          onCompleted={() =>
-                                            this.setState({
-                                              isOrderDialogOpen: false
-                                            })
-                                          }
-                                        />
-                                      </div>
+                                <InlineDialog
+                                  // onClose={() => {
+                                  //   this.setState({ isOrderDialogOpen: false });
+                                  // }}
+                                  content={
+                                    <div
+                                      className={css`
+                                        height: 400px;
+                                        overflow: auto;
+                                        width: 400px;
+                                      `}
+                                    >
+                                      <OrderCarousel
+                                        onCompleted={() =>
+                                          this.setState({
+                                            isOrderDialogOpen: false
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                  }
+                                  placement="left-end"
+                                  isOpen={isOrderDialogOpen}
+                                >
+                                  <Fab
+                                    icon={
+                                      isOrderDialogOpen ? (
+                                        <WhiteClose />
+                                      ) : (
+                                        <WhiteAddShoppingCart />
+                                      )
                                     }
-                                    placement="left-end"
-                                    isOpen={isOrderDialogOpen}
-                                  >
-                                    <Fab
-                                      icon={
-                                        isOrderDialogOpen ? (
-                                          <WhiteClose />
-                                        ) : (
-                                          <WhiteAddShoppingCart />
-                                        )
-                                      }
-                                      label={isOrderDialogOpen ? "" : "Order"}
-                                      className={fabStyles}
-                                      onClick={e => {
-                                        e.preventDefault();
-                                        this.setState(pp => ({
-                                          isOrderDialogOpen: !pp.isOrderDialogOpen
-                                        }));
-                                      }}
-                                    />
-                                  </InlineDialog>
-                                </Fragment>
+                                    label={isOrderDialogOpen ? "" : "Order"}
+                                    className={fabStyles}
+                                    onClick={e => {
+                                      e.preventDefault();
+                                      this.setState(pp => ({
+                                        isOrderDialogOpen: !pp.isOrderDialogOpen
+                                      }));
+                                    }}
+                                  />
+                                </InlineDialog>
                               )}
                             </Fragment>
                           </FlagContext.Provider>

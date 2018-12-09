@@ -5,7 +5,8 @@ import sortBy from "lodash.sortby";
 import {
   JOIN_SCHOOL_MUTATION,
   FIND_SCHOOLS_QUERY,
-  CREATE_SCHOOL_MUTATION
+  CREATE_SCHOOL_MUTATION,
+  USER_QUERY
 } from "../queries";
 import CreatableSelect from "react-select/lib/Creatable";
 import Spinner from "./Spinner";
@@ -79,6 +80,7 @@ class JoinSchool extends Component {
                         mutation={
                           create ? CREATE_SCHOOL_MUTATION : JOIN_SCHOOL_MUTATION
                         }
+                        refetchQueries={[{ query: USER_QUERY }]}
                         onCompleted={() => this.onCompleted(addFlag)}
                       >
                         {(mutation, { loading }) => {
