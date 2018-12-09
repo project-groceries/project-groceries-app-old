@@ -26,10 +26,31 @@
 
     <style>
       #patience {
-        animation: fade 60s;
+        animation-name: fade;
+        animation-duration: 60s;
+        animation-fill-mode: both;
       }
 
       @keyframes fade {
+        0% {
+          opacity: 0;
+        }
+        99% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      #refresh {
+        animation-name: late-fade;
+        animation-delay: 60s;
+        animation-duration: 60s;
+        animation-fill-mode: both;
+      }
+
+      @keyframes late-fade {
         0% {
           opacity: 0;
         }
@@ -230,6 +251,9 @@
           ></path>
         </svg>
         <h2 id="patience">Patience is a virtue</h2>
+        <h2 id="refresh">
+          🤔 Something must be really wrong. Try Refreshing the page
+        </h2>
 
         <!-- <SamsungTVLoader /> -->
       </div>
