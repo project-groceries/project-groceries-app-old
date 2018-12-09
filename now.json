@@ -1,10 +1,13 @@
 {
-  "version": 2,
   "alias": ["app.projectgroceries.com"],
-  "builds": [{ "src": "package.json", "use": "@now/static-build" }],
-  "routes": [
-    { "src": "^/static/(.*)", "dest": "/static/$1" },
-    { "src": "^(/service-worker.js)", "dest": "$1" },
-    { "src": ".*", "dest": "/index.html" }
-  ]
+  "version": 1,
+  "type": "static",
+  "static": {
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }

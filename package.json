@@ -86,8 +86,7 @@
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "start": "yarn build && node server.js",
-    "now-build": "yarn build && mv build dist"
+    "start": "yarn build && node server.js"
   },
   "devDependencies": {},
   "jest": {
