@@ -188,10 +188,15 @@ class CreateRecipe extends Component {
                                     const ingredients = [
                                       ...recipeIngredients
                                     ].map(([id, { amount, scale }]) => ({
-                                      amount: amount * scale.amount,
+                                      amount: scale
+                                        ? amount * scale.amount
+                                        : amount,
                                       ingredient: {
                                         connect: { id }
-                                      }
+                                      },
+                                      scale: scale
+                                        ? { connect: { id: scale.id } }
+                                        : null
                                     }));
 
                                     mutation({
@@ -245,7 +250,6 @@ class CreateRecipe extends Component {
   setScale = (id, multiplier) => {
     this.setState(prevState => {
       const mapFiller = prevState.recipeIngredients.get(id);
-      // console.log()
 
       return {
         recipeIngredients: prevState.recipeIngredients.set(id, {

@@ -654,6 +654,11 @@ export const ORDER_RECIPE_QUERY = gql`
       ingredients {
         id
         amount
+        scale {
+          id
+          name
+          amount
+        }
         ingredient {
           id
           name

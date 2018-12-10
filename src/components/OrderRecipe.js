@@ -115,7 +115,7 @@ class OrderRecipe extends Component {
                     </div>
                   </div>
                   {currentRecipe.ingredients.map(
-                    ({ id, amount, ingredient: { name } }) => (
+                    ({ id, amount, ingredient: { name }, scale }) => (
                       <div
                         key={id}
                         className={css`
@@ -128,7 +128,7 @@ class OrderRecipe extends Component {
                         `}
                       >
                         <small>{name}</small>
-                        <small>{amount * servings}</small>
+                        {scale ? <small>{(amount * servings)/scale.amount} {scale.name}</small> : <small>{amount * servings}</small>}
                       </div>
                     )
                   )}
