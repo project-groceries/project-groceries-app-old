@@ -1,6 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { Query, Mutation } from "react-apollo";
-import { ORDER_INGREDIENT_QUERY, CREATE_ORDERS_MUTATION } from "../queries";
+import {
+  ORDER_INGREDIENT_QUERY,
+  CREATE_ORDERS_MUTATION,
+  ORDERS_QUERY
+} from "../queries";
 import Spinner from "./Spinner";
 import AsyncSelect from "react-select/lib/Async";
 import Button from "@atlaskit/button";
@@ -128,6 +132,7 @@ class OrderIngredient extends Component {
                     {({ addFlag }) => (
                       <Mutation
                         mutation={CREATE_ORDERS_MUTATION}
+                        refetchQueries={[{ query: ORDERS_QUERY }]}
                         onCompleted={() => this.onCompleted(addFlag)}
                       >
                         {(mutation, { loading, error }) => {

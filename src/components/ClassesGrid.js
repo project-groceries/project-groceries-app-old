@@ -97,10 +97,9 @@ class ClassesGrid extends Component {
     const { isOpen } = this.state;
 
     return (
-      <Query query={CLASSES_GRID_QUERY} pollInterval={5000}>
+      <Query query={CLASSES_GRID_QUERY}>
         {({ loading, error, data }) => {
-          const hasData = data ? Object.keys(data).length === 2 : undefined;
-          if (!hasData && loading) return <Spinner />;
+          if (loading) return <Spinner />;
           if (error) return <p>Error</p>;
 
           const {

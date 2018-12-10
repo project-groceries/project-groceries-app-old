@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { css } from "emotion";
 import { Query, Mutation } from "react-apollo";
-import { ORDER_RECIPE_QUERY, CREATE_ORDERS_MUTATION } from "../queries";
+import { ORDER_RECIPE_QUERY, CREATE_ORDERS_MUTATION, ORDERS_QUERY } from "../queries";
 import Spinner from "./Spinner";
 import Select from "react-select";
 import Button from "@atlaskit/button";
@@ -136,6 +136,7 @@ class OrderRecipe extends Component {
                     {({ addFlag }) =>
                       <Mutation
                         mutation={CREATE_ORDERS_MUTATION}
+                        refetchQueries={[{ query: ORDERS_QUERY }]}
                         onCompleted={() => this.onCompleted(addFlag)}
                       >
                         {(mutation, { loading, error }) => {

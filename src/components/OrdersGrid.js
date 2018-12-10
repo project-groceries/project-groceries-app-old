@@ -12,8 +12,8 @@ class OrdersGrid extends Component {
     return (
       <Query query={ORDERS_QUERY} pollInterval={5000}>
         {({ loading, error, data }) => {
-          const hasData = data ? Object.keys(data).length === 1 : undefined;
-          if (!hasData && loading) return <Spinner />;
+          // const hasData = data ? Object.keys(data).length === 1 : undefined;
+          if (loading) return <Spinner />;
 
           if (error) return <p>Error</p>;
 

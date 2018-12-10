@@ -72,6 +72,7 @@ class CreateRecipe extends Component {
                     }}
                     onChange={data => {
                       if (data.value) {
+                        console.log("data", data);
                         this.setState(prev => ({
                           recipeIngredients: prev.recipeIngredients.set(
                             data.value,

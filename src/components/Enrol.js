@@ -4,7 +4,12 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 import { Query, Mutation } from "react-apollo";
 import Select from "react-select";
-import { ENROL_QUERY, ENROL_INTO_CLASS_MUTATION, USER_QUERY } from "../queries";
+import {
+  ENROL_QUERY,
+  ENROL_INTO_CLASS_MUTATION,
+  USER_QUERY,
+  CLASSES_GRID_QUERY
+} from "../queries";
 
 import Button from "@atlaskit/button";
 import { css } from "emotion";
@@ -60,7 +65,10 @@ class Enrol extends Component {
                 {({ addFlag }) => (
                   <Mutation
                     mutation={ENROL_INTO_CLASS_MUTATION}
-                    refetchQueries={[{ query: USER_QUERY }]}
+                    refetchQueries={[
+                      { query: USER_QUERY },
+                      { query: CLASSES_GRID_QUERY }
+                    ]}
                     onCompleted={() => this._success(addFlag)}
                     // onError={this._announceError}
                     // update={this._success}

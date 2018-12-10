@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { css } from "emotion";
 import { Mutation } from "react-apollo";
 import { withRouter } from "react-router";
-import { UNENROL_MUTATION } from "../queries";
+import { UNENROL_MUTATION, CLASSES_GRID_QUERY } from "../queries";
 import Button from "@atlaskit/button";
 
 import { FlagContext } from "../flag-context";
@@ -32,6 +32,7 @@ class Unenrol extends Component {
           {({ addFlag }) => (
             <Mutation
               mutation={UNENROL_MUTATION}
+              refetchQueries={[{ query: CLASSES_GRID_QUERY }]}
               onCompleted={() => this._success(addFlag)}
               onError={error => this._announceError(error, addFlag)}
               // update={this._success}
