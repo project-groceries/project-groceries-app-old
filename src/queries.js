@@ -668,6 +668,15 @@ export const CREATE_RECIPE_QUERY = gql`
     ingredients {
       id
       name
+      measurement {
+        id
+        name
+        scales {
+          id
+          name
+          amount
+        }
+      }
     }
     user {
       id

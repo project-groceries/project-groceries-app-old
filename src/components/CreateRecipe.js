@@ -10,6 +10,7 @@ import { FieldTextStateless } from "@atlaskit/field-text";
 import Button from "@atlaskit/button";
 import { FlagContext } from "../flag-context";
 import { changesNotice } from "../utils";
+import Select from "react-select";
 
 const BlackClose = styled(Close)`
   color: black;
@@ -72,13 +73,15 @@ class CreateRecipe extends Component {
                     }}
                     onChange={data => {
                       if (data.value) {
-                        console.log("data", data);
                         this.setState(prev => ({
                           recipeIngredients: prev.recipeIngredients.set(
-                            data.value,
+                            data.value.id,
                             {
-                              ...data,
-                              amount: 1
+                              ...data.value,
+                              amount: 1,
+                              scale: data.value.measurement
+                                ? this.getUnitScale(data.value.measurement)
+                                : null
                             }
                           )
                         }));
@@ -88,9 +91,9 @@ class CreateRecipe extends Component {
                   {recipeIngredients.size > 0 && (
                     <Fragment>
                       {[...recipeIngredients].map(
-                        ([, { label, value, amount }]) => (
+                        ([, { id, name, unit, amount, measurement }]) => (
                           <div
-                            key={value}
+                            key={id}
                             className={css`
                               display: flex;
                               justify-content: space-between;
@@ -99,42 +102,73 @@ class CreateRecipe extends Component {
                               background-color: whitesmoke;
                               padding: 10px;
 
-                              & > input {
-                                width: 100px;
+                              & > div:last-child {
+                                display: flex;
+                                align-items: center;
+
+                                & > input {
+                                  width: 50px;
+                                }
+
+                                & > div {
+                                  width: 150px;
+                                  margin-left: 8px;
+                                }
                               }
                             `}
                           >
                             <BlackClose
                               onClick={() =>
                                 this.setState(prev => {
-                                  prev.recipeIngredients.delete(value);
+                                  prev.recipeIngredients.delete(id);
                                   return {
                                     recipeIngredients: prev.recipeIngredients
                                   };
                                 })
                               }
                             />
-                            <small>{label}</small>
-                            <input
-                              type="number"
-                              min={0}
-                              onChange={e => {
-                                const { value: newAmount } = e.target;
+                            <small>{name}</small>
+                            <div>
+                              <input
+                                type="number"
+                                min={0}
+                                onChange={e => {
+                                  const { value: newAmount } = e.target;
 
-                                this.setState(ps => ({
-                                  recipeIngredients: ps.recipeIngredients.set(
-                                    value,
-                                    {
-                                      label,
-                                      value,
-                                      amount: Number(newAmount) || ""
-                                    }
-                                  )
-                                }));
-                              }}
-                              value={amount}
-                              required={true}
-                            />
+                                  this.setState(prevState => {
+                                    const mapFiller = prevState.recipeIngredients.get(
+                                      id
+                                    );
+
+                                    return {
+                                      recipeIngredients: prevState.recipeIngredients.set(
+                                        id,
+                                        {
+                                          ...mapFiller,
+                                          amount: Number(newAmount) || ""
+                                        }
+                                      )
+                                    };
+                                  });
+                                }}
+                                value={amount}
+                                required={true}
+                              />
+                              {unit && <small>{unit}</small>}
+                              {measurement && (
+                                <Select
+                                  className="radio-select"
+                                  classNamePrefix="react-select"
+                                  maxMenuHeight={100}
+                                  isSearchable={false}
+                                  defaultValue={this.getUnitScale(measurement)}
+                                  options={this.getScaleOptions(measurement)}
+                                  onChange={data =>
+                                    this.setScale(id, data.value)
+                                  }
+                                />
+                              )}
+                            </div>
                           </div>
                         )
                       )}
@@ -153,8 +187,8 @@ class CreateRecipe extends Component {
                                   onClick={() => {
                                     const ingredients = [
                                       ...recipeIngredients
-                                    ].map(([id, ingredient]) => ({
-                                      amount: ingredient.amount,
+                                    ].map(([id, { amount, scale }]) => ({
+                                      amount: amount * scale.amount,
                                       ingredient: {
                                         connect: { id }
                                       }
@@ -188,6 +222,40 @@ class CreateRecipe extends Component {
     );
   }
 
+  filterIngredients = (inputValue, ingredients) => {
+    const { recipeIngredients } = this.state;
+
+    return ingredients
+      .filter(i => i.name.toLowerCase().includes(inputValue.toLowerCase()))
+      .filter(i => !recipeIngredients.has(i.id))
+      .map(i => ({ value: i, label: i.name }))
+      .slice(0, inputValue.length > 2 ? undefined : 40); // reduce results for faster loading
+  };
+
+  getScaleOptions = measurement => measurement.scales.map(this.scaleToOption);
+
+  getUnitScale = measurement =>
+    this.scaleToOption(this.getSpecificScale(measurement, 1));
+
+  getSpecificScale = (measurement, amount) =>
+    measurement.scales.find(s => s.amount === amount);
+
+  scaleToOption = scale => ({ label: scale.name, value: scale.amount });
+
+  setScale = (id, multiplier) => {
+    this.setState(prevState => {
+      const mapFiller = prevState.recipeIngredients.get(id);
+      // console.log()
+
+      return {
+        recipeIngredients: prevState.recipeIngredients.set(id, {
+          ...mapFiller,
+          scale: this.getSpecificScale(mapFiller.measurement, multiplier)
+        })
+      };
+    });
+  };
+
   onCompleted = addFlag => {
     const { onCompleted } = this.props;
 
@@ -200,16 +268,6 @@ class CreateRecipe extends Component {
     });
 
     if (onCompleted) onCompleted();
-  };
-
-  filterIngredients = (inputValue, ingredients) => {
-    const { recipeIngredients } = this.state;
-
-    return ingredients
-      .filter(i => i.name.toLowerCase().includes(inputValue.toLowerCase()))
-      .filter(i => !recipeIngredients.has(i.id))
-      .map(i => ({ value: i.id, label: i.name }))
-      .slice(0, inputValue.length > 2 ? undefined : 40); // reduce results for faster loading
   };
 }
 
