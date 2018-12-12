@@ -10,9 +10,8 @@ import OrdersGridSession from "./OrdersGridSession";
 class OrdersGrid extends Component {
   render() {
     return (
-      <Query query={ORDERS_QUERY} pollInterval={5000}>
+      <Query query={ORDERS_QUERY}>
         {({ loading, error, data }) => {
-          // const hasData = data ? Object.keys(data).length === 1 : undefined;
           if (loading) return <Spinner />;
 
           if (error) return <p>Error</p>;

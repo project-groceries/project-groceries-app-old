@@ -6,7 +6,8 @@ import {
   CREATE_CLASS_QUERY,
   CREATE_CLASS_MUTATION,
   USER_QUERY,
-  CLASSES_GRID_QUERY
+  CLASSES_GRID_QUERY,
+  ORDER_CAROUSEL_QUERY
 } from "../queries";
 import { css } from "emotion";
 import Button from "@atlaskit/button";
@@ -50,7 +51,8 @@ class CreateClass extends Component {
                   mutation={CREATE_CLASS_MUTATION}
                   refetchQueries={[
                     { query: USER_QUERY },
-                    { query: CLASSES_GRID_QUERY }
+                    { query: CLASSES_GRID_QUERY },
+                    { query: ORDER_CAROUSEL_QUERY }
                   ]}
                   onCompleted={data => this._success(data, addFlag)}
                   onError={error => this._announceError(error, addFlag)}

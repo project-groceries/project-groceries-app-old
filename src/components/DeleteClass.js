@@ -4,7 +4,11 @@ import React, { Component } from "react";
 import { css } from "emotion";
 import { Mutation } from "react-apollo";
 import { withRouter } from "react-router";
-import { DELETE_CLASS_MUTATION, CLASSES_GRID_QUERY } from "../queries";
+import {
+  DELETE_CLASS_MUTATION,
+  CLASSES_GRID_QUERY,
+  ORDER_CAROUSEL_QUERY
+} from "../queries";
 import Button from "@atlaskit/button";
 import { FlagContext } from "../flag-context";
 import { changesNotice } from "../utils";
@@ -22,7 +26,10 @@ class DeleteClass extends Component {
         {({ addFlag }) => (
           <Mutation
             mutation={DELETE_CLASS_MUTATION}
-            refetchQueries={[{ query: CLASSES_GRID_QUERY }]}
+            refetchQueries={[
+              { query: CLASSES_GRID_QUERY },
+              { query: ORDER_CAROUSEL_QUERY }
+            ]}
             onCompleted={() => this._success(addFlag)}
             variables={{ id }}
           >

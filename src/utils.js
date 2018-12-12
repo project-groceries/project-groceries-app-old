@@ -38,3 +38,22 @@ export const changesNotice =
 export const sum = arr => arr.reduce((acc, cur) => acc + cur, 0);
 
 export const sumBy = (arr, fn) => arr.reduce((acc, cur) => acc + fn(cur), 0);
+
+const isAnything = source => test => test === source;
+
+export const isTeacher = isAnything("TEACHER");
+
+// functions for working with measurements and scales
+export const getScaleOptions = measurement =>
+  measurement.scales.map(this.scaleToOption);
+
+export const getUnitScale = measurement =>
+  this.scaleToOption(this.getSpecificScale(measurement, 1));
+
+export const getSpecificScale = (measurement, amount) =>
+  measurement.scales.find(s => s.amount === amount);
+
+export const scaleToOption = scale => ({
+  label: scale.name,
+  value: scale.amount
+});

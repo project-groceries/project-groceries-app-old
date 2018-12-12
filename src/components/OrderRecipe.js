@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { css } from "emotion";
 import { Query, Mutation } from "react-apollo";
-import { ORDER_RECIPE_QUERY, CREATE_ORDERS_MUTATION, ORDERS_QUERY } from "../queries";
+import { ORDER_RECIPE_QUERY, CREATE_ORDERS_MUTATION, ORDERS_QUERY, CLASS_VIEW_GRID_QUERY } from "../queries";
 import Spinner from "./Spinner";
 import Select from "react-select";
 import Button from "@atlaskit/button";
@@ -30,10 +30,9 @@ class OrderRecipe extends Component {
     } = this.state;
 
     return (
-      <Query query={ORDER_RECIPE_QUERY} pollInterval={5000}>
+      <Query query={ORDER_RECIPE_QUERY}>
         {({ loading, error, data }) => {
-          const hasData = data ? Object.keys(data).length === 2 : undefined;
-          if (!hasData && loading) return <Spinner />;
+          if (loading) return <Spinner />;
 
           if (error) return <div>Error</div>;
 
@@ -136,7 +135,7 @@ class OrderRecipe extends Component {
                     {({ addFlag }) =>
                       <Mutation
                         mutation={CREATE_ORDERS_MUTATION}
-                        refetchQueries={[{ query: ORDERS_QUERY }]}
+                        refetchQueries={[{ query: ORDERS_QUERY }, { query: CLASS_VIEW_GRID_QUERY }]}
                         onCompleted={() => this.onCompleted(addFlag)}
                       >
                         {(mutation, { loading, error }) => {

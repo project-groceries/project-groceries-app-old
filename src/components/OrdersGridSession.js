@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { Mutation } from "react-apollo";
-import { DELETE_ORDERSESSION_MUTATION } from "../queries";
+import {
+  DELETE_ORDERSESSION_MUTATION,
+  ORDERS_QUERY,
+  CLASS_VIEW_GRID_QUERY
+} from "../queries";
 import { css } from "emotion";
 import { Link } from "react-router-dom";
 import { formatDistance } from "date-fns";
@@ -68,6 +72,10 @@ class OrdersGridSession extends Component {
             </h2>
             <Mutation
               mutation={DELETE_ORDERSESSION_MUTATION}
+              refetchQueries={[
+                { query: ORDERS_QUERY },
+                { query: CLASS_VIEW_GRID_QUERY }
+              ]}
               variables={{ id }}
             >
               {(mutation, { loading, error }) => {

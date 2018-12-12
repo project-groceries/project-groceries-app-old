@@ -90,10 +90,9 @@ class OrderCarousel extends Component {
           }
         />
         <div data-recipe={isRecipe}>
-          <Query query={ORDER_CAROUSEL_QUERY} pollInterval={5000}>
+          <Query query={ORDER_CAROUSEL_QUERY}>
             {({ loading, error, data }) => {
-              const hasData = data ? Object.keys(data).length === 2 : undefined;
-              if (!hasData && loading)
+              if (loading)
                 return (
                   <Fragment>
                     <div>

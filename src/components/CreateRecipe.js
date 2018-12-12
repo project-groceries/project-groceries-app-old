@@ -1,7 +1,12 @@
 import React, { Component, Fragment } from "react";
 import AsyncSelect from "react-select/lib/Async";
 import { Query, Mutation } from "react-apollo";
-import { CREATE_RECIPE_QUERY, CREATE_RECIPE_MUTATION } from "../queries";
+import {
+  CREATE_RECIPE_QUERY,
+  CREATE_RECIPE_MUTATION,
+  ORDER_RECIPE_QUERY,
+  ORDER_CAROUSEL_QUERY
+} from "../queries";
 import Spinner from "./Spinner";
 import { css } from "emotion";
 import styled from "styled-components";
@@ -9,7 +14,12 @@ import { Close } from "styled-icons/material";
 import { FieldTextStateless } from "@atlaskit/field-text";
 import Button from "@atlaskit/button";
 import { FlagContext } from "../flag-context";
-import { changesNotice } from "../utils";
+import {
+  changesNotice,
+  getScaleOptions,
+  getUnitScale,
+  getSpecificScale
+} from "../utils";
 import Select from "react-select";
 
 const BlackClose = styled(Close)`
@@ -161,8 +171,8 @@ class CreateRecipe extends Component {
                                   classNamePrefix="react-select"
                                   maxMenuHeight={100}
                                   isSearchable={false}
-                                  defaultValue={this.getUnitScale(measurement)}
-                                  options={this.getScaleOptions(measurement)}
+                                  defaultValue={getUnitScale(measurement)}
+                                  options={getScaleOptions(measurement)}
                                   onChange={data =>
                                     this.setScale(id, data.value)
                                   }
@@ -176,6 +186,10 @@ class CreateRecipe extends Component {
                         {({ addFlag }) => (
                           <Mutation
                             mutation={CREATE_RECIPE_MUTATION}
+                            refetchQueries={[
+                              { query: ORDER_RECIPE_QUERY },
+                              { query: ORDER_CAROUSEL_QUERY }
+                            ]}
                             onCompleted={() => this.onCompleted(addFlag)}
                           >
                             {(mutation, { loading, error }) => {
@@ -237,16 +251,6 @@ class CreateRecipe extends Component {
       .slice(0, inputValue.length > 2 ? undefined : 40); // reduce results for faster loading
   };
 
-  getScaleOptions = measurement => measurement.scales.map(this.scaleToOption);
-
-  getUnitScale = measurement =>
-    this.scaleToOption(this.getSpecificScale(measurement, 1));
-
-  getSpecificScale = (measurement, amount) =>
-    measurement.scales.find(s => s.amount === amount);
-
-  scaleToOption = scale => ({ label: scale.name, value: scale.amount });
-
   setScale = (id, multiplier) => {
     this.setState(prevState => {
       const mapFiller = prevState.recipeIngredients.get(id);
@@ -254,7 +258,7 @@ class CreateRecipe extends Component {
       return {
         recipeIngredients: prevState.recipeIngredients.set(id, {
           ...mapFiller,
-          scale: this.getSpecificScale(mapFiller.measurement, multiplier)
+          scale: getSpecificScale(mapFiller.measurement, multiplier)
         })
       };
     });

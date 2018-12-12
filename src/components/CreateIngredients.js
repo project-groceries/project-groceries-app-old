@@ -6,7 +6,11 @@ import Button from "@atlaskit/button";
 import styled from "styled-components";
 import { Add } from "styled-icons/material";
 import { Mutation } from "react-apollo";
-import { CREATE_INGREDIENTS_MUTATION } from "../queries";
+import {
+  CREATE_INGREDIENTS_MUTATION,
+  ORDER_INGREDIENT_QUERY,
+  CLASS_VIEW_GRID_QUERY
+} from "../queries";
 
 const AddIcon = styled(Add)`
   height: 60px;
@@ -56,6 +60,10 @@ class CreateIngredients extends Component {
         <ButtonContainer>
           <Mutation
             mutation={CREATE_INGREDIENTS_MUTATION}
+            refetchQueries={[
+              { query: ORDER_INGREDIENT_QUERY },
+              { query: CLASS_VIEW_GRID_QUERY }
+            ]}
             onCompleted={() => {
               if (onCompleted) onCompleted();
             }}

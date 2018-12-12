@@ -8,9 +8,9 @@ import CreateClass from "./CreateClass";
 import Enrol from "./Enrol";
 import { noPrint } from "../styles";
 import Modal, { ModalTransition } from "@atlaskit/modal-dialog";
-
 import styled from "styled-components";
 import { Add, Class } from "styled-icons/material";
+import { isTeacher } from "../utils";
 
 const AddIcon = styled(Add)`
   height: 60px;
@@ -103,9 +103,16 @@ class ClassesGrid extends Component {
           if (error) return <p>Error</p>;
 
           const {
-            user: { type },
-            classes
+            user: { id, type },
+            allClasses
           } = data;
+
+          // functions to find a user's classes
+          const teacherFn = c => c.teacher.id === id;
+          const studentFn = c => c.students.some(s => s.id === id);
+          const classes = allClasses.filter(
+            isTeacher(type) ? teacherFn : studentFn
+          );
 
           return (
             <div className={`${classesGrid} ${noPrint}`}>
@@ -133,9 +140,11 @@ class ClassesGrid extends Component {
                   </div>
                 </Link>
               ))}
-              <span onClick={() => this.setState({ isOpen: true })}>
-                <AddIcon />
-              </span>
+              {(isTeacher(type) || classes.length !== allClasses.length) && (
+                <span onClick={() => this.setState({ isOpen: true })}>
+                  <AddIcon />
+                </span>
+              )}
               <ModalTransition>
                 {isOpen && (
                   <Modal
@@ -157,7 +166,7 @@ class ClassesGrid extends Component {
                       type == "TEACHER" ? "Create Class" : "Enrol Into A Class"
                     }
                   >
-                    {type === "TEACHER" ? (
+                    {isTeacher(type) ? (
                       <CreateClass
                         onCompleted={() => this.setState({ isOpen: false })}
                       />

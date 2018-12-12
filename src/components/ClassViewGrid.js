@@ -125,11 +125,9 @@ class ClassViewGrid extends Component {
           orderBy,
           summary: isSummary
         }}
-        pollInterval={5000}
       >
         {({ loading, error, data }) => {
-          const hasData = data ? Object.keys(data).length === 2 : undefined;
-          if (!hasData && loading)
+          if (loading)
             return (
               <MainSpinner>
                 <Spinner size="xlarge" />

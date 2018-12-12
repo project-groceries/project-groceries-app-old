@@ -200,7 +200,7 @@ export const ENROL_INTO_CLASS_MUTATION = gql`
 
 export const CLASSES_GRID_QUERY = gql`
   query classesGridQuery {
-    classes {
+    allClasses {
       id
       name
       teacher {

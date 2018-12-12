@@ -1,6 +1,11 @@
 import React, { Component, Fragment } from "react";
 import { Mutation } from "react-apollo";
-import { UPDATE_ORDER_MUTATION, DELETE_ORDER_MUTATION } from "../queries";
+import {
+  UPDATE_ORDER_MUTATION,
+  DELETE_ORDER_MUTATION,
+  CLASS_VIEW_GRID_QUERY,
+  ORDERS_QUERY
+} from "../queries";
 import { orderItem } from "../styles";
 import { FlagContext } from "../flag-context";
 import { changesNotice } from "../utils";
@@ -115,7 +120,14 @@ class OrdersGridItem extends Component {
         </div>
         <div>
           <div>
-            <Mutation mutation={DELETE_ORDER_MUTATION} variables={{ id }}>
+            <Mutation
+              mutation={DELETE_ORDER_MUTATION}
+              refetchQueries={[
+                { query: CLASS_VIEW_GRID_QUERY },
+                { query: ORDERS_QUERY }
+              ]}
+              variables={{ id }}
+            >
               {(mutation, { loading, error }) => {
                 if (error) return <div>Error</div>;
 

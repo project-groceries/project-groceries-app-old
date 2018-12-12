@@ -94,11 +94,9 @@ class ClassView extends Component {
               });
             }
           }}
-          pollInterval={5000}
         >
           {({ loading, error, data }) => {
-            const hasData = data ? Object.keys(data).length === 3 : undefined;
-            if (!hasData && loading) return <Spinner />;
+            if (loading) return <Spinner />;
 
             if (error) return <div>Error</div>;
 

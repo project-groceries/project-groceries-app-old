@@ -3,7 +3,8 @@ import { Query, Mutation } from "react-apollo";
 import {
   ORDER_INGREDIENT_QUERY,
   CREATE_ORDERS_MUTATION,
-  ORDERS_QUERY
+  ORDERS_QUERY,
+  CLASS_VIEW_GRID_QUERY
 } from "../queries";
 import Spinner from "./Spinner";
 import AsyncSelect from "react-select/lib/Async";
@@ -11,7 +12,7 @@ import Button from "@atlaskit/button";
 import styled from "styled-components";
 import { Close } from "styled-icons/material";
 import { FlagContext } from "../flag-context";
-import { changesNotice } from "../utils";
+import { changesNotice, getScaleOptions, getUnitScale } from "../utils";
 import Select from "react-select";
 
 const BlackClose = styled(Close)`
@@ -73,10 +74,9 @@ class OrderIngredient extends Component {
     const { selectedIngredients } = this.state;
 
     return (
-      <Query query={ORDER_INGREDIENT_QUERY} pollInterval={5000}>
+      <Query query={ORDER_INGREDIENT_QUERY}>
         {({ loading, error, data }) => {
-          const hasData = data ? Object.keys(data).length === 2 : undefined;
-          if (!hasData && loading) return <Spinner />;
+          if (loading) return <Spinner />;
 
           if (error) return <div>Error</div>;
 
@@ -117,8 +117,8 @@ class OrderIngredient extends Component {
                               classNamePrefix="react-select"
                               maxMenuHeight={100}
                               isSearchable={false}
-                              defaultValue={this.getUnitScale(measurement)}
-                              options={this.getScaleOptions(measurement)}
+                              defaultValue={getUnitScale(measurement)}
+                              options={getScaleOptions(measurement)}
                               onChange={data =>
                                 this.setMultiplier(id, data.value)
                               }
@@ -132,7 +132,10 @@ class OrderIngredient extends Component {
                     {({ addFlag }) => (
                       <Mutation
                         mutation={CREATE_ORDERS_MUTATION}
-                        refetchQueries={[{ query: ORDERS_QUERY }]}
+                        refetchQueries={[
+                          { query: ORDERS_QUERY },
+                          { query: CLASS_VIEW_GRID_QUERY }
+                        ]}
                         onCompleted={() => this.onCompleted(addFlag)}
                       >
                         {(mutation, { loading, error }) => {
@@ -205,12 +208,6 @@ class OrderIngredient extends Component {
       };
     });
   };
-
-  getScaleOptions = measurement =>
-    measurement.scales.map(s => ({ label: s.name, value: s.amount }));
-
-  getUnitScale = measurement =>
-    this.getScaleOptions(measurement).find(s => s.value === 1);
 
   setMultiplier = (id, multiplier) => {
     this.setState(prevState => {
