@@ -70,7 +70,6 @@ class OrdersGridItem extends Component {
     } = this.props;
 
     const { scale } = this.state;
-    console.log("name", scale);
 
     return (
       <div key={id} className={orderItem}>
