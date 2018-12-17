@@ -16,7 +16,9 @@ import {
   changesNotice,
   getScaleOptions,
   getUnitScale,
-  getSpecificScale
+  getSpecificScale,
+  lowerCase,
+  includesAllWords
 } from "../utils";
 import Select from "react-select";
 
@@ -172,7 +174,7 @@ class OrderIngredient extends Component {
     const { selectedIngredients } = this.state;
 
     return ingredients
-      .filter(i => i.name.toLowerCase().includes(inputValue.toLowerCase()))
+      .filter(i => includesAllWords(lowerCase(i.name), lowerCase(inputValue)))
       .filter(i => !selectedIngredients.has(i.id))
       .map(i => ({ value: i, label: i.name }))
       .slice(0, inputValue.length > 2 ? undefined : 40); // reduce results for faster loading

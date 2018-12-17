@@ -32,6 +32,12 @@ export function timeDifferenceForDate(date) {
   return timeDifference(now, updated);
 }
 
+// A logging function to help with debugging
+export const logify = _ => {
+  console.log(_);
+  return _;
+};
+
 export const changesNotice =
   "Changes may take a few seconds to be reflected on the page.";
 
@@ -57,3 +63,10 @@ export const scaleToOption = scale => ({
   label: scale.name,
   value: scale.amount
 });
+
+// lower case, upper case
+export const lowerCase = str => str.toLowerCase();
+export const upperCase = str => str.toUpperCase();
+
+export const includesAllWords = (searchStr, str) =>
+  str.split(" ").every(word => searchStr.includes(word));
