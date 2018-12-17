@@ -74,7 +74,8 @@ class OrdersGrid extends Component {
         ingredient,
         orderSession: { id: orderSessionId },
         madeBy,
-        class: orderClass
+        class: orderClass,
+        scale
       } = order;
 
       if (
@@ -83,14 +84,14 @@ class OrdersGrid extends Component {
         const orderSession = orderSessions.find(
           orderSession => orderSession.id === orderSessionId
         );
-        orderSession.orders.push({ id, amount, ingredient });
+        orderSession.orders.push({ id, amount, ingredient, scale });
       } else {
         orderSessions.push({
           ...order.orderSession,
           dateCreated: new Date(order.orderSession.createdAt),
           madeBy,
           orderClass,
-          orders: [{ id, amount, ingredient }]
+          orders: [{ id, amount, ingredient, scale }]
         });
       }
     });
