@@ -12,7 +12,12 @@ import Button from "@atlaskit/button";
 import styled from "styled-components";
 import { Close } from "styled-icons/material";
 import { FlagContext } from "../flag-context";
-import { changesNotice, getScaleOptions, getUnitScale } from "../utils";
+import {
+  changesNotice,
+  getScaleOptions,
+  getUnitScale,
+  getSpecificScale
+} from "../utils";
 import Select from "react-select";
 
 const BlackClose = styled(Close)`
@@ -228,7 +233,7 @@ class OrderIngredient extends Component {
 
     const orders = [...selectedIngredients]
       .filter(([, { amount }]) => Boolean(amount)) // avoid empty ingredients
-      .map(([id, { amount, multiplier }]) => ({
+      .map(([id, { amount, multiplier, measurement }]) => ({
         amount: amount * multiplier,
         ingredient: {
           connect: {
@@ -244,7 +249,10 @@ class OrderIngredient extends Component {
           connect: {
             id: currentClass.value
           }
-        }
+        },
+        scale: measurement
+          ? { connect: { id: getSpecificScale(measurement, multiplier).id } }
+          : null
       }))
       .filter(({ amount }) => amount);
 

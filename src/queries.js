@@ -586,6 +586,11 @@ export const ORDERS_QUERY = gql`
         id
         name
       }
+      scale {
+        id
+        name
+        amount
+      }
     }
   }
 `;

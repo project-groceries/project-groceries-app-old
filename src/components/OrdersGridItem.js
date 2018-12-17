@@ -8,7 +8,7 @@ import {
 } from "../queries";
 import { orderItem } from "../styles";
 import { FlagContext } from "../flag-context";
-import { changesNotice } from "../utils";
+import { changesNotice, getUnitScale, scaleToOption } from "../utils";
 import Button from "@atlaskit/button";
 import { Delete, Edit, Close, Done } from "styled-icons/material";
 import styled from "styled-components";
@@ -48,10 +48,10 @@ const AmountContainer = styled.div`
 
 class OrdersGridItem extends Component {
   state = {
-    scale: this.props.order.ingredient.measurement
-      ? this.props.order.ingredient.measurement.scales
-          .map(s => ({ label: s.name, value: s.amount }))
-          .find(s => s.value === 1)
+    scale: this.props.order.scale
+      ? scaleToOption(this.props.order.scale)
+      : this.props.order.ingredient.measurement
+      ? getUnitScale(this.props.order.ingredient.measurement)
       : null
   };
 
@@ -70,6 +70,7 @@ class OrdersGridItem extends Component {
     } = this.props;
 
     const { scale } = this.state;
+    console.log("name", scale);
 
     return (
       <div key={id} className={orderItem}>
