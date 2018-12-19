@@ -54,7 +54,7 @@ export const getScaleOptions = measurement =>
   measurement.scales.map(scaleToOption);
 
 export const getUnitScale = measurement =>
-  scaleToOption(getSpecificScale(measurement, 1));
+  scaleToOption(getSpecificScale(measurement, 1000));
 
 export const getSpecificScale = (measurement, amount) =>
   measurement.scales.find(s => s.amount === amount);
