@@ -15,6 +15,7 @@ import DeleteClass from "./DeleteClass";
 import Unenrol from "./Unenrol";
 import uniqby from "lodash.uniqby";
 import Select from "react-select";
+import { getUnitScale, getScaleOptions } from "../utils";
 
 class ClassView extends Component {
   state = {
@@ -80,12 +81,7 @@ class ClassView extends Component {
             if (!currentScales) {
               this.setState(state => {
                 state.currentScales = new Map(
-                  measurements.map(m => [
-                    m.id,
-                    m.scales
-                      .map(s => ({ label: s.name, value: s.amount }))
-                      .find(s => s.value === 1)
-                  ])
+                  measurements.map(m => [m.id, getUnitScale(m)])
                 );
 
                 return {
@@ -247,7 +243,7 @@ class ClassView extends Component {
                         classNamePrefix="select"
                         isSearchable={false}
                         defaultValue={this.getDefaultScale(m)}
-                        options={this.getScaleOptions(m)}
+                        options={getScaleOptions(m)}
                         onChange={data => this.onScaleChange(data, m.id)}
                       />
                     </div>
@@ -463,10 +459,7 @@ class ClassView extends Component {
   getDefaultScale = measurement =>
     this.state.currentScales
       ? this.state.currentScales.get(measurement.id)
-      : this.getScaleOptions(measurement).find(s => s.value === 1);
-
-  getScaleOptions = measurement =>
-    measurement.scales.map(s => ({ label: s.name, value: s.amount }));
+      : getUnitScale(measurement);
 
   onScaleChange = (data, id) => {
     if (data.value) {
