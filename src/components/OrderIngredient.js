@@ -186,7 +186,7 @@ class OrderIngredient extends Component {
         selectedIngredients: prev.selectedIngredients.set(data.value.id, {
           ...data.value,
           amount: 1,
-          multiplier: 1
+          multiplier: 1000
         })
       }));
     }
