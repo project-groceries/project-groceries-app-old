@@ -30,7 +30,8 @@ class CreateIngredients extends Component {
     ingredients: [
       {
         name: "",
-        measurement: "cjos1hvuf3bog0a16wrjjbshx"
+        measurement: "cjos1hvuf3bog0a16wrjjbshx",
+        density: 1
       }
     ]
   };
@@ -77,10 +78,18 @@ class CreateIngredients extends Component {
                   isLoading={loading}
                   onClick={() => {
                     const properIngredients = ingredients
-                      .filter(i => i.name.length > 0)
+                      .filter(i => i.name)
+                      .filter(i =>
+                        i.measurement === "cjos1kt053c310a16c05mt8zy"
+                          ? i.density
+                          : true
+                      )
                       .map(ingredient => ({
                         name: ingredient.name,
-                        measurement: { connect: { id: ingredient.measurement } }
+                        measurement: {
+                          connect: { id: ingredient.measurement }
+                        },
+                        density: ingredient.density || 1
                       }));
 
                     mutation({

@@ -74,6 +74,34 @@ class CreateIngredients extends Component {
             onChange={data => setMeasurement(index, data.value)}
           />
         </div>
+        {ingredient.measurement === "cjos1kt053c310a16c05mt8zy" && (
+          <div>
+            <h4>
+              Density{" "}
+              <small>
+                (kg/m<sup>3</sup>)
+              </small>
+            </h4>
+            <input
+              type="number"
+              data-name="density"
+              data-index={index}
+              style={{ height: "50px" }}
+              value={ingredient.density}
+              onChange={updateValue}
+            />
+            <small>
+              ⓘ You can find densities for common ingredients{" "}
+              <a
+                href="http://www.onlineconversion.com/weight_volume_cooking.htm"
+                target="_blank"
+              >
+                here
+              </a>
+              .
+            </small>
+          </div>
+        )}
       </div>
     );
   }
