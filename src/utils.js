@@ -45,7 +45,7 @@ export const sum = arr => arr.reduce((acc, cur) => acc + cur, 0);
 
 export const sumBy = (arr, fn) => arr.reduce((acc, cur) => acc + fn(cur), 0);
 
-const isAnything = source => test => test === source;
+const isAnything = source => test => source === test;
 
 export const isTeacher = isAnything("TEACHER");
 
