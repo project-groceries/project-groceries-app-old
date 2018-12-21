@@ -17,8 +17,8 @@ import {
   getScaleOptions,
   getUnitScale,
   getSpecificScale,
-  lowerCase,
-  includesAllWords
+  volumeToMass,
+  searchIngredients
 } from "../utils";
 import Select from "react-select";
 
@@ -98,7 +98,13 @@ class OrderIngredient extends Component {
                 autoFocus
                 defaultOptions
                 loadOptions={(inputValue, callback) => {
-                  callback(this.filterIngredients(inputValue, ingredients));
+                  callback(
+                    searchIngredients(
+                      inputValue,
+                      ingredients,
+                      selectedIngredients
+                    )
+                  );
                 }}
                 onChange={this.onSelectChange}
               />
@@ -126,9 +132,7 @@ class OrderIngredient extends Component {
                               isSearchable={false}
                               defaultValue={getUnitScale(measurement)}
                               options={getScaleOptions(measurement)}
-                              onChange={data =>
-                                this.setMultiplier(id, data.value)
-                              }
+                              onChange={data => this.setScale(id, data.value)}
                             />
                           )}
                         </div>
@@ -170,23 +174,15 @@ class OrderIngredient extends Component {
     );
   }
 
-  filterIngredients = (inputValue, ingredients) => {
-    const { selectedIngredients } = this.state;
-
-    return ingredients
-      .filter(i => includesAllWords(lowerCase(i.name), lowerCase(inputValue)))
-      .filter(i => !selectedIngredients.has(i.id))
-      .map(i => ({ value: i, label: i.name }))
-      .slice(0, inputValue.length > 2 ? undefined : 40); // reduce results for faster loading
-  };
-
   onSelectChange = data => {
     if (data.value) {
       this.setState(prev => ({
         selectedIngredients: prev.selectedIngredients.set(data.value.id, {
           ...data.value,
           amount: 1,
-          multiplier: 1000
+          scale: data.value.measurement
+            ? getSpecificScale(data.value.measurement, 1000)
+            : null
         })
       }));
     }
@@ -216,14 +212,14 @@ class OrderIngredient extends Component {
     });
   };
 
-  setMultiplier = (id, multiplier) => {
+  setScale = (id, multiplier) => {
     this.setState(prevState => {
       const mapFiller = prevState.selectedIngredients.get(id);
 
       return {
         selectedIngredients: prevState.selectedIngredients.set(id, {
           ...mapFiller,
-          multiplier
+          scale: getSpecificScale(mapFiller.measurement, multiplier)
         })
       };
     });
@@ -234,9 +230,13 @@ class OrderIngredient extends Component {
     const { selectedIngredients } = this.state;
 
     const orders = [...selectedIngredients]
-      .filter(([, { amount }]) => Boolean(amount)) // avoid empty ingredients
-      .map(([id, { amount, multiplier, measurement }]) => ({
-        amount: amount * multiplier,
+      .filter(([, { amount }]) => amount) // skip empty ingredients
+      .map(([id, { amount, density, scale, measurement }]) => ({
+        amount: scale
+          ? scale.isMass
+            ? volumeToMass(amount, scale.amount, density).toFixed()
+            : (amount * scale.amount).toFixed()
+          : amount,
         ingredient: {
           connect: {
             id
@@ -252,11 +252,8 @@ class OrderIngredient extends Component {
             id: currentClass.value
           }
         },
-        scale: measurement
-          ? { connect: { id: getSpecificScale(measurement, multiplier).id } }
-          : null
-      }))
-      .filter(({ amount }) => amount);
+        scale: measurement ? { connect: { id: scale.id } } : null
+      }));
 
     mutation({ variables: { orders } });
   };

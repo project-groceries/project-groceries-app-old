@@ -8,7 +8,14 @@ import {
 } from "../queries";
 import { orderItem } from "../styles";
 import { FlagContext } from "../flag-context";
-import { changesNotice, getUnitScale, scaleToOption } from "../utils";
+import {
+  changesNotice,
+  getUnitScale,
+  scaleToOption,
+  massToVolume,
+  getSpecificScale,
+  getScaleOptions
+} from "../utils";
 import Button from "@atlaskit/button";
 import { Delete, Edit, Close, Done } from "styled-icons/material";
 import styled from "styled-components";
@@ -49,9 +56,9 @@ const AmountContainer = styled.div`
 class OrdersGridItem extends Component {
   state = {
     scale: this.props.order.scale
-      ? scaleToOption(this.props.order.scale)
+      ? this.props.order.scale
       : this.props.order.ingredient.measurement
-      ? getUnitScale(this.props.order.ingredient.measurement)
+      ? getSpecificScale(this.props.order.ingredient.measurement, 1000)
       : null
   };
 
@@ -60,7 +67,7 @@ class OrdersGridItem extends Component {
       order: {
         id,
         amount,
-        ingredient: { name, unit, measurement }
+        ingredient: { name, unit, measurement, density }
       },
       isEditing,
       editAmount,
@@ -79,7 +86,14 @@ class OrdersGridItem extends Component {
             <AmountContainer>
               <input
                 id="name"
-                placeholder={scale ? amount / scale.value : amount}
+                // placeholder={scale ? amount / scale.amount : amount}
+                placeholder={
+                  !scale
+                    ? amount
+                    : scale.isMass
+                    ? massToVolume(amount, scale.amount, density)
+                    : amount / scale.amount
+                }
                 value={editAmount}
                 onChange={e => onInputChange(e, id)}
                 type="number"
@@ -89,11 +103,11 @@ class OrdersGridItem extends Component {
                 <Select
                   className="basic-single"
                   classNamePrefix="select"
-                  defaultValue={scale}
+                  defaultValue={scaleToOption(scale)}
                   isSearchable={false}
-                  options={this.getScaleOptions(measurement)}
+                  options={getScaleOptions(measurement)}
                   maxMenuHeight={100}
-                  onChange={this.onScaleChange}
+                  onChange={data => this.onScaleChange(data, measurement)}
                 />
               ) : (
                 unit
@@ -101,15 +115,19 @@ class OrdersGridItem extends Component {
             </AmountContainer>
           ) : scale ? (
             <AmountContainer>
-              <small>{amount / scale.value}</small>
+              <small>
+                {scale.isMass
+                  ? massToVolume(amount, scale.amount, density)
+                  : amount / scale.amount}
+              </small>
               <Select
                 className="basic-single"
                 classNamePrefix="select"
-                defaultValue={scale}
+                defaultValue={scaleToOption(scale)}
                 isSearchable={false}
-                options={this.getScaleOptions(measurement)}
+                options={getScaleOptions(measurement)}
                 maxMenuHeight={100}
-                onChange={this.onScaleChange}
+                onChange={data => this.onScaleChange(data, measurement)}
               />
             </AmountContainer>
           ) : (
@@ -164,7 +182,7 @@ class OrdersGridItem extends Component {
                                   variables: {
                                     id,
                                     amount: scale
-                                      ? editAmount * scale.value
+                                      ? editAmount * scale.amount
                                       : editAmount
                                   }
                                 });
@@ -191,14 +209,12 @@ class OrdersGridItem extends Component {
     );
   }
 
-  getScaleOptions = measurement =>
-    measurement.scales.map(s => ({ label: s.name, value: s.amount }));
+  // getScaleOptions = measurement =>
+  //   measurement.scales.map(s => ({ label: s.name, value: s.amount }));
 
-  onScaleChange = data => {
+  onScaleChange = (data, measurement) => {
     if (data.value) {
-      this.setState({
-        scale: data
-      });
+      this.setState({ scale: getSpecificScale(measurement, data.value) });
     }
   };
 

@@ -1,12 +1,17 @@
 import React, { Component, Fragment } from "react";
 import { css } from "emotion";
 import { Query, Mutation } from "react-apollo";
-import { ORDER_RECIPE_QUERY, CREATE_ORDERS_MUTATION, ORDERS_QUERY, CLASS_VIEW_GRID_QUERY } from "../queries";
+import {
+  ORDER_RECIPE_QUERY,
+  CREATE_ORDERS_MUTATION,
+  ORDERS_QUERY,
+  CLASS_VIEW_GRID_QUERY
+} from "../queries";
 import Spinner from "./Spinner";
 import Select from "react-select";
 import Button from "@atlaskit/button";
 import { FlagContext } from "../flag-context";
-import { changesNotice } from "../utils";
+import { changesNotice, massToVolume } from "../utils";
 
 class OrderRecipe extends Component {
   constructor(props) {
@@ -16,18 +21,14 @@ class OrderRecipe extends Component {
       currentClass: null,
       currentRecipe: null,
       selectedRecipe: null,
-      servings: 1,
+      servings: 1
     };
   }
 
   render() {
     const { currentClass } = this.props;
-    
-    const {
-      currentRecipe,
-      selectedRecipe,
-      servings,
-    } = this.state;
+
+    const { currentRecipe, selectedRecipe, servings } = this.state;
 
     return (
       <Query query={ORDER_RECIPE_QUERY}>
@@ -54,9 +55,7 @@ class OrderRecipe extends Component {
                   if (data.value) {
                     this.setState({
                       selectedRecipe: data,
-                      currentRecipe: recipes.find(
-                        r => r.id === data.value
-                      )
+                      currentRecipe: recipes.find(r => r.id === data.value)
                     });
                   }
                 }}
@@ -92,10 +91,7 @@ class OrderRecipe extends Component {
                       <span
                         onClick={() =>
                           this.setState(pp => ({
-                            servings:
-                              pp.servings > 1
-                                ? pp.servings - 1
-                                : 1
+                            servings: pp.servings > 1 ? pp.servings - 1 : 1
                           }))
                         }
                       >
@@ -114,7 +110,7 @@ class OrderRecipe extends Component {
                     </div>
                   </div>
                   {currentRecipe.ingredients.map(
-                    ({ id, amount, ingredient: { name }, scale }) => (
+                    ({ id, amount, ingredient: { name, density }, scale }) => (
                       <div
                         key={id}
                         className={css`
@@ -127,15 +123,31 @@ class OrderRecipe extends Component {
                         `}
                       >
                         <small>{name}</small>
-                        {scale ? <small>{(amount * servings)/scale.amount} {scale.name}</small> : <small>{amount * servings}</small>}
+                        {scale ? (
+                          <small>
+                            {scale.isMass
+                              ? massToVolume(
+                                  amount * servings,
+                                  scale.amount,
+                                  density
+                                )
+                              : (amount * servings) / scale.amount}{" "}
+                            {scale.name}
+                          </small>
+                        ) : (
+                          <small>{amount * servings}</small>
+                        )}
                       </div>
                     )
                   )}
                   <FlagContext.Consumer>
-                    {({ addFlag }) =>
+                    {({ addFlag }) => (
                       <Mutation
                         mutation={CREATE_ORDERS_MUTATION}
-                        refetchQueries={[{ query: ORDERS_QUERY }, { query: CLASS_VIEW_GRID_QUERY }]}
+                        refetchQueries={[
+                          { query: ORDERS_QUERY },
+                          { query: CLASS_VIEW_GRID_QUERY }
+                        ]}
                         onCompleted={() => this.onCompleted(addFlag)}
                       >
                         {(mutation, { loading, error }) => {
@@ -147,14 +159,10 @@ class OrderRecipe extends Component {
                               onClick={() => {
                                 const orders = currentRecipe.ingredients.map(
                                   recipeIngredient => ({
-                                    amount:
-                                      servings *
-                                      recipeIngredient.amount,
+                                    amount: servings * recipeIngredient.amount,
                                     ingredient: {
                                       connect: {
-                                        id:
-                                          recipeIngredient.ingredient
-                                            .id
+                                        id: recipeIngredient.ingredient.id
                                       }
                                     },
                                     madeBy: {
@@ -177,7 +185,7 @@ class OrderRecipe extends Component {
                           );
                         }}
                       </Mutation>
-                    }
+                    )}
                   </FlagContext.Consumer>
                 </Fragment>
               )}

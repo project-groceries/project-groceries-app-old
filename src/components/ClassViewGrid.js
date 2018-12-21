@@ -5,7 +5,7 @@ import { CLASS_VIEW_GRID_QUERY } from "../queries";
 import Spinner from "@atlaskit/spinner";
 import UndrawNoData from "./svg/UndrawNoData";
 import styled from "styled-components";
-import { sumBy } from "../utils";
+import { sumBy, massToVolume } from "../utils";
 
 const ClassViewGridContainer = styled.div`
   display: grid;
@@ -156,7 +156,7 @@ class ClassViewGrid extends Component {
                   </ClassViewGridSpinner>
                 )}
                 {ingredients.map(
-                  ({ id, name, unit, orders, tags, measurement }) => {
+                  ({ id, name, unit, density, orders, tags, measurement }) => {
                     const scale =
                       measurement && scales ? scales.get(measurement.id) : null;
 
@@ -173,8 +173,15 @@ class ClassViewGrid extends Component {
                           )}
                           {scale ? (
                             <small>
-                              {sumBy(orders, o => o.amount) / scale.value}{" "}
-                              {scale.label}
+                              {scale.isMass
+                                ? massToVolume(
+                                    sumBy(orders, o => o.amount),
+                                    scale.amount,
+                                    density
+                                  )
+                                : sumBy(orders, o => o.amount) /
+                                  scale.amount}{" "}
+                              {scale.name}
                             </small>
                           ) : (
                             <small>

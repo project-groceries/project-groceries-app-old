@@ -15,7 +15,7 @@ import DeleteClass from "./DeleteClass";
 import Unenrol from "./Unenrol";
 import uniqby from "lodash.uniqby";
 import Select from "react-select";
-import { getUnitScale, getScaleOptions } from "../utils";
+import { getUnitScale, getScaleOptions, getSpecificScale } from "../utils";
 
 class ClassView extends Component {
   state = {
@@ -81,7 +81,7 @@ class ClassView extends Component {
             if (!currentScales) {
               this.setState(state => {
                 state.currentScales = new Map(
-                  measurements.map(m => [m.id, getUnitScale(m)])
+                  measurements.map(m => [m.id, getSpecificScale(m, 1000)])
                 );
 
                 return {
@@ -244,7 +244,7 @@ class ClassView extends Component {
                         isSearchable={false}
                         defaultValue={this.getDefaultScale(m)}
                         options={getScaleOptions(m)}
-                        onChange={data => this.onScaleChange(data, m.id)}
+                        onChange={data => this.onScaleChange(data, m)}
                       />
                     </div>
                   ))}
@@ -461,10 +461,13 @@ class ClassView extends Component {
       ? this.state.currentScales.get(measurement.id)
       : getUnitScale(measurement);
 
-  onScaleChange = (data, id) => {
+  onScaleChange = (data, measurement) => {
     if (data.value) {
       this.setState(prevState => ({
-        currentScales: prevState.currentScales.set(id, data)
+        currentScales: prevState.currentScales.set(
+          measurement.id,
+          getSpecificScale(measurement, data.value)
+        )
       }));
     }
   };

@@ -243,6 +243,7 @@ export const CLASS_VIEW_QUERY = gql`
         id
         name
         amount
+        isMass
       }
     }
   }
@@ -270,14 +271,10 @@ export const CLASS_VIEW_GRID_QUERY = gql`
       id
       name
       unit
+      density
       measurement {
         id
         name
-        scales {
-          id
-          name
-          amount
-        }
       }
       tags {
         id
@@ -564,12 +561,14 @@ export const ORDERS_QUERY = gql`
         id
         name
         unit
+        density
         measurement {
           id
           scales {
             id
             name
             amount
+            isMass
           }
         }
       }
@@ -590,6 +589,7 @@ export const ORDERS_QUERY = gql`
         id
         name
         amount
+        isMass
       }
     }
   }
@@ -636,12 +636,14 @@ export const ORDER_INGREDIENT_QUERY = gql`
       id
       name
       unit
+      density
       measurement {
         id
         scales {
           id
           name
           amount
+          isMass
         }
       }
     }
@@ -663,10 +665,12 @@ export const ORDER_RECIPE_QUERY = gql`
           id
           name
           amount
+          isMass
         }
         ingredient {
           id
           name
+          density
         }
       }
     }
@@ -678,6 +682,7 @@ export const CREATE_RECIPE_QUERY = gql`
     ingredients {
       id
       name
+      density
       measurement {
         id
         name
@@ -685,6 +690,7 @@ export const CREATE_RECIPE_QUERY = gql`
           id
           name
           amount
+          isMass
         }
       }
     }

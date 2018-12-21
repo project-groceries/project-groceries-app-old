@@ -18,7 +18,9 @@ import {
   changesNotice,
   getScaleOptions,
   getUnitScale,
-  getSpecificScale
+  getSpecificScale,
+  searchIngredients,
+  volumeToMass
 } from "../utils";
 import Select from "react-select";
 
@@ -79,7 +81,13 @@ class CreateRecipe extends Component {
                     maxMenuHeight={200}
                     defaultOptions
                     loadOptions={(inputValue, callback) => {
-                      callback(this.filterIngredients(inputValue, ingredients));
+                      callback(
+                        searchIngredients(
+                          inputValue,
+                          ingredients,
+                          recipeIngredients
+                        )
+                      );
                     }}
                     onChange={data => {
                       if (data.value) {
@@ -90,7 +98,7 @@ class CreateRecipe extends Component {
                               ...data.value,
                               amount: 1,
                               scale: data.value.measurement
-                                ? this.getUnitScale(data.value.measurement)
+                                ? getSpecificScale(data.value.measurement, 1000)
                                 : null
                             }
                           )
@@ -198,29 +206,9 @@ class CreateRecipe extends Component {
                               return (
                                 <Button
                                   appearance="primary"
-                                  onClick={() => {
-                                    const ingredients = [
-                                      ...recipeIngredients
-                                    ].map(([id, { amount, scale }]) => ({
-                                      amount: scale
-                                        ? amount * scale.amount
-                                        : amount,
-                                      ingredient: {
-                                        connect: { id }
-                                      },
-                                      scale: scale
-                                        ? { connect: { id: scale.id } }
-                                        : null
-                                    }));
-
-                                    mutation({
-                                      variables: {
-                                        name: recipeName,
-                                        schoolId,
-                                        ingredients
-                                      }
-                                    });
-                                  }}
+                                  onClick={() =>
+                                    this.submitRecipe(mutation, schoolId)
+                                  }
                                   isLoading={loading}
                                 >
                                   Create Recipe
@@ -241,16 +229,6 @@ class CreateRecipe extends Component {
     );
   }
 
-  filterIngredients = (inputValue, ingredients) => {
-    const { recipeIngredients } = this.state;
-
-    return ingredients
-      .filter(i => i.name.toLowerCase().includes(inputValue.toLowerCase()))
-      .filter(i => !recipeIngredients.has(i.id))
-      .map(i => ({ value: i, label: i.name }))
-      .slice(0, inputValue.length > 2 ? undefined : 40); // reduce results for faster loading
-  };
-
   setScale = (id, multiplier) => {
     this.setState(prevState => {
       const mapFiller = prevState.recipeIngredients.get(id);
@@ -261,6 +239,32 @@ class CreateRecipe extends Component {
           scale: getSpecificScale(mapFiller.measurement, multiplier)
         })
       };
+    });
+  };
+
+  submitRecipe = (mutation, schoolId) => {
+    const { recipeIngredients, recipeName } = this.state;
+
+    const ingredients = [...recipeIngredients]
+      .filter(([, { amount }]) => amount) // skip empty ingredients
+      .map(([id, { amount, density, scale }]) => ({
+        amount: scale
+          ? scale.isMass
+            ? volumeToMass(amount, scale.amount, density).toFixed()
+            : (amount * scale.amount).toFixed()
+          : amount,
+        ingredient: {
+          connect: { id }
+        },
+        scale: scale ? { connect: { id: scale.id } } : null
+      }));
+
+    mutation({
+      variables: {
+        name: recipeName,
+        schoolId,
+        ingredients
+      }
     });
   };
 

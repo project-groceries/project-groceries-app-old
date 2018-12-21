@@ -64,9 +64,42 @@ export const scaleToOption = scale => ({
   value: scale.amount
 });
 
+// converting between weights and volumes
+// where the unit of weight is kilogram and the unit of volume is metres cubed
+export const massToKilograms = (amount, multiplier) => amount / multiplier;
+export const kilogramsToMass = (amount, multiplier) => amount * multiplier;
+
+export const kilogramsToMetresCubed = (kilograms, density) =>
+  kilograms / density;
+export const metresCubedToKilograms = (metresCubed, density) =>
+  metresCubed * density;
+
+export const metresCubedToVolume = (amount, multiplier) => amount * multiplier;
+export const volumeToMetresCubed = (amount, multiplier) => amount / multiplier;
+
+export const volumeToMass = (amount, multiplier, density) =>
+  kilogramsToMass(
+    metresCubedToKilograms(volumeToMetresCubed(amount, multiplier), density),
+    1000000
+  );
+
+export const massToVolume = (amount, multiplier, density) =>
+  metresCubedToVolume(
+    kilogramsToMetresCubed(massToKilograms(amount, 1000000), density),
+    multiplier
+  );
+
 // lower case, upper case
 export const lowerCase = str => str.toLowerCase();
 export const upperCase = str => str.toUpperCase();
 
 export const includesAllWords = (searchStr, str) =>
   str.split(" ").every(word => searchStr.includes(word));
+
+// search for ingredients
+export const searchIngredients = (query, ingredients, selectedIngredients) =>
+  ingredients
+    .filter(i => includesAllWords(lowerCase(i.name), lowerCase(query)))
+    .filter(i => !selectedIngredients.has(i.id))
+    .map(i => ({ value: i, label: i.name }))
+    .slice(0, query.length > 2 ? undefined : 40); // reduce results for faster loading
