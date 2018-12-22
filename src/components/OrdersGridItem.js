@@ -14,7 +14,8 @@ import {
   scaleToOption,
   massToVolume,
   getSpecificScale,
-  getScaleOptions
+  getScaleOptions,
+  volumeToMass
 } from "../utils";
 import Button from "@atlaskit/button";
 import { Delete, Edit, Close, Done } from "styled-icons/material";
@@ -172,22 +173,29 @@ class OrdersGridItem extends Component {
                     >
                       {mutation => {
                         return (
-                          <Button appearance="subtle">
-                            <DoneIcon
-                              fill="green"
-                              onClick={() => {
-                                stopEditing(id);
+                          <Button
+                            appearance="subtle"
+                            onClick={() => {
+                              console.log("we in here");
+                              stopEditing(id);
 
-                                mutation({
-                                  variables: {
-                                    id,
-                                    amount: scale
-                                      ? editAmount * scale.amount
-                                      : editAmount
-                                  }
-                                });
-                              }}
-                            />
+                              mutation({
+                                variables: {
+                                  id,
+                                  amount: scale
+                                    ? scale.isMass
+                                      ? volumeToMass(
+                                          editAmount,
+                                          scale.amount,
+                                          density
+                                        )
+                                      : editAmount * scale.amount
+                                    : editAmount
+                                }
+                              });
+                            }}
+                          >
+                            <DoneIcon fill="green" />
                           </Button>
                         );
                       }}
