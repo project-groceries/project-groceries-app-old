@@ -10,7 +10,6 @@ import { orderItem } from "../styles";
 import { FlagContext } from "../flag-context";
 import {
   changesNotice,
-  getUnitScale,
   scaleToOption,
   massToVolume,
   getSpecificScale,
@@ -87,7 +86,6 @@ class OrdersGridItem extends Component {
             <AmountContainer>
               <input
                 id="name"
-                // placeholder={scale ? amount / scale.amount : amount}
                 placeholder={
                   !scale
                     ? amount
@@ -165,43 +163,40 @@ class OrdersGridItem extends Component {
           <div>
             {isEditing ? (
               <Fragment>
-                <FlagContext.Consumer>
-                  {({ addFlag }) => (
-                    <Mutation
-                      mutation={UPDATE_ORDER_MUTATION}
-                      onCompleted={() => this.editOrderSuccess(addFlag)}
-                    >
-                      {mutation => {
-                        return (
-                          <Button
-                            appearance="subtle"
-                            onClick={() => {
-                              console.log("we in here");
-                              stopEditing(id);
+                {editAmount && (
+                  <Mutation
+                    mutation={UPDATE_ORDER_MUTATION}
+                    onCompleted={this.editOrderSuccess}
+                  >
+                    {mutation => {
+                      return (
+                        <Button
+                          appearance="subtle"
+                          onClick={() => {
+                            stopEditing(id);
 
-                              mutation({
-                                variables: {
-                                  id,
-                                  amount: scale
-                                    ? scale.isMass
-                                      ? volumeToMass(
-                                          editAmount,
-                                          scale.amount,
-                                          density
-                                        )
-                                      : editAmount * scale.amount
-                                    : editAmount
-                                }
-                              });
-                            }}
-                          >
-                            <DoneIcon fill="green" />
-                          </Button>
-                        );
-                      }}
-                    </Mutation>
-                  )}
-                </FlagContext.Consumer>
+                            mutation({
+                              variables: {
+                                id,
+                                amount: scale
+                                  ? scale.isMass
+                                    ? volumeToMass(
+                                        editAmount,
+                                        scale.amount,
+                                        density
+                                      )
+                                    : editAmount * scale.amount
+                                  : editAmount
+                              }
+                            });
+                          }}
+                        >
+                          <DoneIcon fill="green" />
+                        </Button>
+                      );
+                    }}
+                  </Mutation>
+                )}
                 <Button appearance="subtle" onClick={() => stopEditing(id)}>
                   <CloseIcon fill="red" />
                 </Button>
@@ -217,25 +212,16 @@ class OrdersGridItem extends Component {
     );
   }
 
-  // getScaleOptions = measurement =>
-  //   measurement.scales.map(s => ({ label: s.name, value: s.amount }));
-
   onScaleChange = (data, measurement) => {
     if (data.value) {
       this.setState({ scale: getSpecificScale(measurement, data.value) });
     }
   };
 
-  editOrderSuccess = addFlag => {
+  editOrderSuccess = () => {
     const { onCompleted } = this.props;
 
     window.mixpanel.track("Edited an order");
-
-    addFlag({
-      type: "success",
-      title: "The order was successfully edited",
-      description: changesNotice
-    });
 
     if (onCompleted) onCompleted();
   };
