@@ -83,6 +83,11 @@ class Login extends Component {
               align-items: center;
               padding: 10px;
 
+              @media (max-width: 400px) {
+                width: 100%;
+                height: 100%;
+              }
+
               & > * {
                 margin: 10px;
               }
@@ -198,7 +203,7 @@ class Login extends Component {
           </div> */}
         </main>
 
-        <footer className="bar">
+        {/* <footer className="bar">
           <span />
           <a
             style={{
@@ -241,7 +246,7 @@ class Login extends Component {
             </span>
           </a>
           <span />
-        </footer>
+        </footer> */}
       </div>
     );
   }
