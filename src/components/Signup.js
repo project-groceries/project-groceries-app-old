@@ -7,6 +7,9 @@ import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
 import { SIGNUP_MUTATION } from "../queries";
 
+import UndrawMaintenance from "./svg/UndrawMaintenance";
+import { css } from "emotion";
+
 class Login extends Component {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired
@@ -59,17 +62,46 @@ class Login extends Component {
             />
             <path className="bag" d="M39.3 493.1h471.3V160.4H39.3" />
           </svg>
-          <div id="title">
+          {/* <div id="title">
             <h1 className="display-w-lg title__text">Sign Up</h1>
             <h3 className="display-w-md title__text">Sign Up</h3>
-          </div>
+          </div> */}
           <div className="btn default" onClick={() => history.push("/login")}>
             Log In
           </div>
         </nav>
 
         <main className="flex-center">
-          <div className="card card--w-fluid">
+          <div
+            className={css`
+              background-color: white;
+              box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05);
+              width: 400px;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              padding: 10px;
+
+              & > * {
+                margin: 10px;
+              }
+            `}
+          >
+            <h1>Uh Oh</h1>
+            <img src="./UndrawMaintenance.svg" width="200px" alt="" />
+            <p>
+              The signup page is not working at the moment. We have discovered
+              some issues and are working to fix them. Apologies for any
+              inconvenience.
+            </p>
+            <p>
+              If you would like to be notified when you can sign up, send an
+              email to hemedi@projectgroceries.com and we will inform you when
+              this page is back up and running
+            </p>
+          </div>
+          {/* <div className="card card--w-fluid">
             {error ? (
               <small id="incorrect" className="card warning">
                 {errorMessage}
@@ -163,7 +195,7 @@ class Login extends Component {
                 )}
               </Mutation>
             )}
-          </div>
+          </div> */}
         </main>
 
         <footer className="bar">
