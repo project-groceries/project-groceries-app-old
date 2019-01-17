@@ -97,7 +97,11 @@ export const includesAllWords = (searchStr, str) =>
   str.split(" ").every(word => searchStr.includes(word));
 
 // search for ingredients
-export const searchIngredients = (query, ingredients, selectedIngredients) =>
+export const searchIngredients = (
+  query = "",
+  ingredients,
+  selectedIngredients
+) =>
   ingredients
     .filter(i => includesAllWords(lowerCase(i.name), lowerCase(query)))
     .filter(i => !selectedIngredients.has(i.id))
